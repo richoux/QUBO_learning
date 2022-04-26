@@ -29,7 +29,10 @@ BuilderQUBO::BuilderQUBO( const std::vector<int>& training_data,
 
 		for( int i = 0 ; i < row ; ++i )
 			if( i != 0 && i <= triangle_length )
+			{
+				_index_triangle_variables.push_back( shift + i );
 				_is_triangle_variables.push_back( true );
+			}
 			else
 				_is_triangle_variables.push_back( false );
 	}
@@ -40,15 +43,16 @@ void BuilderQUBO::declare_variables()
 	for( size_t i = 0 ; i < _is_triangle_variables.size() ; ++i )
 	{
 		if( _is_triangle_variables[i] )
-			variables.emplace_back( std::initializer_list<int>( {1} ) );
+			variables.emplace_back( std::initializer_list<int>( {1, 2} ) );
 		else
-			variables.emplace_back( std::initializer_list<int>( {-1, 0, 1} ) );
+			variables.emplace_back( std::initializer_list<int>( {-2, -1, 0, 1, 2} ) );
 	}
 }
 
 void BuilderQUBO::declare_constraints()
 {
 	constraints.emplace_back( make_shared<TrainingSet>( variables, _training_data, _size_training_set, _candidate_length, _domain_size, _starting_value, _error_vector ) );
+	constraints.emplace_back( make_shared< UniqueValue >( _index_triangle_variables ) );
 }
 
 void BuilderQUBO::declare_objective()

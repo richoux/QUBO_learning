@@ -22,7 +22,7 @@ endif
 # Directories
 OBJDIR=obj
 OBJ_scam=$(addprefix $(OBJDIR)/,constraint_unique_value.o objective_supervised_learning.o builder_scam.o print_qubo.o learn_qubo_scam.o)
-OBJ_svn=$(addprefix $(OBJDIR)/,constraint_training_set.o objective_svn.o builder_svn.o print_qubo.o learn_qubo_svn.o)
+OBJ_svn=$(addprefix $(OBJDIR)/,constraint_training_set.o constraint_unique_value.o objective_svn.o builder_svn.o print_qubo.o learn_qubo_svn.o)
 BINDIR=bin
 INCLUDEDIR=./include
 LIBDIR=./lib

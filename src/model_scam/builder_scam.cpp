@@ -45,15 +45,15 @@ void BuilderQUBO::declare_variables()
 	for( size_t i = 0 ; i < _is_triangle_variables.size() ; ++i )
 	{
 		if( _is_triangle_variables[i] )
-			variables.emplace_back( std::initializer_list<int>( {1} ) ); // complete scam
+			variables.emplace_back( std::initializer_list<int>( {1, 2} ) );
 		else
-			variables.emplace_back( std::initializer_list<int>( {-1, 0, 1} ) );
+			variables.emplace_back( std::initializer_list<int>( {-2, -1, 0, 1, 2} ) );
 	}
 }
 
 void BuilderQUBO::declare_constraints()
 {
-	constraints.emplace_back( make_shared< UniqueValue >( _index_triangle_variables ) ); // complete scam, part 2
+	constraints.emplace_back( make_shared< UniqueValue >( _index_triangle_variables ) );
 }
 
 void BuilderQUBO::declare_objective()

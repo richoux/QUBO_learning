@@ -4,6 +4,7 @@
 #include <ghost/model_builder.hpp>
 
 #include "constraint_training_set.hpp"
+#include "constraint_unique_value.hpp"
 #include "objective_svn.hpp"
 
 using namespace ghost;
@@ -19,6 +20,7 @@ class BuilderQUBO : public ModelBuilder
 	int _starting_value;
 	std::vector<double> _error_vector;
 
+	std::vector<int> _index_triangle_variables;
 	std::vector<bool> _is_triangle_variables;
 	
 public:
