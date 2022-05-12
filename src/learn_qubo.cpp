@@ -17,6 +17,8 @@
 #include "print_qubo.hpp"
 #if defined SVN
 #include "builder_svn.hpp"
+#elif defined SPARSE
+#include "builder_sparse.hpp"
 #else
 #include "builder_scam.hpp"
 #endif
