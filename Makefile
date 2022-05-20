@@ -28,7 +28,7 @@ BINDIR=bin
 INCLUDEDIR=./include
 LIBDIR=./lib
 
-VPATH=src:src/model_scam:src/model_svn:src/model_sparse
+VPATH=src/common:src/model_scam:src/model_svn:src/model_sparse
 
 # Reminder, 'cause it is easy to forget makefile's fucked-up syntax...
 # $@ is what triggered the rule, ie the target before :
@@ -60,18 +60,18 @@ qubo_ghost_sparse_debug: $(OBJ_sparse)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
 $(OBJDIR)/learn_qubo_scam.o: learn_qubo.cpp builder_scam.cpp print_qubo.cpp
-	$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -I./src/model_scam $< -o $@
+	$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -I./src/model_scam -I./src/common $< -o $@
 
 $(OBJDIR)/learn_qubo_svn.o: learn_qubo.cpp builder_svn.cpp print_qubo.cpp
-	$(CXX) $(CXXFLAGS) -c -DSVN -I$(INCLUDEDIR) -I./src/model_svn $< -o $@
+	$(CXX) $(CXXFLAGS) -c -DSVN -I$(INCLUDEDIR) -I./src/model_svn -I./src/common $< -o $@
 
 $(OBJDIR)/learn_qubo_sparse.o: learn_qubo.cpp builder_sparse.cpp print_qubo.cpp
-	$(CXX) $(CXXFLAGS) -c -DSPARSE -I$(INCLUDEDIR) -I./src/model_sparse $< -o $@
+	$(CXX) $(CXXFLAGS) -c -DSPARSE -I$(INCLUDEDIR) -I./src/model_sparse -I./src/common $< -o $@
 
 $(OBJDIR)/%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) $< -o $@
+	$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -I./src/common $< -o $@
 
 .PHONY: clean 
 
 clean:
-	rm -f core $(BINDIR)/* $(OBJDIR)/*.o *~ src/*~ src/model_scam/*~ src/model_svn/*~ src/model_sparse/*~
+	rm -f core $(BINDIR)/* $(OBJDIR)/*.o *~ src/common/*~ src/model_scam/*~ src/model_svn/*~ src/model_sparse/*~

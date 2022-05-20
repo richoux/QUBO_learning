@@ -12,6 +12,8 @@ using namespace ghost;
 class TrainingSet : public Constraint
 {
 	std::vector<int> _training_data;
+	mutable std::vector<int> _variable_values;
+	// mutable std::vector<int> _variable_values_for_delta;
 	size_t _size_training_set;
 	size_t _domain_size;
 	size_t _candidate_length;
@@ -21,9 +23,11 @@ class TrainingSet : public Constraint
 	std::vector<double> _error_vector;
 	
 	Eigen::VectorXi fill_vector( const std::vector<int>& candidate ) const;
-	Eigen::MatrixXi fill_matrix( const vector<Variable*>& vecVariables ) const;
+	Eigen::MatrixXi fill_matrix( const std::vector<int>& variable_values ) const;
 
+	double compute_error( const std::vector<int>& variable_values ) const;
 	double required_error( const vector<Variable*>& variables ) const override;
+	// double optional_delta_error( const std::vector<Variable*> &variables, const std::vector<int> &indexes, const std::vector<int> &candidate_values ) const override;
 
 public:
 	TrainingSet( const vector<Variable>& variables,
