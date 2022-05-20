@@ -290,13 +290,20 @@ int main( int argc, char **argv )
 		          << "Objective function cost: " << cost << "\n";
 	
 		check_solution( solution,
-		                samples,
+		                candidates,
 		                labels,
 		                number_variables,
 		                domain_size,
-		                number_samples,
+		                total_training_set_size,
 		                starting_value );
 
+		// check_solution( solution,
+		//                 samples,
+		//                 labels,
+		//                 number_variables,
+		//                 domain_size,
+		//                 number_samples,
+		//                 starting_value );
 	}
 	
 	return EXIT_SUCCESS;
