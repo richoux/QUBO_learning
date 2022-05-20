@@ -12,6 +12,7 @@
 
 #include <ghost/solver.hpp>
 #include <argh.h>
+#include <randutils.hpp>
 #include <Eigen/Dense>
 
 #include "print_qubo.hpp"
@@ -28,14 +29,15 @@ using namespace std::literals::chrono_literals;
 
 void usage( char **argv )
 {
-	cout << "Usage: " << argv[0] << " -f FILE_TRAINING_DATA [-t TIME_BUDGET] [-p]\n"
+	cout << "Usage: " << argv[0] << " -f FILE_TRAINING_DATA [-t TIME_BUDGET] [-s PERCENT] [-p]\n"
 	     << "OR : " << argv[0] << " --expected\n"
 	     << "Arguments:\n"
 	     << "-h, --help, printing this message.\n"
 	     << "-f, --file FILE_TRAINING_DATA.\n"
 	     << "-t, --timeout TIME_BUDGET, in seconds (1 by default)\n"
+	     << "-s, --sample PERCENT, to sample candidates from PERCENT of the training set (100 by default)\n"
 	     << "-p, --parallel, to make parallel search\n"
-	     << "--expected, to print soime expected results\n";
+	     << "--expected, to print some expected results\n";
 }
 
 void expected()
@@ -167,18 +169,23 @@ int main( int argc, char **argv )
 	size_t domain_size;
 	int starting_value;
 	int time_budget;
+	int percent_training_set;
 	
 	string training_data_file_path;
 	string line, string_number;
 	ifstream training_data_file;
 
 	size_t number_samples = 0;
+	size_t total_training_set_size = 0;
+	vector<int> candidates;
 	vector<int> samples;
 	vector<double> labels;
+	vector<double> sampled_labels;
 
 	bool parallel;
-	
-	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-p", "--parallel" } );
+
+	randutils::mt19937_rng rng;
+	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-p", "--parallel", "-s", "--sample" } );
 	cmdl.parse( argc, argv );
 	
 	if( cmdl[ { "-h", "--help"} ] )
@@ -201,6 +208,7 @@ int main( int argc, char **argv )
 
 		cmdl( {"f", "file"} ) >> training_data_file_path;
 		cmdl( {"t", "timeout"}, 1 ) >> time_budget;
+		cmdl( {"s", "sample"}, 100 ) >> percent_training_set;
 		time_budget *= 1000000; // GHOST needs microseconds
 		cmdl( {"p", "parallel"}, false ) >> parallel;
 
@@ -214,7 +222,7 @@ int main( int argc, char **argv )
 	
 		while( getline( training_data_file, line ) )
 		{
-			++number_samples;
+			++total_training_set_size;
 			auto delimiter = line.find(" : ");
 			std::string label = line.substr( 0, delimiter );
 			stringstream label_stream( label );
@@ -227,19 +235,45 @@ int main( int argc, char **argv )
 			{
 				stringstream number_stream( string_number );
 				number_stream >> value;
-				samples.push_back( value );
+				candidates.push_back( value );
 			}
 		}		
 
 		training_data_file.close();
+		number_samples = static_cast<int>( ( total_training_set_size * percent_training_set ) / 100 );
 
+		if( percent_training_set < 100 )
+		{
+			std::vector<int> indexes( total_training_set_size );
+			std::iota( indexes.begin(), indexes.end(), 0 );
+			
+			rng.shuffle( indexes );
+			for( int i = 0 ; i < number_samples ; ++i )
+			{
+				std::copy_n( candidates.begin() + ( indexes[ i ] * number_variables ), number_variables, std::back_inserter( samples ) );
+				sampled_labels.push_back( labels[ indexes[ i ] ] );
+
+				// std::copy_n( candidates.begin() + ( indexes[ i ] * number_variables ), number_variables, std::ostream_iterator<int>( std::cout, " " ) );
+				// std::cout << ": " << labels[ indexes[ i ] ] << "\n";
+			}
+		}
+		else
+		{
+			samples.resize( total_training_set_size * number_variables );
+			std::copy( candidates.begin(), candidates.end(), samples.begin() );
+
+			sampled_labels.resize( total_training_set_size );
+			std::copy( labels.begin(), labels.end(), sampled_labels.begin() );
+		}
+		
 		std::cout << "Number vars: " << number_variables
 		          << ", Domain: " << domain_size
 		          << ", Number samples: " << number_samples
+		          << ", Training set size: " << total_training_set_size
 		          << ", Starting value: " << starting_value
 		          << "\n";		
 	
-		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, labels );
+		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels );
 		Solver solver( builder );
 
 		double cost;
