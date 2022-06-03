@@ -37,6 +37,7 @@ void usage( char **argv )
 	     << "-t, --timeout TIME_BUDGET, in seconds (1 by default)\n"
 	     << "-s, --sample PERCENT, to sample candidates from PERCENT of the training set (100 by default)\n"
 	     << "-p, --parallel, to make parallel search\n"
+	     << "-d, --debug, to print additional information\n"
 	     << "--expected, to print some expected results\n";
 }
 
@@ -183,7 +184,8 @@ int main( int argc, char **argv )
 	vector<double> sampled_labels;
 
 	bool parallel;
-
+	bool debug;
+	
 	randutils::mt19937_rng rng;
 	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample" } );
 	cmdl.parse( argc, argv );
@@ -210,11 +212,8 @@ int main( int argc, char **argv )
 		cmdl( {"t", "timeout"}, 1 ) >> time_budget;
 		cmdl( {"s", "sample"}, 100 ) >> percent_training_set;
 		time_budget *= 1000000; // GHOST needs microseconds
-		//cmdl( {"p", "parallel"} ) ? parallel = true : parallel = false;
-		if( cmdl[ {"-p", "--parallel"} ] )
-			parallel = true;
-		else
-			parallel = false;
+		cmdl[ {"-p", "--parallel"} ] ? parallel = true : parallel = false;
+		cmdl[ {"-d", "--debug"} ] ? debug = true : debug = false;
 		
 		training_data_file.open( training_data_file_path );
 		int value;
@@ -256,9 +255,16 @@ int main( int argc, char **argv )
 			{
 				std::copy_n( candidates.begin() + ( indexes[ i ] * number_variables ), number_variables, std::back_inserter( samples ) );
 				sampled_labels.push_back( labels[ indexes[ i ] ] );
+			}
 
-				// std::copy_n( candidates.begin() + ( indexes[ i ] * number_variables ), number_variables, std::ostream_iterator<int>( std::cout, " " ) );
-				// std::cout << ": " << labels[ indexes[ i ] ] << "\n";
+			if( debug )
+			{
+				std::cout << "List of NON-SAMPLED candidates:\n";
+				for( int i = number_samples ; i < total_training_set_size ; ++i )
+				{
+					std::copy_n( candidates.begin() + ( indexes[ i ] * number_variables ), number_variables, std::ostream_iterator<int>( std::cout, " " ) );
+					std::cout << ": " << labels[ indexes[ i ] ] << "\n";
+				}
 			}
 		}
 		else
@@ -269,13 +275,14 @@ int main( int argc, char **argv )
 			sampled_labels.resize( total_training_set_size );
 			std::copy( labels.begin(), labels.end(), sampled_labels.begin() );
 		}
-		
-		std::cout << "Number vars: " << number_variables
-		          << ", Domain: " << domain_size
-		          << ", Number samples: " << number_samples
-		          << ", Training set size: " << total_training_set_size
-		          << ", Starting value: " << starting_value
-		          << "\nParallel run: " << std::boolalpha << parallel << "\n";		
+
+		if( debug )
+			std::cout << "Number vars: " << number_variables
+			          << ", Domain: " << domain_size
+			          << ", Number samples: " << number_samples
+			          << ", Training set size: " << total_training_set_size
+			          << ", Starting value: " << starting_value
+			          << "\nParallel run: " << std::boolalpha << parallel << "\n";		
 	
 		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels );
 		Solver solver( builder );
