@@ -20,5 +20,4 @@ double ObjectiveSparse::required_cost( const vector<Variable*>& vecVariables ) c
 int ObjectiveSparse::expert_heuristic_value( const std::vector< Variable * > &variables, int variable_index, const std::vector< int > &possible_values ) const
 {
 	return rng.pick( possible_values );
-
 }

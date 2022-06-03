@@ -185,10 +185,10 @@ int main( int argc, char **argv )
 	bool parallel;
 
 	randutils::mt19937_rng rng;
-	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-p", "--parallel", "-s", "--sample" } );
+	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample" } );
 	cmdl.parse( argc, argv );
 	
-	if( cmdl[ { "-h", "--help"} ] )
+	if( cmdl[ {"-h", "--help"} ] )
 	{
 		usage( argv );
 		return EXIT_SUCCESS;
@@ -210,8 +210,12 @@ int main( int argc, char **argv )
 		cmdl( {"t", "timeout"}, 1 ) >> time_budget;
 		cmdl( {"s", "sample"}, 100 ) >> percent_training_set;
 		time_budget *= 1000000; // GHOST needs microseconds
-		cmdl( {"p", "parallel"}, false ) >> parallel;
-
+		//cmdl( {"p", "parallel"} ) ? parallel = true : parallel = false;
+		if( cmdl[ {"-p", "--parallel"} ] )
+			parallel = true;
+		else
+			parallel = false;
+		
 		training_data_file.open( training_data_file_path );
 		int value;
 		double error;
@@ -271,7 +275,7 @@ int main( int argc, char **argv )
 		          << ", Number samples: " << number_samples
 		          << ", Training set size: " << total_training_set_size
 		          << ", Starting value: " << starting_value
-		          << "\n";		
+		          << "\nParallel run: " << std::boolalpha << parallel << "\n";		
 	
 		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels );
 		Solver solver( builder );
