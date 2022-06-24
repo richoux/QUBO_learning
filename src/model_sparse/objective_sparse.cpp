@@ -17,7 +17,10 @@ double ObjectiveSparse::required_cost( const vector<Variable*>& vecVariables ) c
 	return std::count_if( vecVariables.begin(), vecVariables.end(), [](auto &v){ return v->get_value() == 0; } );
 }
 
-int ObjectiveSparse::expert_heuristic_value( const std::vector< Variable * > &variables, int variable_index, const std::vector< int > &possible_values ) const
+int ObjectiveSparse::expert_heuristic_value( const std::vector<Variable*> &variables,
+                                             int variable_index,
+                                             const std::vector<int> &possible_values,
+                                             randutils::mt19937_rng &rng ) const
 {
 	return rng.pick( possible_values );
 }
