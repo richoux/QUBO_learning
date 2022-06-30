@@ -21,11 +21,19 @@ class SupervisedQUBO : public Minimize
 	                     // Then we consider that other values in the domain are all natural numbers
 	                     // from starting_value to starting_value + domain_size.
 	std::vector<double> _error_vector;
-	
+	bool _complementary_variable;
+
   double required_cost( const vector<Variable*>& vecVariables ) const override;
 	Eigen::VectorXi fill_vector( const std::vector<int>& candidate ) const;
 	Eigen::MatrixXi fill_matrix( const vector<Variable*>& vecVariables ) const;
 	
 public:
-	SupervisedQUBO( const vector<Variable>& variables, const std::vector<int>& training_data, size_t number_samples, size_t number_variables, size_t domain_size, int starting_value, const std::vector<double>& error_vector );
+	SupervisedQUBO( const vector<Variable>& variables,
+	                const std::vector<int>& training_data,
+	                size_t number_samples,
+	                size_t number_variables,
+	                size_t domain_size,
+	                int starting_value,
+	                const std::vector<double>& error_vector,
+	                bool complementary_variable );
 };

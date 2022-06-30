@@ -14,29 +14,50 @@ ObjectiveSVN::ObjectiveSVN( const vector<Variable>& variables,
                             size_t number_variables,
                             size_t domain_size,
                             int starting_value,
-                            const std::vector<double>& error_vector )
+                            const std::vector<double>& error_vector,
+                            bool complementary_variable )
 	: Maximize( variables, "Learning QUBO SVN" ),
 	  _training_data( training_data ),
 	  _size_training_set( number_samples ),
 	  _domain_size( domain_size ),
 	  _candidate_length( number_variables ),
 	  _starting_value( starting_value ),
-	  _error_vector( error_vector )
+	  _error_vector( error_vector ),
+	  _complementary_variable( complementary_variable )
 { }
 
 Eigen::VectorXi ObjectiveSVN::fill_vector( const std::vector<int>& candidate ) const
 {
-	Eigen::VectorXi X = Eigen::VectorXi::Zero( _candidate_length * _domain_size );
+	Eigen::VectorXi X;
 
-	for( size_t index = 0 ; index < _candidate_length ; ++index )
-		X( index * _domain_size + ( candidate[ index ] - _starting_value ) ) = 1;
+	if( _complementary_variable )
+	{
+		X = Eigen::VectorXi::Zero( ( _candidate_length - 1 ) * _domain_size + 1 );
+		
+		for( size_t index = 0 ; index < _candidate_length - 1 ; ++index )
+			X( index * _domain_size + ( candidate[ index ] - _starting_value ) ) = 1;
+
+		X( _candidate_length - 1 ) = 1;	
+	}
+	else
+	{
+		X = Eigen::VectorXi::Zero( _candidate_length * _domain_size );
+		
+		for( size_t index = 0 ; index < _candidate_length ; ++index )
+			X( index * _domain_size + ( candidate[ index ] - _starting_value ) ) = 1;
+	}
 
 	return X;
 }
 
 Eigen::MatrixXi ObjectiveSVN::fill_matrix( const vector<Variable*>& vecVariables ) const
 {
-	size_t matrix_side = _candidate_length * _domain_size;
+	size_t matrix_side;
+	if( _complementary_variable )
+		matrix_side	= ( _candidate_length - 1 ) * _domain_size + 1;
+	else
+		matrix_side	= _candidate_length * _domain_size;
+		
 	Eigen::MatrixXi Q = Eigen::MatrixXi::Zero( matrix_side, matrix_side );
 
 	for( size_t length = matrix_side ; length > 0 ; --length )

@@ -38,6 +38,7 @@ void usage( char **argv )
 	     << "-s, --sample PERCENT, to sample candidates from PERCENT of the training set (100 by default)\n"
 	     << "-p, --parallel, to make parallel search\n"
 	     << "-d, --debug, to print additional information\n"
+	     << "-c, --complementary, to force one complementary variable\n"
 	     << "--expected, to print some expected results\n";
 }
 
@@ -155,9 +156,13 @@ void check_solution( const std::vector<int>& solution,
                      size_t number_variables,
                      size_t domain_size,
                      size_t number_samples,
-                     int starting_value )
+                     int starting_value,
+                     bool complementary_variable )
 {
 	size_t matrix_side = number_variables * domain_size;
+	if( complementary_variable )
+		++matrix_side;
+	
 	Eigen::MatrixXi Q = Eigen::MatrixXi::Zero( matrix_side, matrix_side );
 
 	for( size_t length = matrix_side ; length > 0 ; --length )
@@ -173,13 +178,20 @@ void check_solution( const std::vector<int>& solution,
 	int min_scalar = std::numeric_limits<int>::max();
 	std::vector<int> scalars( number_samples );
 
+	int additional_variable = 0;
+	if( complementary_variable )
+		additional_variable = 1;
+
 	for( size_t index_sample = 0 ; index_sample < number_samples ; ++index_sample )
 	{
 		Eigen::VectorXi X = Eigen::VectorXi::Zero( matrix_side );
 		
 		for( size_t index_var = 0 ; index_var < number_variables ; ++index_var )
-			X( index_var * domain_size + ( samples[ index_sample * number_variables + index_var ] - starting_value ) ) = 1;
+			X( index_var * domain_size + ( samples[ index_sample * ( number_variables + additional_variable ) + index_var ] - starting_value ) ) = 1;
 
+		if( complementary_variable )
+			X( matrix_side - 1 ) = 1;
+		
 		scalars[ index_sample ] = ( X.transpose() * Q ) * X;
 		if( min_scalar > scalars[ index_sample ]	)
 			min_scalar = scalars[ index_sample ];		
@@ -191,15 +203,14 @@ void check_solution( const std::vector<int>& solution,
 	for( size_t index_sample = 0 ; index_sample < number_samples ; ++index_sample )
 	{
 		std::string candidate = "[";
-		for( size_t index_var = 0 ; index_var < number_variables ; ++index_var )
+		for( size_t index_var = 0 ; index_var < number_variables + additional_variable ; ++index_var )
 		{
 			if( index_var > 0 )
 				candidate += " ";
-			candidate += std::to_string( samples[ index_sample * number_variables + index_var ] );
+			candidate += std::to_string( samples[ index_sample * ( number_variables + additional_variable ) + index_var ] );
 		}
-		candidate += "]";
 
-		// std::cout << "Scalar for candidate " << candidate << ": " << std::setw( 3 ) << scalars[ index_sample ] << "\n";		
+		candidate += "]";
 		
 		if( labels[ index_sample ] == 0 && scalars[ index_sample ] != min_scalar )
 			std::cout << "/!\\ Candidate " << candidate << " is a solution but has not a minimal scalar: " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
@@ -230,6 +241,7 @@ int main( int argc, char **argv )
 
 	bool parallel;
 	bool debug;
+	bool complementary_variable;
 	
 	randutils::mt19937_rng rng;
 	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample" } );
@@ -259,6 +271,7 @@ int main( int argc, char **argv )
 		time_budget *= 1000000; // GHOST needs microseconds
 		cmdl[ {"-p", "--parallel"} ] ? parallel = true : parallel = false;
 		cmdl[ {"-d", "--debug"} ] ? debug = true : debug = false;
+		cmdl[ {"-c", "--complementary"} ] ? complementary_variable = true : complementary_variable = false;
 		
 		training_data_file.open( training_data_file_path );
 		int value;
@@ -276,8 +289,7 @@ int main( int argc, char **argv )
 			stringstream label_stream( label );
 			label_stream >> error;
 			labels.push_back( error );
-			line.erase(0, delimiter + 3 );
-			
+			line.erase( 0, delimiter + 3 );
 			stringstream line_stream( line );
 			while( line_stream >> string_number )
 			{
@@ -285,11 +297,18 @@ int main( int argc, char **argv )
 				number_stream >> value;
 				candidates.push_back( value );
 			}
-		}		
+
+			if( complementary_variable )
+				candidates.push_back( 1 );
+		}
 
 		training_data_file.close();
 		number_samples = static_cast<int>( ( total_training_set_size * percent_training_set ) / 100 );
 
+		int additional_variable = 0;
+		if( complementary_variable )
+			additional_variable = 1;
+		
 		if( percent_training_set < 100 )
 		{
 			std::vector<int> indexes( total_training_set_size );
@@ -298,7 +317,7 @@ int main( int argc, char **argv )
 			rng.shuffle( indexes );
 			for( int i = 0 ; i < number_samples ; ++i )
 			{
-				std::copy_n( candidates.begin() + ( indexes[ i ] * number_variables ), number_variables, std::back_inserter( samples ) );
+				std::copy_n( candidates.begin() + ( indexes[ i ] * ( number_variables + additional_variable ) ), number_variables + additional_variable, std::back_inserter( samples ) );
 				sampled_labels.push_back( labels[ indexes[ i ] ] );
 			}
 
@@ -307,14 +326,14 @@ int main( int argc, char **argv )
 				std::cout << "List of NON-SAMPLED candidates:\n";
 				for( int i = number_samples ; i < total_training_set_size ; ++i )
 				{
-					std::copy_n( candidates.begin() + ( indexes[ i ] * number_variables ), number_variables, std::ostream_iterator<int>( std::cout, " " ) );
+					std::copy_n( candidates.begin() + ( indexes[ i ] * ( number_variables + additional_variable ) ), number_variables + additional_variable, std::ostream_iterator<int>( std::cout, " " ) );
 					std::cout << ": " << labels[ indexes[ i ] ] << "\n";
 				}
 			}
 		}
 		else
 		{
-			samples.resize( total_training_set_size * number_variables );
+			samples.resize( total_training_set_size * ( number_variables + additional_variable ) );
 			std::copy( candidates.begin(), candidates.end(), samples.begin() );
 
 			sampled_labels.resize( total_training_set_size );
@@ -322,14 +341,14 @@ int main( int argc, char **argv )
 		}
 
 		if( debug )
-			std::cout << "Number vars: " << number_variables
+			std::cout << "Number vars: " << number_variables + additional_variable
 			          << ", Domain: " << domain_size
 			          << ", Number samples: " << number_samples
 			          << ", Training set size: " << total_training_set_size
 			          << ", Starting value: " << starting_value
 			          << "\nParallel run: " << std::boolalpha << parallel << "\n";		
-	
-		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels );
+
+		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable );
 		Solver solver( builder );
 
 		double cost;
@@ -351,15 +370,8 @@ int main( int argc, char **argv )
 		                number_variables,
 		                domain_size,
 		                total_training_set_size,
-		                starting_value );
-
-		// check_solution( solution,
-		//                 samples,
-		//                 labels,
-		//                 number_variables,
-		//                 domain_size,
-		//                 number_samples,
-		//                 starting_value );
+		                starting_value,
+		                complementary_variable );
 	}
 	
 	return EXIT_SUCCESS;
