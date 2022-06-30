@@ -20,8 +20,10 @@
 #include "builder_svn.hpp"
 #elif defined SPARSE
 #include "builder_sparse.hpp"
-#else
+#elif defined SCAM
 #include "builder_scam.hpp"
+#else
+#include "builder_force_pattern.hpp"
 #endif
 
 using namespace ghost;
@@ -44,7 +46,18 @@ void usage( char **argv )
 
 void expected()
 {
-	// size_t matrix_side = 9;
+	size_t matrix_side = 9;
+	Eigen::MatrixXi Q {
+		{-1, 0, 0, 1, 0, 0, 1, 0, 0},
+		{0, -1, 0, 0, 1, 0, 0, 1, 0},
+		{0, 0, -1, 0, 0, 1, 0, 0, 1},
+		{0, 0, 0, -1, 0, 0, 1, 0, 0},
+		{0, 0, 0, 0, -1, 0, 0, 1, 0},
+		{0, 0, 0, 0, 0, -1, 0, 0, 1},
+		{0, 0, 0, 0, 0, 0, -1, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, -1, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, -1}
+	};
 	// Eigen::MatrixXi Q {
 	// 	{-1, 1, 1, 1, 0, 0, 1, 0, 0},
 	// 	{0, -1, 1, 0, 1, 0, 0, 1, 0},
@@ -57,36 +70,37 @@ void expected()
 	// 	{0, 0, 0, 0, 0, 0, 0, 0, -1}
 	// };
 
-	// std::vector< std::array<int, 3> > candidates {
-	// 	{1, 1, 1},
-	// 	{1, 1, 2},
-	// 	{1, 1, 3},
-	// 	{1, 2, 1},
-	// 	{1, 2, 2},
-	// 	{1, 2, 3},
-	// 	{1, 3, 1},
-	// 	{1, 3, 2},
-	// 	{1, 3, 3},
-	// 	{2, 1, 1},
-	// 	{2, 1, 2},
-	// 	{2, 1, 3},
-	// 	{2, 2, 1},
-	// 	{2, 2, 2},
-	// 	{2, 2, 3},
-	// 	{2, 3, 1},
-	// 	{2, 3, 2},
-	// 	{2, 3, 3},
-	// 	{3, 1, 1},
-	// 	{3, 1, 2},
-	// 	{3, 1, 3},
-	// 	{3, 2, 1},
-	// 	{3, 2, 2},
-	// 	{3, 2, 3},
-	// 	{3, 3, 1},
-	// 	{3, 3, 2},
-	// 	{3, 3, 3}
-	// };
+	std::vector< std::array<int, 3> > candidates {
+		{1, 1, 1},
+		{1, 1, 2},
+		{1, 1, 3},
+		{1, 2, 1},
+		{1, 2, 2},
+		{1, 2, 3},
+		{1, 3, 1},
+		{1, 3, 2},
+		{1, 3, 3},
+		{2, 1, 1},
+		{2, 1, 2},
+		{2, 1, 3},
+		{2, 2, 1},
+		{2, 2, 2},
+		{2, 2, 3},
+		{2, 3, 1},
+		{2, 3, 2},
+		{2, 3, 3},
+		{3, 1, 1},
+		{3, 1, 2},
+		{3, 1, 3},
+		{3, 2, 1},
+		{3, 2, 2},
+		{3, 2, 3},
+		{3, 3, 1},
+		{3, 3, 2},
+		{3, 3, 3}
+	};
 
+	/*
 	size_t matrix_side = 10;
 	Eigen::MatrixXi Q {
 		{0, 0, 0, 0, 0, 0, 0, 0, 0,   0},
@@ -130,7 +144,8 @@ void expected()
 		{2, 2, 1, 1},
 		{2, 2, 2, 1}
 	};
-
+	*/
+	
 	for( auto& candidate : candidates )
 	{
 		Eigen::VectorXi X = Eigen::VectorXi::Zero( matrix_side );
@@ -138,12 +153,12 @@ void expected()
 		string candidate_string = "[";		
 		for( size_t index = 0 ; index < 3 ; ++index )
 		{
-			X( index * 3 + candidate[ index ] ) = 1;
+			X( index * 3 + candidate[ index ] - 1 ) = 1;
 			if( index > 0)
 				candidate_string += ",";
 			candidate_string += std::to_string( candidate[ index ] );
 		}
-		X( 9 ) = 1;
+		//X( 9 ) = 1;
 
 		candidate_string += "]";		
 		std::cout << candidate_string << " = " << ( X.transpose() * Q ) * X << "\n";
