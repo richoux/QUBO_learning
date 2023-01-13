@@ -67,9 +67,9 @@ void BuilderQUBO::declare_variables()
 	for( size_t i = 0 ; i < _is_triangle_variables.size() ; ++i )
 	{
 		if( _is_triangle_variables[i] )
-			variables.emplace_back( std::initializer_list<int>( {0} ) );
+			variables.emplace_back( std::initializer_list<int>( {2} ) );
 		else
-			variables.emplace_back( std::initializer_list<int>( {-2, -1, 0, 1, 2} ) );
+			variables.emplace_back( std::initializer_list<int>( {-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10} ) ); // {-2, -1, 0, 1, 2}
 	}
 }
 
