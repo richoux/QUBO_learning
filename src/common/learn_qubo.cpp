@@ -32,7 +32,7 @@ using namespace std::literals::chrono_literals;
 void usage( char **argv )
 {
 	cout << "Usage: " << argv[0] << " -f FILE_TRAINING_DATA [-t TIME_BUDGET] [-s PERCENT] [-p]\n"
-	     << "OR : " << argv[0] << " -f FILE_TRAINING_DATA --check FILE_Q_MATRIX\n"
+	     << "OR : " << argv[0] << " -f FILE_TRAINING_DATA --check [FILE_Q_MATRIX]\n"
 	     << "OR : " << argv[0] << " --expected\n"
 	     << "Arguments:\n"
 	     << "-h, --help, printing this message.\n"
@@ -42,7 +42,7 @@ void usage( char **argv )
 	     << "-p, --parallel, to make parallel search\n"
 	     << "-d, --debug, to print additional information\n"
 	     << "-c, --complementary, to force one complementary variable\n"
-	     << "--check FILE_Q_MATRIX, to compute xt.Q.x results\n"
+	     << "--check [FILE_Q_MATRIX] to compute xt.Q.x results if a file is provided containing Q, or to display all xt.Q.x results after the learning of Q otherwise.\n"
 	     << "--expected, to print some expected results\n";
 }
 
@@ -338,32 +338,26 @@ int main( int argc, char **argv )
 		{
 			q_matrix_file.open( q_matrix_file_path );
 			vector<int> q_matrix;
-			
+
+			int row = 0;
 			while( getline( q_matrix_file, line ) )
 			{
-				// cout << "\nline: " << line << "\n";
+				int count = 0;
 				stringstream line_stream( line );
 				while( line_stream >> string_number )
 				{
-					// cout << string_number << " ";
+					++count;
+					if( count < row + 1 )
+						continue;
 					stringstream number_stream( string_number );
 					number_stream >> value;
 					q_matrix.push_back( value );
 				}
+				++row;
 			}
 
 			q_matrix_file.close();
 
-			// cout << "\nq_matrix:\n";
-			// int shift = 0;
-			// for( int i = 0 ; i < number_variables*domain_size ; ++i )
-			// {
-			// 	if( i > 0 )
-			// 		shift += number_variables*domain_size - i + 1;
-			// 	for( int j = 0 ; j < number_variables*domain_size - i ; ++j )
-			// 		cout << q_matrix[shift + j] << " ";
-			// 	cout << "\n";
-			// }
 			check_solution( q_matrix,
 			                candidates,
 			                labels,
@@ -434,7 +428,11 @@ int main( int argc, char **argv )
 
 			std::cout << "\nConstraints satisfied: " << std::boolalpha << solved << "\n"
 			          << "Objective function cost: " << cost << "\n";
-	
+
+			bool check = false;
+			if( cmdl[ {"check"} ] )
+			    check = true;
+			
 			check_solution( solution,
 			                candidates,
 			                labels,
@@ -442,7 +440,8 @@ int main( int argc, char **argv )
 			                domain_size,
 			                total_training_set_size,
 			                starting_value,
-			                complementary_variable );
+			                complementary_variable,
+			                check );
 		}
 	}
 	return EXIT_SUCCESS;
