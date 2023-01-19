@@ -42,6 +42,7 @@ void usage( char **argv )
 	     << "-p, --parallel, to make parallel search\n"
 	     << "-d, --debug, to print additional information\n"
 	     << "-c, --complementary, to force one complementary variable\n"
+	     << "-w, --weak_learners NUMBER_LEARNERS, to learn NUMBER_LEARNERS Q matrices and merge them into an average matrix (disabled by default).\n"
 	     << "--check [FILE_Q_MATRIX] to compute xt.Q.x results if a file is provided containing Q, or to display all xt.Q.x results after the learning of Q otherwise.\n"
 	     << "--expected, to print some expected results\n";
 }
@@ -254,6 +255,7 @@ int main( int argc, char **argv )
 	int starting_value;
 	int time_budget;
 	int percent_training_set;
+	int weak_learners;
 	
 	string training_data_file_path;
 	string q_matrix_file_path;
@@ -275,7 +277,7 @@ int main( int argc, char **argv )
 	bool force_positive;
 	
 	randutils::mt19937_rng rng;
-	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample", "--check" } );
+	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample", "--check", "-w", "--weak_learners" } );
 	cmdl.parse( argc, argv );
 	
 	if( cmdl[ {"-h", "--help"} ] )
@@ -299,6 +301,7 @@ int main( int argc, char **argv )
 		cmdl( {"f", "file"} ) >> training_data_file_path;
 		cmdl( {"t", "timeout"}, 1 ) >> time_budget;
 		cmdl( {"s", "sample"}, 100 ) >> percent_training_set;
+		cmdl( {"w", "weak_learners"}, 1 ) >> weak_learners;
 		time_budget *= 1000000; // GHOST needs microseconds
 		cmdl[ {"-p", "--parallel"} ] ? parallel = true : parallel = false;
 		cmdl[ {"-d", "--debug"} ] ? debug = true : debug = false;
@@ -440,32 +443,59 @@ int main( int argc, char **argv )
 			}
 
 			if( debug )
+			{
 				std::cout << "Number vars: " << number_variables + additional_variable
 				          << ", Domain: " << domain_size
 				          << ", Number samples: " << number_samples
 				          << ", Training set size: " << total_training_set_size
 				          << ", Starting value: " << starting_value
-				          << "\nParallel run: " << std::boolalpha << parallel << "\n";		
-
+				          << "\nParallel run: " << std::boolalpha << parallel << "\n";
+				if( weak_learners > 1 )
+					std::cout  << "Weak learners: " << weak_learners << "\n";		
+			}
+			
 			BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable );
 			Solver solver( builder );
 
-			double cost;
 			vector<int> solution;
-
+			double cost;
+			bool solved = true;
 			Options options;
 			options.print = make_shared<PrintQUBO>( number_variables * domain_size );
 			if( parallel )
 				options.parallel_runs = true;
-		
-			auto solved = solver.solve( cost, solution, time_budget, options );		
+			
+			if( weak_learners == 1 )
+			{			
+				solved = solver.solve( cost, solution, time_budget, options );		
+			}
+			else
+			{
+				vector<vector<int>> solutions( weak_learners );
+				double sum_cost = 0.;
+				
+				for( int i = 0 ; i < weak_learners ; ++i )
+				{
+					solved = solved && solver.solve( cost, solutions[i], time_budget, options );
+					sum_cost += cost;
+				}
 
+				solution = std::vector<int>( solutions[0].size(), 0 );
+				
+				for( auto& sol : solutions )
+					std::transform( sol.cbegin(), sol.cend(), solution.cbegin(), solution.begin(), std::plus<>{} );
+
+				std::transform( solution.cbegin(), solution.cend(), solution.begin(), [&](auto s){ return static_cast<int>( std::round( s / weak_learners ) ); } );
+				
+				cost = sum_cost / weak_learners;
+			}
+				
 			std::cout << "\nConstraints satisfied: " << std::boolalpha << solved << "\n"
 			          << "Objective function cost: " << cost << "\n";
-
+			
 			bool check = false;
 			if( cmdl[ {"check"} ] )
-			    check = true;
+				check = true;
 			
 			check_solution( solution,
 			                candidates,
@@ -477,7 +507,8 @@ int main( int argc, char **argv )
 			                complementary_variable,
 			                check );
 		}
+		
+		return EXIT_SUCCESS;
 	}
-	return EXIT_SUCCESS;
 }
 
