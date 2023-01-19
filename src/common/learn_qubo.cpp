@@ -38,7 +38,7 @@ void usage( char **argv )
 	     << "-h, --help, printing this message.\n"
 	     << "-f, --file FILE_TRAINING_DATA.\n"
 	     << "-t, --timeout TIME_BUDGET, in seconds (1 by default)\n"
-	     << "-s, --sample PERCENT, to sample candidates from PERCENT of the training set (100 by default)\n"
+	     << "-s, --sample PERCENT [--force_positive], to sample candidates from PERCENT of the training set (100 by default). --force_positive forces considering all positive candidates.\n"
 	     << "-p, --parallel, to make parallel search\n"
 	     << "-d, --debug, to print additional information\n"
 	     << "-c, --complementary, to force one complementary variable\n"
@@ -262,6 +262,7 @@ int main( int argc, char **argv )
 	ifstream q_matrix_file;
 
 	size_t number_samples = 0;
+	int number_remains_to_sample = 0;
 	size_t total_training_set_size = 0;
 	vector<int> candidates;
 	vector<int> samples;
@@ -271,6 +272,7 @@ int main( int argc, char **argv )
 	bool parallel;
 	bool debug;
 	bool complementary_variable;
+	bool force_positive;
 	
 	randutils::mt19937_rng rng;
 	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample", "--check" } );
@@ -300,7 +302,8 @@ int main( int argc, char **argv )
 		time_budget *= 1000000; // GHOST needs microseconds
 		cmdl[ {"-p", "--parallel"} ] ? parallel = true : parallel = false;
 		cmdl[ {"-d", "--debug"} ] ? debug = true : debug = false;
-		cmdl[ {"-c", "--complementary"} ] ? complementary_variable = true : complementary_variable = false;
+		cmdl[ {"-c", "--complementary"} ] ? complementary_variable = true : complementary_variable = false;-
+		cmdl[ {"--force_positive"} ] ? force_positive = true : force_positive = false;
 		
 		training_data_file.open( training_data_file_path );
 		int value;
@@ -373,23 +376,54 @@ int main( int argc, char **argv )
 			int additional_variable = 0;
 			if( complementary_variable )
 				additional_variable = 1;
-		
+
 			if( percent_training_set < 100 )
 			{
 				std::vector<int> indexes( total_training_set_size );
 				std::iota( indexes.begin(), indexes.end(), 0 );
-			
+				
+				if( debug )
+					std::cout << "List of sampled candidates:\n";
+
+				int number_positive_candidates = 0;
+
+				if( force_positive )
+					for( int i = total_training_set_size - 1 ; i >= 0 ; --i )
+						if( labels[ i ] == 0 )
+						{
+							std::copy_n( candidates.begin() + ( i * ( number_variables + additional_variable ) ), number_variables + additional_variable, std::back_inserter( samples ) );
+							sampled_labels.push_back( 0 );
+							++number_positive_candidates;
+							indexes.erase( indexes.begin() + i );
+							if( debug )
+							{
+								std::copy_n( candidates.begin() + ( i * ( number_variables + additional_variable ) ), number_variables + additional_variable, std::ostream_iterator<int>( std::cout, " " ) );
+								std::cout << ": " << labels[ i ] << "\n";
+							}
+						}
+
+				number_remains_to_sample = number_samples - number_positive_candidates;
+				
+				if( number_remains_to_sample < 0 )
+					std::cerr << "Warning: the sample rate is too low regarding the number of positive candidates for this constraint.\n";
+				
 				rng.shuffle( indexes );
-				for( int i = 0 ; i < number_samples ; ++i )
+
+				for( int i = 0 ; i < number_remains_to_sample ; ++i )
 				{
 					std::copy_n( candidates.begin() + ( indexes[ i ] * ( number_variables + additional_variable ) ), number_variables + additional_variable, std::back_inserter( samples ) );
 					sampled_labels.push_back( labels[ indexes[ i ] ] );
+					if( debug )
+					{
+						std::copy_n( candidates.begin() + ( indexes[ i ] * ( number_variables + additional_variable ) ), number_variables + additional_variable, std::ostream_iterator<int>( std::cout, " " ) );
+						std::cout << ": " << labels[ indexes[ i ] ] << "\n";
+					}						
 				}
 
 				if( debug )
 				{
 					std::cout << "List of NON-SAMPLED candidates:\n";
-					for( int i = number_samples ; i < total_training_set_size ; ++i )
+					for( int i = number_samples - number_positive_candidates; i < total_training_set_size - number_positive_candidates ; ++i )
 					{
 						std::copy_n( candidates.begin() + ( indexes[ i ] * ( number_variables + additional_variable ) ), number_variables + additional_variable, std::ostream_iterator<int>( std::cout, " " ) );
 						std::cout << ": " << labels[ indexes[ i ] ] << "\n";
