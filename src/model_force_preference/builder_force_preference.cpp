@@ -1,0 +1,99 @@
+#include <numeric>
+#include <initializer_list>
+
+#include <ghost/global_constraints/all_different.hpp>
+
+#include "builder_force_preference.hpp"
+
+BuilderQUBO::BuilderQUBO( const std::vector<int>& training_data,
+                          size_t number_samples,
+                          size_t number_variables,
+                          size_t domain_size,
+                          int starting_value,
+                          const std::vector<double>& error_vector,
+                          bool complementary_variable )
+	: ModelBuilder(),
+	  _training_data( training_data ),
+	  _size_training_set( number_samples ),
+	  _domain_size( domain_size ),
+	  _candidate_length( number_variables ),
+	  _matrix_side( _candidate_length * _domain_size ),
+	  _starting_value( starting_value ),
+	  _error_vector( error_vector ),
+	  _full_domain( 8 * number_variables + 1 ),
+	  _positive_domain( 4 * number_variables ),
+	  _complementary_variable( complementary_variable )
+{
+	std::iota( _full_domain.begin(), _full_domain.end(), - 4*number_variables );
+	std::iota( _positive_domain.begin(), _positive_domain.end(), 1 );
+
+	int sum_vars = 0;
+	for( int i = 1 ; i < _candidate_length ; ++i )
+		sum_vars += i;
+	
+	_index_rectangle_variables = std::vector<std::vector<int>>( sum_vars * _domain_size );
+	int rectangle_id = -1;
+		
+	if( _complementary_variable )
+		++_matrix_side;
+	
+	for( int row = _matrix_side ; row > 0 ; --row )
+	{
+		int col = _matrix_side - row;
+		int shift = 0;
+		int triangle_length;
+
+		triangle_length = ( _domain_size - ( ( col + 1 ) % _domain_size ) ) % _domain_size;
+
+		for( int i = 0 ; i < col ; ++i )
+			shift += ( _matrix_side - i );
+
+		for( int i = 0 ; i < row ; ++i )
+			if( i != 0 )
+			{
+				if( !( _complementary_variable && i == row - 1 ) )
+				{
+					if( i <= triangle_length )
+					{
+						_index_triangle_variables.push_back( shift + i );
+						_is_triangle_variables.push_back( true );
+					}
+					else
+					{
+						_is_triangle_variables.push_back( false );
+						if( ( i - triangle_length ) % _domain_size == 1 ) // if we start a new line of rectangle variables
+							++rectangle_id;
+						_index_rectangle_variables[rectangle_id].push_back( shift + i );
+					}
+				}
+				else
+					_is_triangle_variables.push_back( false );
+			}
+			else
+				_is_triangle_variables.push_back( false );
+	}
+}
+
+void BuilderQUBO::declare_variables()
+{
+	for( size_t i = 0 ; i < _is_triangle_variables.size() ; ++i )
+	{
+		if( _is_triangle_variables[i] )
+			variables.emplace_back( _positive_domain );
+		else
+			variables.emplace_back( _full_domain );
+	}
+}
+
+void BuilderQUBO::declare_constraints()
+{
+	constraints.emplace_back( make_shared< UniqueValue >( _index_triangle_variables ) );
+	for( auto& rec: _index_rectangle_variables )
+	  constraints.emplace_back( std::make_shared<ghost::global_constraints::AllDifferent>( rec ) );
+}
+
+void BuilderQUBO::declare_objective()
+{
+	objective = std::make_shared<SupervisedQUBO>( variables, _training_data, _size_training_set, _candidate_length, _domain_size, _starting_value, _error_vector, _complementary_variable );
+}
+

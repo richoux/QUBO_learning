@@ -1,5 +1,5 @@
-EXEC=qubo_ghost_scam qubo_ghost_svn qubo_ghost_sparse qubo_ghost_force_pattern
-EXEC_DEBUG=qubo_ghost_scam_debug qubo_ghost_svn_debug qubo_ghost_sparse_debug qubo_ghost_force_pattern_debug
+EXEC=qubo_ghost_scam qubo_ghost_svn qubo_ghost_sparse qubo_ghost_force_pattern qubo_ghost_force_preference
+EXEC_DEBUG=qubo_ghost_scam_debug qubo_ghost_svn_debug qubo_ghost_sparse_debug qubo_ghost_force_pattern_debug qubo_ghost_force_preference_debug
 
 # Compiler flags
 CXXFIRSTFLAGS= -O3 -W -Wall -Wextra -pedantic -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable
@@ -26,11 +26,12 @@ OBJ_scam=$(addprefix $(OBJDIR)/,constraint_unique_value.o objective_supervised_l
 OBJ_svn=$(addprefix $(OBJDIR)/,constraint_training_set.o constraint_unique_value.o objective_svn.o builder_svn.o print_qubo.o learn_qubo_svn.o)
 OBJ_sparse=$(addprefix $(OBJDIR)/,constraint_training_set.o constraint_unique_value.o objective_sparse.o builder_sparse.o print_qubo.o learn_qubo_sparse.o)
 OBJ_force_pattern=$(addprefix $(OBJDIR)/,constraint_equal.o objective_supervised_learning.o builder_force_pattern.o print_qubo.o learn_qubo_force_pattern.o)
+OBJ_force_preference=$(addprefix $(OBJDIR)/,constraint_unique_value.o objective_supervised_learning.o builder_force_preference.o print_qubo.o learn_qubo_force_preference.o)
 BINDIR=bin
 INCLUDEDIR=./include
 LIBDIR=./lib
 
-VPATH=src/common:src/model_scam:src/model_svn:src/model_sparse:src/model_force_pattern
+VPATH=src/common:src/model_scam:src/model_svn:src/model_sparse:src/model_force_pattern:src/model_force_preference
 
 # Reminder, 'cause it is easy to forget makefile's fucked-up syntax...
 # $@ is what triggered the rule, ie the target before :
@@ -56,6 +57,9 @@ qubo_ghost_sparse: $(OBJ_sparse)
 qubo_ghost_force_pattern: $(OBJ_force_pattern)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
+qubo_ghost_force_preference: $(OBJ_force_preference)
+	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
+
 qubo_ghost_scam_debug: $(OBJ_scam)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
@@ -66,6 +70,9 @@ qubo_ghost_sparse_debug: $(OBJ_sparse)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
 qubo_ghost_force_pattern_debug: $(OBJ_force_pattern)
+	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
+
+qubo_ghost_force_preference_debug: $(OBJ_force_preference)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
 $(OBJDIR)/learn_qubo_scam.o: learn_qubo.cpp builder_scam.cpp print_qubo.cpp
@@ -79,6 +86,9 @@ $(OBJDIR)/learn_qubo_sparse.o: learn_qubo.cpp builder_sparse.cpp print_qubo.cpp
 
 $(OBJDIR)/learn_qubo_force_pattern.o: learn_qubo.cpp builder_force_pattern.cpp print_qubo.cpp
 	$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -I./src/model_force_pattern -I./src/common $< -o $@
+
+$(OBJDIR)/learn_qubo_force_preference.o: learn_qubo.cpp builder_force_preference.cpp print_qubo.cpp
+	$(CXX) $(CXXFLAGS) -c -DPREF -I$(INCLUDEDIR) -I./src/model_force_preference -I./src/common $< -o $@
 
 $(OBJDIR)/%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -I./src/common $< -o $@

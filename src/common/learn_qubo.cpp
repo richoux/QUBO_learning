@@ -22,6 +22,8 @@
 #include "builder_sparse.hpp"
 #elif defined SCAM
 #include "builder_scam.hpp"
+#elif defined PREF
+#include "builder_force_preference.hpp"
 #else
 #include "builder_force_pattern.hpp"
 #endif
