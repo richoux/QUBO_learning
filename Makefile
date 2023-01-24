@@ -2,21 +2,22 @@ EXEC=qubo_ghost_scam qubo_ghost_svn qubo_ghost_sparse qubo_ghost_force_pattern q
 EXEC_DEBUG=qubo_ghost_scam_debug qubo_ghost_svn_debug qubo_ghost_sparse_debug qubo_ghost_force_pattern_debug qubo_ghost_force_preference_debug
 
 # Compiler flags
+MYFLAGS=
 CXXFIRSTFLAGS= -O3 -W -Wall -Wextra -pedantic -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable
 CXXFIRSTFLAGSDEBUG= -g -O0 -W -Wall -Wextra -pedantic -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
 	CXX=g++
-	CXXFLAGS= -std=c++20 $(CXXFIRSTFLAGS)
-	CXXFLAGSDEBUG= -std=c++20 $(CXXFIRSTFLAGSDEBUG)
+	CXXFLAGS= -std=c++20 $(CXXFIRSTFLAGS) $(MYFLAGS)
+	CXXFLAGSDEBUG= -std=c++20 $(CXXFIRSTFLAGSDEBUG) $(MYFLAGS)
 	LDFLAGS=-lghost_static -pthread
 	LDFLAGSDEBUG=-lghost_staticd -pthread
 endif
 ifeq ($(UNAME_S),Darwin)
 	CXX=clang++
-	CXXFLAGS= -std=c++20 -stdlib=libc++ $(CXXFIRSTFLAGS)
-	CXXFLAGSDEBUG= -std=c++20 -stdlib=libc++ $(CXXFIRSTFLAGSDEBUG)
+	CXXFLAGS= -std=c++20 -stdlib=libc++ $(CXXFIRSTFLAGS) $(MYFLAGS)
+	CXXFLAGSDEBUG= -std=c++20 -stdlib=libc++ $(CXXFIRSTFLAGSDEBUG) $(MYFLAGS)
 	LDFLAGS=-lghost_static -lc++ -lc++abi -pthread
 endif
 
