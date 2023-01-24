@@ -2,6 +2,7 @@
 #include <initializer_list>
 
 #include <ghost/global_constraints/all_different.hpp>
+#include <ghost/global_constraints/all_equal.hpp>
 
 #include "builder_force_preference.hpp"
 
@@ -87,7 +88,8 @@ void BuilderQUBO::declare_variables()
 
 void BuilderQUBO::declare_constraints()
 {
-	constraints.emplace_back( make_shared< UniqueValue >( _index_triangle_variables ) );
+	//constraints.emplace_back( make_shared< UniqueValue >( _index_triangle_variables ) );
+	constraints.emplace_back( std::make_shared<ghost::global_constraints::AllEqual>( _index_triangle_variables ) );
 	for( auto& rec: _index_rectangle_variables )
 	  constraints.emplace_back( std::make_shared<ghost::global_constraints::AllDifferent>( rec ) );
 }

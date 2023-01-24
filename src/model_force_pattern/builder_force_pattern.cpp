@@ -1,8 +1,9 @@
 #include <numeric>
 #include <initializer_list>
 
+#include <ghost/global_constraints/all_equal.hpp>
+
 #include "builder_force_pattern.hpp"
-#include "constraint_equal.hpp"
 #include "objective_supervised_learning.hpp"
 
 BuilderQUBO::BuilderQUBO( const std::vector<int>& training_data,
@@ -76,7 +77,8 @@ void BuilderQUBO::declare_variables()
 void BuilderQUBO::declare_constraints()
 {
 	for( int i = 0 ; i < _domain_size * _domain_size ; ++i )
-		constraints.emplace_back( make_shared<Equal>( _index_non_triangle_variables[i] ) );
+		constraints.emplace_back( make_shared<ghost::global_constraints::AllEqual>( _index_non_triangle_variables[i] ) );
+	//constraints.emplace_back( make_shared<Equal>( _index_non_triangle_variables[i] ) );
 }
 
 void BuilderQUBO::declare_objective()

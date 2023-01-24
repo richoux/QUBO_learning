@@ -3,7 +3,6 @@
 #include <memory>
 #include <ghost/model_builder.hpp>
 
-#include "constraint_unique_value.hpp"
 #include "objective_supervised_learning.hpp"
 
 using namespace ghost;

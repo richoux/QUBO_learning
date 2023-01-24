@@ -23,11 +23,11 @@ endif
 
 # Directories
 OBJDIR=obj
-OBJ_scam=$(addprefix $(OBJDIR)/,constraint_unique_value.o objective_supervised_learning.o builder_scam.o print_qubo.o learn_qubo_scam.o)
-OBJ_svn=$(addprefix $(OBJDIR)/,constraint_training_set.o constraint_unique_value.o objective_svn.o builder_svn.o print_qubo.o learn_qubo_svn.o)
-OBJ_sparse=$(addprefix $(OBJDIR)/,constraint_training_set.o constraint_unique_value.o objective_sparse.o builder_sparse.o print_qubo.o learn_qubo_sparse.o)
-OBJ_force_pattern=$(addprefix $(OBJDIR)/,constraint_equal.o objective_supervised_learning.o builder_force_pattern.o print_qubo.o learn_qubo_force_pattern.o)
-OBJ_force_preference=$(addprefix $(OBJDIR)/,constraint_unique_value.o objective_supervised_learning.o builder_force_preference.o print_qubo.o learn_qubo_force_preference.o)
+OBJ_scam=$(addprefix $(OBJDIR)/,objective_supervised_learning.o builder_scam.o print_qubo.o learn_qubo_scam.o)
+OBJ_svn=$(addprefix $(OBJDIR)/,constraint_training_set.o objective_svn.o builder_svn.o print_qubo.o learn_qubo_svn.o)
+OBJ_sparse=$(addprefix $(OBJDIR)/,constraint_training_set.o objective_sparse.o builder_sparse.o print_qubo.o learn_qubo_sparse.o)
+OBJ_force_pattern=$(addprefix $(OBJDIR)/,objective_supervised_learning.o builder_force_pattern.o print_qubo.o learn_qubo_force_pattern.o)
+OBJ_force_preference=$(addprefix $(OBJDIR)/,objective_supervised_learning.o builder_force_preference.o print_qubo.o learn_qubo_force_preference.o)
 BINDIR=bin
 INCLUDEDIR=./include
 LIBDIR=./lib

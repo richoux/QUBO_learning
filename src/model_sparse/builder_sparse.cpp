@@ -1,6 +1,8 @@
 #include <numeric>
 #include <initializer_list>
 
+#include <ghost/global_constraints/all_equal.hpp>
+
 #include "builder_sparse.hpp"
 
 BuilderQUBO::BuilderQUBO( const std::vector<int>& training_data,
@@ -61,7 +63,8 @@ void BuilderQUBO::declare_variables()
 void BuilderQUBO::declare_constraints()
 {
 	constraints.emplace_back( make_shared<TrainingSet>( variables, _training_data, _size_training_set, _candidate_length, _domain_size, _starting_value, _error_vector ) );
-	constraints.emplace_back( make_shared< UniqueValue >( _index_triangle_variables ) );
+	//constraints.emplace_back( make_shared< UniqueValue >( _index_triangle_variables ) );
+	constraints.emplace_back( make_shared<ghost::global_constraints::AllEqual>( _index_triangle_variables ) );
 }
 
 void BuilderQUBO::declare_objective()
