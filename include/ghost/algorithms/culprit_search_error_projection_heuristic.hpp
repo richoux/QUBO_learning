@@ -29,20 +29,35 @@
 
 #pragma once
 
-#include <vector>
-
-#include "variable_heuristic.hpp"
+#include "error_projection_heuristic.hpp"
 
 namespace ghost
 {
 	namespace algorithms
 	{
-		class AdaptiveSearchVariableHeuristic : public VariableHeuristic
+		class CulpritSearchErrorProjection : public ErrorProjection
 		{
-		public:
-			AdaptiveSearchVariableHeuristic();
+			std::vector<std::vector<double>> _error_variables_by_constraints;
 			
-			int select_variable_candidate( const std::vector<double>& candidates, const SearchUnitData& data, randutils::mt19937_rng& rng ) const override;
+			void compute_variable_errors_on_constraint( const std::vector<Variable>& variables,
+			                                            const std::vector<std::vector<int>>& matrix_var_ctr,
+			                                            std::shared_ptr<Constraint> constraint );
+			
+		public:
+			CulpritSearchErrorProjection();
+
+			void initialize_data_structures() override;
+
+			void compute_variable_errors( std::vector<double>& error_variables,
+			                              const std::vector<Variable>& variables,
+			                              const std::vector<std::vector<int>>& matrix_var_ctr,
+			                              const std::vector<std::shared_ptr<Constraint>>& constraints ) override;
+			
+			void update_variable_errors( std::vector<double>& error_variables,
+			                             const std::vector<Variable>& variables,
+			                             const std::vector<std::vector<int>>& matrix_var_ctr,
+			                             std::shared_ptr<Constraint> constraint,
+			                             double delta ) override;
 		};
 	}
 }

@@ -30,19 +30,40 @@
 #pragma once
 
 #include <vector>
+#include <map>
 
-#include "variable_heuristic.hpp"
+#include "../search_unit_data.hpp"
+// #include "../macros.hpp"
+#include "../thirdparty/randutils.hpp"
 
 namespace ghost
 {
 	namespace algorithms
 	{
-		class AdaptiveSearchVariableHeuristic : public VariableHeuristic
+		/*
+		 * ValueHeuristic follows the Strategy design pattern to implement variable selection heuristics.
+		 */
+		class ValueHeuristic
 		{
+		protected:
+			std::string name;
+
 		public:
-			AdaptiveSearchVariableHeuristic();
-			
-			int select_variable_candidate( const std::vector<double>& candidates, const SearchUnitData& data, randutils::mt19937_rng& rng ) const override;
+			ValueHeuristic( std::string&& name )
+				: name( std::move( name ) )
+			{ }
+
+			//! Default virtual destructor.
+			virtual ~ValueHeuristic() = default;
+
+			inline std::string get_name() const { return name; }
+
+			virtual int select_value_candidates( int variable_to_change,
+			                                     const SearchUnitData& data,
+			                                     const Model& model,
+			                                     const std::map<int, std::vector<double>>& delta_errors,
+			                                     double& min_conflict,
+			                                     randutils::mt19937_rng& rng ) const = 0;
 		};
 	}
 }
