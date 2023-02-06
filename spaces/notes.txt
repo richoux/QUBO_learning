@@ -1,0 +1,17 @@
+alldiff_3_3
+alldiff_4_4
+alldiff_5_5
+AllDifferent_n_m of n variables with domains of size m
+
+linear_equation_3_3_3: x + y + z = 3, x,y,z in {0,1,2}
+linear_equation_3_3_4: x + y + z = 4, x,y,z in {1,2,3}
+linear_equation_3_3_5: x + y + z = 5, x,y,z in {1,2,3}
+linear_equation_3_3_6: x + y + z = 6, x,y,z in {1,2,3}
+linear_equation+x+y-z: x + y - z = 0, x,y,z in {1,2,3}
+
+linear_inequation_leq_3_3_6: x + y + z <= 6, x,y,z in {1,2,3}
+
+connection_minimum_geq_3_3_2: x1,x2,x3 in {1,2,3} s.t. for all i, xi >= 2
+less_than_or_equals_3_4: x1 <= x2 <= x3, x1,x2,x3 in {1,2,3,4}
+
+overlap1D_3_7_2: 3 tasks of length 2, in a 7-length box.
