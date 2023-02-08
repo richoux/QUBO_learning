@@ -30,7 +30,8 @@ public:
 	             size_t domain_size,
 	             int starting_value,
 	             const std::vector<double>& error_vector,
-	             bool complementary_variable );
+	             bool complementary_variable,
+	             int parameter = 0 );
 	
 	void declare_variables() override;
 	void declare_constraints() override;

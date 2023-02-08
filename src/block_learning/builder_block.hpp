@@ -3,9 +3,6 @@
 #include <memory>
 #include <ghost/model_builder.hpp>
 
-#include "constraint_training_set.hpp"
-#include "objective_svn.hpp"
-
 using namespace ghost;
 using namespace std;
 
@@ -18,10 +15,11 @@ class BuilderQUBO : public ModelBuilder
 	int _matrix_side;
 	int _starting_value;
 	std::vector<double> _error_vector;
-
-	std::vector<int> _index_triangle_variables;
-	std::vector<bool> _is_triangle_variables;
-	bool _complementary_variable;
+	int _parameter;
+	
+	// size_t _number_full_blocks;
+	// std::vector<int> _halfblock_index;
+	// std::vector<int> _fullblock_index;
 	
 public:
 	BuilderQUBO( const std::vector<int>& training_data,
@@ -31,7 +29,7 @@ public:
 	             int starting_value,
 	             const std::vector<double>& error_vector,
 	             bool complementary_variable,
-	             int parameter = 0 );
+	             int parameter );
 	
 	void declare_variables() override;
 	void declare_constraints() override;

@@ -11,7 +11,8 @@ BuilderQUBO::BuilderQUBO( const std::vector<int>& training_data,
                           size_t domain_size,
                           int starting_value,
                           const std::vector<double>& error_vector,
-                          bool complementary_variable )
+                          bool complementary_variable,
+                          int parameter )
 	: ModelBuilder(),
 	  _training_data( training_data ),
 	  _size_training_set( number_samples ),
