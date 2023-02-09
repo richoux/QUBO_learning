@@ -46,20 +46,21 @@ void usage( char **argv )
 	     << "-d, --debug, to print additional information\n"
 	     << "-c, --complementary, to force one complementary variable\n"
 	     << "-w, --weak_learners NUMBER_LEARNERS, to learn NUMBER_LEARNERS Q matrices and merge them into an average matrix (disabled by default).\n"
+	     << "-r, --result FILE_RESULT, to write the learned Q matrix in FILE_RESULT"
 	     << "--check [FILE_Q_MATRIX] to compute xt.Q.x results if a file is provided containing Q, or to display all xt.Q.x results after the learning of Q otherwise.\n";
 }
 
-#if defined BLOCK
-void check_solution( const std::vector<int>& solution,
-                     const std::vector<int>& samples,
-                     const std::vector<double>& labels,
-                     size_t number_variables,
-                     size_t domain_size,
-                     size_t number_samples,
-                     int starting_value,
-                     bool complementary_variable,
-                     int parameter = 1,
-                     bool full_check = false )
+void check_solution_block( const std::vector<int>& solution,
+                           const std::vector<int>& samples,
+                           const std::vector<double>& labels,
+                           size_t number_variables,
+                           size_t domain_size,
+                           size_t number_samples,
+                           int starting_value,
+                           bool complementary_variable,
+                           string result_file_path,
+                           int parameter = 1,
+                           bool full_check = false )
 {
 	size_t matrix_side = number_variables * domain_size;
 	if( complementary_variable )
@@ -69,6 +70,7 @@ void check_solution( const std::vector<int>& solution,
 
 	int row_domain, col_domain;
 	bool triangle_element;
+	int errors = 0;
 	
 	for( size_t row = 0 ; row < matrix_side ; ++row )
 	{
@@ -155,9 +157,6 @@ void check_solution( const std::vector<int>& solution,
 		if( min_scalar > scalars[ index_sample ]	)
 			min_scalar = scalars[ index_sample ];		
 	}
-
-	std::cout << "\nQ matrix:\n" << Q
-	          << "\n\nMin scalar = " << min_scalar << "\n\n";
 	
 	for( size_t index_sample = 0 ; index_sample < number_samples ; ++index_sample )
 	{
@@ -174,20 +173,42 @@ void check_solution( const std::vector<int>& solution,
 		if( labels[ index_sample ] == 0 )
 		{
 			if( scalars[ index_sample ] != min_scalar )
+			{
+				++errors;
 				std::cout << "/!\\ Candidate " << candidate << " is a solution but has not a minimal scalar: " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
+			}
 			else
 				if( full_check )
 					std::cout << "Candidate " << candidate << " (solution): " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
 		}
 		else
 			if( scalars[ index_sample ] == min_scalar )
+			{
+				++errors;
 				std::cout << "/!\\ Candidate " << candidate << " is not a solution but has the minimal scalar " << std::setw( 3 ) << min_scalar << "\n";
+			}
 			else
 				if( full_check )
 					std::cout << "Candidate " << candidate << ": " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
 	}
+
+	std::cout << "\nQ matrix:\n" << Q
+	          << "\n\nMin scalar = " << min_scalar << "\n"
+	          << "Number of errors: " << errors << "\n\n";
+
+	if( result_file_path != "" )
+	{
+		std::cout << "Result file: " << result_file_path << "\n";
+		ofstream result_file;
+		result_file.open( result_file_path );
+		std::streambuf *coutbuf = std::cout.rdbuf();
+		std::cout.rdbuf( result_file.rdbuf() );
+		std::cout << Q << "\n";
+		std::cout.rdbuf( coutbuf );
+		result_file.close();
+	}
 }
-#else
+
 void check_solution( const std::vector<int>& solution,
                      const std::vector<int>& samples,
                      const std::vector<double>& labels,
@@ -196,6 +217,7 @@ void check_solution( const std::vector<int>& solution,
                      size_t number_samples,
                      int starting_value,
                      bool complementary_variable,
+                     string result_file_path,
                      int parameter = 1,
                      bool full_check = false )
 {
@@ -215,6 +237,7 @@ void check_solution( const std::vector<int>& solution,
 			Q( row_number, row_number + i ) = solution[ ( row_number * matrix_side ) - shift + i ];
 	}
 
+	int errors = 0;
 	int min_scalar = std::numeric_limits<int>::max();
 	std::vector<int> scalars( number_samples );
 
@@ -237,9 +260,6 @@ void check_solution( const std::vector<int>& solution,
 			min_scalar = scalars[ index_sample ];		
 	}
 
-	std::cout << "\nQ matrix:\n" << Q
-	          << "\n\nMin scalar = " << min_scalar << "\n\n";
-	
 	for( size_t index_sample = 0 ; index_sample < number_samples ; ++index_sample )
 	{
 		std::string candidate = "[";
@@ -255,20 +275,41 @@ void check_solution( const std::vector<int>& solution,
 		if( labels[ index_sample ] == 0 )
 		{
 			if( scalars[ index_sample ] != min_scalar )
+			{
+				++errors;
 				std::cout << "/!\\ Candidate " << candidate << " is a solution but has not a minimal scalar: " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
+			}
 			else
 				if( full_check )
 					std::cout << "Candidate " << candidate << " (solution): " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
 		}
 		else
 			if( scalars[ index_sample ] == min_scalar )
+			{
+				++errors;
 				std::cout << "/!\\ Candidate " << candidate << " is not a solution but has the minimal scalar " << std::setw( 3 ) << min_scalar << "\n";
+			}
 			else
 				if( full_check )
 					std::cout << "Candidate " << candidate << ": " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
 	}
+
+	std::cout << "\nQ matrix:\n" << Q
+	          << "\n\nMin scalar = " << min_scalar << "\n"
+	          << "Number of errors: " << errors << "\n\n";
+
+	if( result_file_path != "" )
+	{
+		std::cout << "Result file: " << result_file_path << "\n";
+		ofstream result_file;
+		result_file.open( result_file_path );
+		std::streambuf *coutbuf = std::cout.rdbuf();
+		std::cout.rdbuf( result_file.rdbuf() );
+		std::cout << Q << "\n";
+		std::cout.rdbuf( coutbuf );
+		result_file.close();
+	}
 }
-#endif
 
 int main( int argc, char **argv )
 {
@@ -281,6 +322,7 @@ int main( int argc, char **argv )
 	int weak_learners;
 	
 	string training_data_file_path;
+	string result_file_path;
 	string q_matrix_file_path;
 	string line, string_number;
 	ifstream training_data_file;
@@ -300,7 +342,7 @@ int main( int argc, char **argv )
 	bool force_positive;
 	
 	randutils::mt19937_rng rng;
-	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample", "--check", "-w", "--weak_learners" } );
+	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample", "--check", "-w", "--weak_learners", "-r", "--result" } );
 	cmdl.parse( argc, argv );
 	
 	if( cmdl[ {"-h", "--help"} ] )
@@ -316,15 +358,16 @@ int main( int argc, char **argv )
 	}
 
 	cmdl( {"f", "file"} ) >> training_data_file_path;
+	cmdl( {"r", "result"}, "" ) >> result_file_path;
 	cmdl( {"t", "timeout"}, 1 ) >> time_budget;
 	cmdl( {"s", "sample"}, 100 ) >> percent_training_set;
 	cmdl( {"w", "weak_learners"}, 1 ) >> weak_learners;
 	time_budget *= 1000000; // GHOST needs microseconds
 	cmdl[ {"-p", "--parallel"} ] ? parallel = true : parallel = false;
 	cmdl[ {"-d", "--debug"} ] ? debug = true : debug = false;
-	cmdl[ {"-c", "--complementary"} ] ? complementary_variable = true : complementary_variable = false;-
-			                             cmdl[ {"--force_positive"} ] ? force_positive = true : force_positive = false;
-		
+	cmdl[ {"-c", "--complementary"} ] ? complementary_variable = true : complementary_variable = false;
+	cmdl[ {"--force_positive"} ] ? force_positive = true : force_positive = false;
+	
 	training_data_file.open( training_data_file_path );
 	int value;
 	double error;
@@ -392,6 +435,7 @@ int main( int argc, char **argv )
 		                total_training_set_size,
 		                starting_value,
 		                complementary_variable,
+		                "",
 		                parameter,
 		                true );
 	}
@@ -523,6 +567,19 @@ int main( int argc, char **argv )
 		if( parameter == std::numeric_limits<int>::max() )
 			parameter = 1;
 
+#if defined BLOCK
+		check_solution_block( solution,
+		                      candidates,
+		                      labels,
+		                      number_variables,
+		                      domain_size,
+		                      total_training_set_size,
+		                      starting_value,
+		                      complementary_variable,
+		                      result_file_path,
+		                      parameter,
+		                      check );
+#else
 		check_solution( solution,
 		                candidates,
 		                labels,
@@ -531,10 +588,12 @@ int main( int argc, char **argv )
 		                total_training_set_size,
 		                starting_value,
 		                complementary_variable,
+		                result_file_path,
 		                parameter,
 		                check );
+#endif
 	}
-		
+
 	return EXIT_SUCCESS;
 }
 
