@@ -36,18 +36,18 @@ using namespace std::literals::chrono_literals;
 void usage( char **argv )
 {
 	cout << "Usage: " << argv[0] << " -f FILE_TRAINING_DATA [-t TIME_BUDGET] [-s PERCENT] [-p]\n"
-	     << "OR : " << argv[0] << " -f FILE_TRAINING_DATA --check [FILE_Q_MATRIX]\n"
+	     << "OR : " << argv[0] << " -f FILE_TRAINING_DATA -c [FILE_Q_MATRIX]\n"
 	     << "Arguments:\n"
 	     << "-h, --help, printing this message.\n"
 	     << "-f, --file FILE_TRAINING_DATA.\n"
+	     << "-c, --check [FILE_Q_MATRIX], to compute xt.Q.x results if a file is provided containing Q, or to display all xt.Q.x results after the learning of Q otherwise.\n"
+	     << "-r, --result FILE_RESULT, to write the learned Q matrix in FILE_RESULT\n"
 	     << "-t, --timeout TIME_BUDGET, in seconds (1 by default)\n"
 	     << "-s, --sample PERCENT [--force_positive], to sample candidates from PERCENT of the training set (100 by default). --force_positive forces considering all positive candidates.\n"
 	     << "-p, --parallel, to make parallel search\n"
 	     << "-d, --debug, to print additional information\n"
-	     << "-c, --complementary, to force one complementary variable\n"
 	     << "-w, --weak_learners NUMBER_LEARNERS, to learn NUMBER_LEARNERS Q matrices and merge them into an average matrix (disabled by default).\n"
-	     << "-r, --result FILE_RESULT, to write the learned Q matrix in FILE_RESULT"
-	     << "--check [FILE_Q_MATRIX] to compute xt.Q.x results if a file is provided containing Q, or to display all xt.Q.x results after the learning of Q otherwise.\n";
+	     << "--complementary, to force one complementary variable\n";
 }
 
 void check_solution_block( const std::vector<int>& solution,
@@ -342,7 +342,7 @@ int main( int argc, char **argv )
 	bool force_positive;
 	
 	randutils::mt19937_rng rng;
-	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample", "--check", "-w", "--weak_learners", "-r", "--result" } );
+	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample", "-c", "--check", "-w", "--weak_learners", "-r", "--result" } );
 	cmdl.parse( argc, argv );
 	
 	if( cmdl[ {"-h", "--help"} ] )
@@ -359,13 +359,14 @@ int main( int argc, char **argv )
 
 	cmdl( {"f", "file"} ) >> training_data_file_path;
 	cmdl( {"r", "result"}, "" ) >> result_file_path;
+	cmdl( {"c", "check"}, "" ) >> q_matrix_file_path;
 	cmdl( {"t", "timeout"}, 1 ) >> time_budget;
 	cmdl( {"s", "sample"}, 100 ) >> percent_training_set;
 	cmdl( {"w", "weak_learners"}, 1 ) >> weak_learners;
 	time_budget *= 1000000; // GHOST needs microseconds
 	cmdl[ {"-p", "--parallel"} ] ? parallel = true : parallel = false;
 	cmdl[ {"-d", "--debug"} ] ? debug = true : debug = false;
-	cmdl[ {"-c", "--complementary"} ] ? complementary_variable = true : complementary_variable = false;
+	cmdl[ {"--complementary"} ] ? complementary_variable = true : complementary_variable = false;
 	cmdl[ {"--force_positive"} ] ? force_positive = true : force_positive = false;
 	
 	training_data_file.open( training_data_file_path );
@@ -400,7 +401,7 @@ int main( int argc, char **argv )
 	training_data_file.close();
 	number_samples = static_cast<int>( ( total_training_set_size * percent_training_set ) / 100 );
 
-	if( cmdl( {"check"} ) >> q_matrix_file_path )
+	if( q_matrix_file_path != "" )
 	{
 		q_matrix_file.open( q_matrix_file_path );
 		vector<int> q_matrix;
@@ -561,7 +562,7 @@ int main( int argc, char **argv )
 		          << "Objective function cost: " << cost << "\n";
 			
 		bool check = false;
-		if( cmdl[ {"check"} ] )
+		if( cmdl[ {"c", "check"} ] )
 			check = true;
 
 		if( parameter == std::numeric_limits<int>::max() )
