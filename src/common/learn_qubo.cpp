@@ -26,6 +26,8 @@
 #include "builder_force_preference.hpp"
 #elif defined BLOCK
 #include "builder_block.hpp"
+#elif defined BLOCK_SAT
+#include "builder_block_sat.hpp"
 #else
 #include "builder_force_pattern.hpp"
 #endif
@@ -43,6 +45,7 @@ void usage( char **argv )
 	     << "-c, --check [FILE_Q_MATRIX], to compute xt.Q.x results if a file is provided containing Q, or to display all xt.Q.x results after the learning of Q otherwise.\n"
 	     << "-r, --result FILE_RESULT, to write the learned Q matrix in FILE_RESULT\n"
 	     << "-t, --timeout TIME_BUDGET, in seconds (1 by default)\n"
+	     << "-b, --benchmark, to limit prints.\n"
 	     << "-s, --sample PERCENT [--force_positive], to sample candidates from PERCENT of the training set (100 by default). --force_positive forces considering all positive candidates.\n"
 	     << "-p, --parallel, to make parallel search\n"
 	     << "-d, --debug, to print additional information\n"
@@ -58,10 +61,14 @@ void check_solution_block( const std::vector<int>& solution,
                            size_t number_samples,
                            int starting_value,
                            bool complementary_variable,
+                           bool silent,
                            string result_file_path,
                            int parameter = 1,
                            bool full_check = false )
 {
+	if( silent )
+		full_check = false;
+
 	size_t matrix_side = number_variables * domain_size;
 	if( complementary_variable )
 		++matrix_side;
@@ -175,7 +182,8 @@ void check_solution_block( const std::vector<int>& solution,
 			if( scalars[ index_sample ] != min_scalar )
 			{
 				++errors;
-				std::cout << "/!\\ Candidate " << candidate << " is a solution but has not a minimal scalar: " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
+				if( !silent )
+					std::cout << "/!\\ Candidate " << candidate << " is a solution but has not a minimal scalar: " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
 			}
 			else
 				if( full_check )
@@ -185,20 +193,23 @@ void check_solution_block( const std::vector<int>& solution,
 			if( scalars[ index_sample ] == min_scalar )
 			{
 				++errors;
-				std::cout << "/!\\ Candidate " << candidate << " is not a solution but has the minimal scalar " << std::setw( 3 ) << min_scalar << "\n";
+				if( !silent )
+					std::cout << "/!\\ Candidate " << candidate << " is not a solution but has the minimal scalar " << std::setw( 3 ) << min_scalar << "\n";
 			}
 			else
 				if( full_check )
 					std::cout << "Candidate " << candidate << ": " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
 	}
 
-	std::cout << "\nQ matrix:\n" << Q
-	          << "\n\nMin scalar = " << min_scalar << "\n"
-	          << "Number of errors: " << errors << "\n\n";
+	if( !silent )
+		std::cout << "\nQ matrix:\n" << Q
+		          << "\n\nMin scalar = " << min_scalar << "\n"
+		          << "Number of errors: " << errors << "\n\n";
 
 	if( result_file_path != "" )
 	{
-		std::cout << "Result file: " << result_file_path << "\n";
+		if( !silent )
+			std::cout << "Result file: " << result_file_path << "\n";
 		ofstream result_file;
 		result_file.open( result_file_path );
 		std::streambuf *coutbuf = std::cout.rdbuf();
@@ -217,10 +228,14 @@ void check_solution( const std::vector<int>& solution,
                      size_t number_samples,
                      int starting_value,
                      bool complementary_variable,
+                     bool silent,
                      string result_file_path,
                      int parameter = 1,
                      bool full_check = false )
 {
+	if( silent )
+		full_check = false;
+		
 	size_t matrix_side = number_variables * domain_size;
 	if( complementary_variable )
 		++matrix_side;
@@ -277,7 +292,8 @@ void check_solution( const std::vector<int>& solution,
 			if( scalars[ index_sample ] != min_scalar )
 			{
 				++errors;
-				std::cout << "/!\\ Candidate " << candidate << " is a solution but has not a minimal scalar: " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
+				if( !silent )
+					std::cout << "/!\\ Candidate " << candidate << " is a solution but has not a minimal scalar: " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
 			}
 			else
 				if( full_check )
@@ -287,20 +303,23 @@ void check_solution( const std::vector<int>& solution,
 			if( scalars[ index_sample ] == min_scalar )
 			{
 				++errors;
-				std::cout << "/!\\ Candidate " << candidate << " is not a solution but has the minimal scalar " << std::setw( 3 ) << min_scalar << "\n";
+				if( !silent )
+					std::cout << "/!\\ Candidate " << candidate << " is not a solution but has the minimal scalar " << std::setw( 3 ) << min_scalar << "\n";
 			}
 			else
 				if( full_check )
 					std::cout << "Candidate " << candidate << ": " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
 	}
 
-	std::cout << "\nQ matrix:\n" << Q
-	          << "\n\nMin scalar = " << min_scalar << "\n"
-	          << "Number of errors: " << errors << "\n\n";
+	if( !silent )
+		std::cout << "\nQ matrix:\n" << Q
+		          << "\n\nMin scalar = " << min_scalar << "\n";
+	std::cout << "Number of errors: " << errors << "\n\n";
 
 	if( result_file_path != "" )
 	{
-		std::cout << "Result file: " << result_file_path << "\n";
+		if( !silent )
+			std::cout << "Result file: " << result_file_path << "\n";
 		ofstream result_file;
 		result_file.open( result_file_path );
 		std::streambuf *coutbuf = std::cout.rdbuf();
@@ -340,6 +359,7 @@ int main( int argc, char **argv )
 	bool debug;
 	bool complementary_variable;
 	bool force_positive;
+	bool silent;
 	
 	randutils::mt19937_rng rng;
 	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample", "-c", "--check", "-w", "--weak_learners", "-r", "--result" } );
@@ -366,6 +386,7 @@ int main( int argc, char **argv )
 	time_budget *= 1000000; // GHOST needs microseconds
 	cmdl[ {"-p", "--parallel"} ] ? parallel = true : parallel = false;
 	cmdl[ {"-d", "--debug"} ] ? debug = true : debug = false;
+	cmdl[ {"-b", "--benchmark"} ] ? silent = true : silent = false;
 	cmdl[ {"--complementary"} ] ? complementary_variable = true : complementary_variable = false;
 	cmdl[ {"--force_positive"} ] ? force_positive = true : force_positive = false;
 	
@@ -436,9 +457,10 @@ int main( int argc, char **argv )
 		                total_training_set_size,
 		                starting_value,
 		                complementary_variable,
+		                silent,
 		                "",
 		                parameter,
-		                true );
+		                false );
 	}
 	else
 	{
@@ -527,7 +549,7 @@ int main( int argc, char **argv )
 		double cost;
 		bool solved = true;
 		Options options;
-#if not defined BLOCK
+#if not defined BLOCK and not defined BLOCK_SAT
 		options.print = make_shared<PrintQUBO>( number_variables * domain_size );
 #endif
 		if( parallel )
@@ -557,18 +579,19 @@ int main( int argc, char **argv )
 				
 			cost = sum_cost / weak_learners;
 		}
-				
-		std::cout << "\nConstraints satisfied: " << std::boolalpha << solved << "\n"
-		          << "Objective function cost: " << cost << "\n";
+
+		if( !silent )
+			std::cout << "\nConstraints satisfied: " << std::boolalpha << solved << "\n"
+			          << "Objective function cost: " << cost << "\n";
 			
 		bool check = false;
-		if( cmdl[ {"c", "check"} ] )
+		if( cmdl[ {"c", "check"} ] && q_matrix_file_path == "" )
 			check = true;
 
 		if( parameter == std::numeric_limits<int>::max() )
 			parameter = 1;
 
-#if defined BLOCK
+#if defined BLOCK or defined BLOCK_SAT
 		check_solution_block( solution,
 		                      candidates,
 		                      labels,
@@ -577,6 +600,7 @@ int main( int argc, char **argv )
 		                      total_training_set_size,
 		                      starting_value,
 		                      complementary_variable,
+		                      silent,
 		                      result_file_path,
 		                      parameter,
 		                      check );
@@ -589,6 +613,7 @@ int main( int argc, char **argv )
 		                total_training_set_size,
 		                starting_value,
 		                complementary_variable,
+		                silent,
 		                result_file_path,
 		                parameter,
 		                check );
