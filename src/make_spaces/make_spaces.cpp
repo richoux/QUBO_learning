@@ -19,15 +19,17 @@
 #include "constraints/linear_equation.hpp"
 #include "constraints/ordered.hpp"
 #include "constraints/no_overlap_1d.hpp"
+#include "constraints/element.hpp"
+#include "constraints/channel.hpp"
 
 using namespace std;
 
 void usage( char **argv )
 {
-	cout << "Usage: " << argv[0] << " -c {ad|le|or|no} -n NB_VARIABLES -d MAX_VALUE_DOMAIN -s SAMPLING_PRECISION -o OUTPUT_FILE [-p PARAMETERS]\n"
+	cout << "Usage: " << argv[0] << " -c {ad|le|or|no|el|ch} -n NB_VARIABLES -d MAX_VALUE_DOMAIN -s SAMPLING_PRECISION -o OUTPUT_FILE [-p PARAMETERS]\n"
 	     << "Arguments:\n"
 	     << "-h, --help\n"
-	     << "-c, --constraint {ad|le|or|no}\n"
+	     << "-c, --constraint {ad|le|or|no|el|ch}\n"
 	     << "-n, --nb_vars NB_VARIABLES\n"
 	     << "-d, --max_domain MAX_VALUE_DOMAIN\n"
 	     << "-s, --sampling NUMBER_SAMPLING\n"
@@ -89,9 +91,11 @@ int main( int argc, char** argv )
 	    ( constraint.compare("ad") != 0
 	      && constraint.compare("le") != 0
 	      && constraint.compare("or") != 0
-	      && constraint.compare("no") != 0 ) )
+	      && constraint.compare("no") != 0
+	      && constraint.compare("el") != 0
+	      && constraint.compare("ch") != 0 ) )
 	{
-		cerr << "Must provide a valid constraint among ad, le, or and no. You provided '" << cmdl( {"c", "constraint"} ).str() << "'\n";
+		cerr << "Must provide a valid constraint among ad, le, or, no, el and ch. You provided '" << cmdl( {"c", "constraint"} ).str() << "'\n";
 		usage( argv );
 		return EXIT_FAILURE;
 	}
@@ -120,10 +124,22 @@ int main( int argc, char** argv )
 			cout << "Constraint: No Overlap 1D.\n";
 			constraint_concept = make_unique<NoOverlap1D>( nb_vars, max_value, params );
 		}
+
+		if( constraint.compare("el") == 0 )
+		{
+			cout << "Constraint: Element.\n";
+			constraint_concept = make_unique<Element>( nb_vars, max_value, params[0] );
+		}
+
+		if( constraint.compare("ch") == 0 )
+		{
+			cout << "Constraint: Channel.\n";
+			constraint_concept = make_unique<Channel>( nb_vars, max_value );
+		}
 	}
 
 	cout << nb_vars << "-" << max_value;	
-	if( constraint.compare("le") == 0 || constraint.compare("no") == 0 )
+	if( constraint.compare("le") == 0 || constraint.compare("no") == 0 || constraint.compare("el") == 0 )
 		cout << "-" << params_value;
 	cout << "\n";
 

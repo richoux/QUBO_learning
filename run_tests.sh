@@ -1,11 +1,11 @@
 #!/bin/bash
 
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 path/to/executable"
-		exit
-fi
+# if [ "$#" -ne 1 ]; then
+#     echo "Usage: $0 path/to/executable"
+# 		exit
+# fi
 
-EXE=$1
+EXE="./bin/q_learning"
 LOOP=100
 
 echo "$LOOP runs for each constraint"
@@ -18,6 +18,15 @@ do
 done
 SUM=`grep Wall-clock out_time | sed 's/us//g' | awk -v sum=0 '{sum += $5} END {print sum}'`
 MEAN=$(echo "scale=2; $SUM/$LOOP" | bc)
+
+if [[ ${MEAN%.*} -eq 0 ]]; then
+		CORE=$(grep -c '^processor' /proc/cpuinfo)
+		echo "Error: no runtimes available."
+		echo "Please recompile the project with the following command: 'make clean && make -j $CORE MYFLAGS=-DGHOST_BENCH'"
+		rm tmp out_time out_error
+		exit
+fi
+
 echo "Mean runtime in microseconds: $MEAN"
 SUM=`awk -v sum=0 '{sum += $4} END {print sum}' out_error`
 MEAN=$(echo "scale=2; $SUM/$LOOP" | bc)
