@@ -1,5 +1,5 @@
 #EXEC=qubo_ghost_scam qubo_ghost_svn qubo_ghost_sparse qubo_ghost_force_pattern qubo_ghost_force_preference qubo_block qubo_block_sat
-EXEC=q_learning make_spaces make_complete_spaces
+EXEC=q_learning_opt q_learning_sat make_spaces make_complete_spaces
 #EXEC_DEBUG=qubo_ghost_scam_debug qubo_ghost_svn_debug qubo_ghost_sparse_debug qubo_ghost_force_pattern_debug qubo_ghost_force_preference_debug qubo_block_debug qubo_block_sat_debug
 
 # Compiler flags
@@ -31,13 +31,14 @@ OBJDIR=obj
 # OBJ_force_preference=$(addprefix $(OBJDIR)/,objective_supervised_learning.o builder_force_preference.o print_qubo.o learn_qubo_force_preference.o)
 # OBJ_block=$(addprefix $(OBJDIR)/,objective_block.o builder_block.o learn_qubo_block.o constraint_parameter.o)
 OBJ_block_sat=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_sat.o learn_qubo_block_sat.o)
+OBJ_block_opt=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_opt.o learn_qubo_block_opt.o objective_short_expression.o)
 OBJ_make_spaces=$(addprefix $(OBJDIR)/,make_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
 OBJ_make_complete_spaces=$(addprefix $(OBJDIR)/,make_complete_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
 BINDIR=bin
 INCLUDEDIR=./include
 LIBDIR=./lib
 
-VPATH=src/models/common:src/models/model_scam:src/models/model_svn:src/models/model_sparse:src/models/model_force_pattern:src/models/model_force_preference:src/models/block_learning:src/models/block_learning_sat:src/make_spaces:src/make_spaces/constraints:src/make_spaces/utils
+VPATH=src/models/common:src/models/model_scam:src/models/model_svn:src/models/model_sparse:src/models/model_force_pattern:src/models/model_force_preference:src/models/block_learning:src/models/block_learning_sat:src/models/block_learning_opt:src/make_spaces:src/make_spaces/constraints:src/make_spaces/utils
 
 # Reminder, 'cause it is easy to forget makefile's fucked-up syntax...
 # $@ is what triggered the rule, ie the target before :
@@ -117,8 +118,14 @@ make_spaces: $(OBJ_make_spaces)
 make_complete_spaces: $(OBJ_make_complete_spaces)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
-q_learning: $(OBJ_block_sat)
+q_learning_opt: $(OBJ_block_opt)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
+
+q_learning_sat: $(OBJ_block_sat)
+	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
+
+$(OBJDIR)/learn_qubo_block_opt.o: learn_qubo.cpp builder_block_opt.cpp 
+	$(CXX) $(CXXFLAGS) -c -DBLOCK_OPT -I$(INCLUDEDIR) -I./src/models/block_learning_opt -I./src/models/common $< -o $@
 
 $(OBJDIR)/learn_qubo_block_sat.o: learn_qubo.cpp builder_block_sat.cpp 
 	$(CXX) $(CXXFLAGS) -c -DBLOCK_SAT -I$(INCLUDEDIR) -I./src/models/block_learning_sat -I./src/models/common $< -o $@

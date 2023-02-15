@@ -28,6 +28,8 @@
 #include "builder_block.hpp"
 #elif defined BLOCK_SAT
 #include "builder_block_sat.hpp"
+#elif defined BLOCK_OPT
+#include "builder_block_opt.hpp"
 #else
 #include "builder_force_pattern.hpp"
 #endif
@@ -63,7 +65,7 @@ void check_solution_block( const std::vector<int>& solution,
                            bool complementary_variable,
                            bool silent,
                            string result_file_path,
-                           int parameter = 1,
+                           int parameter,
                            bool full_check = false )
 {
 	if( silent )
@@ -78,6 +80,7 @@ void check_solution_block( const std::vector<int>& solution,
 	int row_domain, col_domain;
 	bool triangle_element;
 	int errors = 0;
+	int param;
 	
 	for( size_t row = 0 ; row < matrix_side ; ++row )
 	{
@@ -93,7 +96,14 @@ void check_solution_block( const std::vector<int>& solution,
 					Q( row, col ) += -1;
 				else
 					if( solution[0] == 3 ) // linear combinatorics pattern
-						Q( row, col ) += -( 2 * parameter - ( row_domain + starting_value ) ) * ( row_domain + starting_value );
+					{
+						if( parameter == std::numeric_limits<int>::max() )
+							param = 1;
+						else
+							param = parameter;
+
+						Q( row, col ) += -( 2 * param - ( row_domain + starting_value ) ) * ( row_domain + starting_value );
+					}
 			}
 			else // non-diagonal
 			{
@@ -136,8 +146,33 @@ void check_solution_block( const std::vector<int>& solution,
 					if( solution[7] == 1 ) // linear combinatorics pattern
 						Q( row, col ) += 2 * ( row_domain + starting_value ) * ( col_domain + starting_value );
 
-					if( solution[8] == 1 ) // diagonal beam pattern
-						Q( row, col ) += std::max( 0, parameter - ( std::abs( col_domain - row_domain ) ) );
+					if( solution[8] == 1 ) // repel pattern
+					{
+						if( parameter == std::numeric_limits<int>::max() )
+							param = 0;
+						else
+							param = parameter;
+						
+						Q( row, col ) += std::max( 0, param - ( std::abs( col_domain - row_domain ) ) );
+					}
+
+					if( solution[9] == 1 ) // attract pattern
+					{
+						if( parameter == std::numeric_limits<int>::max() )
+							param = 0;
+						else
+							param = parameter;
+
+						Q( row, col ) += std::max( 0, std::abs( col_domain - row_domain ) - ( static_cast<int>( domain_size ) - 1 - param ) );
+					}
+
+					if( solution[10] == 1 ) // swapped values pattern
+					{
+						if( ( row / domain_size ) == col_domain && ( col / domain_size ) == row_domain )
+							Q( row, col ) += -1;
+						else
+							Q( row, col ) += 1;
+					}
 				}
 			}
 		}
@@ -230,7 +265,7 @@ void check_solution( const std::vector<int>& solution,
                      bool complementary_variable,
                      bool silent,
                      string result_file_path,
-                     int parameter = 1,
+                     int parameter,
                      bool full_check = false )
 {
 	if( silent )
@@ -446,9 +481,6 @@ int main( int argc, char **argv )
 
 		q_matrix_file.close();
 
-		if( parameter == std::numeric_limits<int>::max() )
-			parameter = 1;
-		
 		check_solution( q_matrix,
 		                candidates,
 		                labels,
@@ -549,7 +581,7 @@ int main( int argc, char **argv )
 		double cost;
 		bool solved = true;
 		Options options;
-#if not defined BLOCK and not defined BLOCK_SAT
+#if not defined BLOCK and not defined BLOCK_SAT and not defined BLOCK_OPT
 		options.print = make_shared<PrintQUBO>( number_variables * domain_size );
 #endif
 		if( parallel )
@@ -581,17 +613,22 @@ int main( int argc, char **argv )
 		}
 
 		if( !silent )
+		{
 			std::cout << "\nConstraints satisfied: " << std::boolalpha << solved << "\n"
 			          << "Objective function cost: " << cost << "\n";
 			
+			std::cout << "v[0]: " << solution[0];
+			for( int i = 1 ; i < static_cast<int>( solution.size() ) ; ++i )
+				std::cout << ", v[" << i << "]: " << solution[i];
+			//std::copy( solution.begin(), solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
+			std::cout << "\n";
+		}
+		
 		bool check = false;
 		if( cmdl[ {"c", "check"} ] && q_matrix_file_path == "" )
 			check = true;
 
-		if( parameter == std::numeric_limits<int>::max() )
-			parameter = 1;
-
-#if defined BLOCK or defined BLOCK_SAT
+#if defined BLOCK or defined BLOCK_SAT or defined BLOCK_OPT
 		check_solution_block( solution,
 		                      candidates,
 		                      labels,

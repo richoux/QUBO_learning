@@ -4,7 +4,8 @@
 #include <ghost/global_constraints/linear_equation_leq.hpp>
 
 #include "constraint_training_set_block.hpp"
-#include "builder_block_sat.hpp"
+#include "objective_short_expression.hpp"
+#include "builder_block_opt.hpp"
 
 BuilderQUBO::BuilderQUBO( const std::vector<int>& training_data,
                           size_t number_samples,
@@ -66,4 +67,9 @@ void BuilderQUBO::declare_constraints()
 	constraints.emplace_back( make_shared< ghost::global_constraints::LinearEquationLeq >( std::vector<int>{1,2,3,4,5,6}, 1 ) );
 	constraints.emplace_back( make_shared< ghost::global_constraints::LinearEquationLeq >( std::vector<int>{8,9}, 1 ) );
 	constraints.emplace_back( make_shared<TrainingSet>( variables, _training_data, _size_training_set, _candidate_length, _domain_size, _starting_value, _error_vector, _parameter ) );
+}
+
+void BuilderQUBO::declare_objective()
+{
+	objective = std::make_shared<ObjectiveShortExpression>( variables );
 }

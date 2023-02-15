@@ -5,7 +5,7 @@
 # 		exit
 # fi
 
-EXE="./bin/q_learning"
+EXE="./bin/q_learning_sat"
 LOOP=100
 
 echo "$LOOP runs for each constraint"
@@ -13,7 +13,8 @@ echo ""
 echo "AllDiff"
 for i in {1..$LOOP}
 do
-		$EXE -f spaces/incomplete/alldiff-15_15_2.txt -p -r tmp --benchmark 2> /dev/null 1>> out_time
+#		$EXE -f spaces/incomplete/alldiff-15_15_2.txt -p -r tmp --benchmark 2> /dev/null 1>> out_time
+		$EXE -f spaces/incomplete/alldiff-15_15_100.txt -p -r tmp --benchmark 2> /dev/null 1>> out_time
 		$EXE -f spaces/incomplete/alldiff-15_15_100000.txt -c tmp --benchmark >> out_error
 done
 SUM=`grep Wall-clock out_time | sed 's/us//g' | awk -v sum=0 '{sum += $5} END {print sum}'`
@@ -38,7 +39,8 @@ echo ""
 echo "LinearEquation"
 for i in {1..$LOOP}
 do
-		$EXE -f spaces/incomplete/linear_equation-12_12_72_2.txt -p -r tmp --benchmark 2> /dev/null 1> out_time
+#		$EXE -f spaces/incomplete/linear_equation-12_12_72_2.txt -p -r tmp --benchmark 2> /dev/null 1> out_time
+		$EXE -f spaces/incomplete/linear_equation-12_12_72_100.txt -p -r tmp --benchmark 2> /dev/null 1> out_time
 		$EXE -f spaces/incomplete/linear_equation-12_12_72_10000.txt -c tmp --benchmark >> out_error
 done
 SUM=`grep Wall-clock out_time | sed 's/us//g' | awk -v sum=0 '{sum += $5} END {print sum}'`
@@ -69,7 +71,8 @@ echo ""
 echo "NoOverlap"
 for i in {1..$LOOP}
 do
-		$EXE -f spaces/incomplete/no_overlap_1D-12_48_3_3.txt -p -r tmp --benchmark 2> /dev/null 1> out_time
+#		$EXE -f spaces/incomplete/no_overlap_1D-12_48_3_3.txt -p -r tmp --benchmark 2> /dev/null 1> out_time
+		$EXE -f spaces/incomplete/no_overlap_1D-12_48_3_100.txt -p -r tmp --benchmark 2> /dev/null 1> out_time
 		$EXE -f spaces/incomplete/no_overlap_1D-12_48_3_10000.txt -c tmp --benchmark >> out_error
 done
 SUM=`grep Wall-clock out_time | sed 's/us//g' | awk -v sum=0 '{sum += $5} END {print sum}'`
@@ -85,7 +88,8 @@ echo ""
 echo "Ordered"
 for i in {1..$LOOP}
 do
-		$EXE -f spaces/incomplete/ordered-12_18_2.txt -p -r tmp --benchmark 2> /dev/null 1> out_time
+#		$EXE -f spaces/incomplete/ordered-12_18_2.txt -p -r tmp --benchmark 2> /dev/null 1> out_time
+		$EXE -f spaces/incomplete/ordered-12_18_100.txt -p -r tmp --benchmark 2> /dev/null 1> out_time
 		$EXE -f spaces/incomplete/ordered-12_18_10000.txt -c tmp --benchmark >> out_error
 done
 SUM=`grep Wall-clock out_time | sed 's/us//g' | awk -v sum=0 '{sum += $5} END {print sum}'`
