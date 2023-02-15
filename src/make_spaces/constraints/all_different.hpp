@@ -9,5 +9,4 @@ public:
 	AllDifferent();
 	
 	bool constraint_concept( const std::vector<int>& var, int start, int end ) const override;
-	bool constraint_concept( const std::vector<Variable*>& var ) const override;
 };

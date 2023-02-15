@@ -18,13 +18,3 @@ bool Channel::constraint_concept( const vector<int>& var, int start, int end ) c
 
 	return true;
 }
-
-bool Channel::constraint_concept( const vector<Variable*>& var ) const
-{
-	// we consider that domains star from 1, explaining the '!= i+1'
-	for( int i = 0 ; i < static_cast<int>( var.size() ) ; ++i )
-		if( var[i]->get_value() < 0 || var[i]->get_value() >= static_cast<int>( var.size() ) || var[ var[i]->get_value() ]->get_value() != i+1 )
-			return false;
-
-	return true;
-}

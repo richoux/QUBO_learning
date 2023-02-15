@@ -15,8 +15,3 @@ bool Element::constraint_concept( const vector<int>& var, int start, int end ) c
 {
 	return std::any_of( var.begin() + start, var.begin() + start + end, [&](auto v){ return v == _element; } );
 }
-
-bool Element::constraint_concept( const vector<Variable*>& var ) const
-{
-	return std::any_of( var.begin(), var.end(), [&](auto &v){ return v->get_value() == _element; } );
-}

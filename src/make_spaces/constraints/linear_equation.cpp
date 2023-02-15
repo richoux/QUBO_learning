@@ -16,13 +16,3 @@ bool LinearEquation::constraint_concept( const vector<int>& var, int start, int 
 {
 	return accumulate( var.begin() + start, var.begin() + end, 0 ) == _rhs;
 }
-
-bool LinearEquation::constraint_concept( const vector<Variable*>& var ) const
-{
-	int sum = 0;
-	
-	for( auto& v : var )
-		sum += v->get_value();
-	
-	return sum == _rhs;	
-}

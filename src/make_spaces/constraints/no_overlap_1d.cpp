@@ -23,17 +23,3 @@ bool NoOverlap1D::constraint_concept( const vector<int>& var, int start, int end
 
 	return true;
 }
-
-bool NoOverlap1D::constraint_concept( const vector<Variable*>& var ) const
-{
-	for( int i = 0; i < (int)var.size(); ++i )
-		for( int j = 0; i < (int)var.size(); ++j )
-			if( j != i
-			    &&
-			    var[j]->get_value() + _params[j] > var[i]->get_value()
-			    &&
-			    var[i]->get_value() + _params[i] > var[j]->get_value() )
-				return false;
-
-	return true;
-}
