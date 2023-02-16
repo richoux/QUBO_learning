@@ -15,6 +15,7 @@
 #include <randutils.hpp>
 #include <Eigen/Dense>
 
+#include "matrix.hpp"
 #include "print_qubo.hpp"
 #if defined SVN
 #include "builder_svn.hpp"
@@ -34,6 +35,8 @@
 #include "builder_force_pattern.hpp"
 #endif
 
+#define BLOCK_MODEL_SIZE 11
+
 using namespace ghost;
 using namespace std::literals::chrono_literals;
 
@@ -44,8 +47,9 @@ void usage( char **argv )
 	     << "Arguments:\n"
 	     << "-h, --help, printing this message.\n"
 	     << "-f, --file FILE_TRAINING_DATA.\n"
-	     << "-c, --check [FILE_Q_MATRIX], to compute xt.Q.x results if a file is provided containing Q, or to display all xt.Q.x results after the learning of Q otherwise.\n"
-	     << "-r, --result FILE_RESULT, to write the learned Q matrix in FILE_RESULT\n"
+	     << "-c, --check [FILE_RESULT], to compute xt.Q.x results if a file is provided containing either Q or the solution produced by GHOST, or to display all xt.Q.x results after the learning of Q if no files are given.\n"
+	     << "-r, --result FILE_RESULT, to write the solution in FILE_RESULT\n"
+	     << "-m, --matrix FILE_RESULT, to write the learned Q matrix in FILE_RESULT\n"
 	     << "-t, --timeout TIME_BUDGET, in seconds (1 by default)\n"
 	     << "-b, --benchmark, to limit prints.\n"
 	     << "-s, --sample PERCENT [--force_positive], to sample candidates from PERCENT of the training set (100 by default). --force_positive forces considering all positive candidates.\n"
@@ -65,6 +69,7 @@ void check_solution_block( const std::vector<int>& solution,
                            bool complementary_variable,
                            bool silent,
                            string result_file_path,
+                           string matrix_file_path,
                            int parameter,
                            bool full_check = false )
 {
@@ -75,108 +80,8 @@ void check_solution_block( const std::vector<int>& solution,
 	if( complementary_variable )
 		++matrix_side;
 	
-	Eigen::MatrixXi Q = Eigen::MatrixXi::Zero( matrix_side, matrix_side );
-
-	int row_domain, col_domain;
-	bool triangle_element;
+	Eigen::MatrixXi Q = fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
 	int errors = 0;
-	int param;
-	
-	for( size_t row = 0 ; row < matrix_side ; ++row )
-	{
-		row_domain = row % domain_size;
-		for( size_t col = row ; col < matrix_side ; ++col )
-		{
-			col_domain = col % domain_size;
-			triangle_element = ( col < row + domain_size - row_domain ? true : false );
-			
-			if( col == row ) //diagonal
-			{
-				if( solution[0] == 2 ) // -1-diagonal pattern
-					Q( row, col ) += -1;
-				else
-					if( solution[0] == 3 ) // linear combinatorics pattern
-					{
-						if( parameter == std::numeric_limits<int>::max() )
-							param = 1;
-						else
-							param = parameter;
-
-						Q( row, col ) += -( 2 * param - ( row_domain + starting_value ) ) * ( row_domain + starting_value );
-					}
-			}
-			else // non-diagonal
-			{
-				if( triangle_element )
-				{
-					Q( row, col ) += 2; // one-hot constraint
-					if( solution[0] == 3 ) // linear combinatorics pattern
-						Q( row, col ) += 2 * ( row_domain + starting_value ) * ( col_domain + starting_value );
-				}
-				else // full-block
-				{
-					if( row_domain == col_domain )
-					{
-						if( solution[1] == 1 ) // equality pattern
-							Q( row, col ) += 1;
-						if( solution[4] == 1 ) // less-than pattern
-							Q( row, col ) += 1;
-						if( solution[6] == 1 ) // greater-than pattern
-							Q( row, col ) += 1;
-					}
-					if( row_domain < col_domain )
-					{
-						if( solution[2] == 1 ) // different pattern
-							Q( row, col ) += 1;
-						if( solution[5] == 1 ) // greater-than-or-equals-to pattern
-							Q( row, col ) += 1;
-						if( solution[6] == 1 ) // greater-than pattern
-							Q( row, col ) += 1;
-					}
-					if( row_domain > col_domain )
-					{
-						if( solution[2] == 1 ) // different pattern
-							Q( row, col ) += 1;
-						if( solution[3] == 1 ) // less-than-or-equals-to pattern
-							Q( row, col ) += 1;
-						if( solution[4] == 1 ) // less-than pattern
-							Q( row, col ) += 1;
-					}
-
-					if( solution[7] == 1 ) // linear combinatorics pattern
-						Q( row, col ) += 2 * ( row_domain + starting_value ) * ( col_domain + starting_value );
-
-					if( solution[8] == 1 ) // repel pattern
-					{
-						if( parameter == std::numeric_limits<int>::max() )
-							param = 0;
-						else
-							param = parameter;
-						
-						Q( row, col ) += std::max( 0, param - ( std::abs( col_domain - row_domain ) ) );
-					}
-
-					if( solution[9] == 1 ) // attract pattern
-					{
-						if( parameter == std::numeric_limits<int>::max() )
-							param = 0;
-						else
-							param = parameter;
-
-						Q( row, col ) += std::max( 0, std::abs( col_domain - row_domain ) - ( static_cast<int>( domain_size ) - 1 - param ) );
-					}
-
-					if( solution[10] == 1 ) // swapped values pattern
-					{
-						if( ( row / domain_size ) == col_domain && ( col / domain_size ) == row_domain )
-							Q( row, col ) += -1;
-						else
-							Q( row, col ) += 1;
-					}
-				}
-			}
-		}
-	}
 
 	int min_scalar = std::numeric_limits<int>::max();
 	std::vector<int> scalars( number_samples );
@@ -241,21 +146,35 @@ void check_solution_block( const std::vector<int>& solution,
 		          << "\n\nMin scalar = " << min_scalar << "\n"
 		          << "Number of errors: " << errors << "\n\n";
 
+	if( matrix_file_path != "" )
+	{
+		if( !silent )
+			std::cout << "Matrix file: " << matrix_file_path << "\n";
+		ofstream matrix_file;
+		matrix_file.open( matrix_file_path );
+		std::streambuf *coutbuf = std::cout.rdbuf();
+		std::cout.rdbuf( matrix_file.rdbuf() );
+		std::cout << "Matrix\n";
+		std::cout << Q << "\n";
+		std::cout.rdbuf( coutbuf );
+		matrix_file.close();
+	}
+
 	if( result_file_path != "" )
 	{
 		if( !silent )
 			std::cout << "Result file: " << result_file_path << "\n";
 		ofstream result_file;
 		result_file.open( result_file_path );
-		std::streambuf *coutbuf = std::cout.rdbuf();
-		std::cout.rdbuf( result_file.rdbuf() );
-		std::cout << Q << "\n";
-		std::cout.rdbuf( coutbuf );
+		result_file << "Solution\n";
+		for( int value : solution )
+			result_file << value << " ";
+		result_file << "\n";
 		result_file.close();
 	}
 }
 
-void check_solution( const std::vector<int>& solution,
+void check_solution( const Eigen::MatrixXi& Q,
                      const std::vector<int>& samples,
                      const std::vector<double>& labels,
                      size_t number_variables,
@@ -265,6 +184,7 @@ void check_solution( const std::vector<int>& solution,
                      bool complementary_variable,
                      bool silent,
                      string result_file_path,
+                     string matrix_file_path,
                      int parameter,
                      bool full_check = false )
 {
@@ -275,18 +195,6 @@ void check_solution( const std::vector<int>& solution,
 	if( complementary_variable )
 		++matrix_side;
 	
-	Eigen::MatrixXi Q = Eigen::MatrixXi::Zero( matrix_side, matrix_side );
-
-	for( size_t length = matrix_side ; length > 0 ; --length )
-	{
-		int row_number = matrix_side - length;
-		
-		int shift = row_number * ( row_number - 1 ) / 2;
-		
-		for( int i = 0 ; i < length ; ++i )
-			Q( row_number, row_number + i ) = solution[ ( row_number * matrix_side ) - shift + i ];
-	}
-
 	int errors = 0;
 	int min_scalar = std::numeric_limits<int>::max();
 	std::vector<int> scalars( number_samples );
@@ -351,17 +259,18 @@ void check_solution( const std::vector<int>& solution,
 		          << "\n\nMin scalar = " << min_scalar << "\n";
 	std::cout << "Number of errors: " << errors << "\n\n";
 
-	if( result_file_path != "" )
+	if( matrix_file_path != "" )
 	{
 		if( !silent )
-			std::cout << "Result file: " << result_file_path << "\n";
-		ofstream result_file;
-		result_file.open( result_file_path );
+			std::cout << "Matrix file: " << matrix_file_path << "\n";
+		ofstream matrix_file;
+		matrix_file.open( matrix_file_path );
 		std::streambuf *coutbuf = std::cout.rdbuf();
-		std::cout.rdbuf( result_file.rdbuf() );
+		std::cout.rdbuf( matrix_file.rdbuf() );
+		std::cout << "Matrix\n";
 		std::cout << Q << "\n";
 		std::cout.rdbuf( coutbuf );
-		result_file.close();
+		matrix_file.close();
 	}
 }
 
@@ -377,10 +286,11 @@ int main( int argc, char **argv )
 	
 	string training_data_file_path;
 	string result_file_path;
-	string q_matrix_file_path;
+	string matrix_file_path;
+	string check_file_path;
 	string line, string_number;
 	ifstream training_data_file;
-	ifstream q_matrix_file;
+	ifstream check_file;
 
 	size_t number_samples = 0;
 	int number_remains_to_sample = 0;
@@ -395,9 +305,11 @@ int main( int argc, char **argv )
 	bool complementary_variable;
 	bool force_positive;
 	bool silent;
-	
+
+	vector<int> solution;
+
 	randutils::mt19937_rng rng;
-	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample", "-c", "--check", "-w", "--weak_learners", "-r", "--result" } );
+	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample", "-c", "--check", "-w", "--weak_learners", "-r", "--result", "-m", "--matrix" } );
 	cmdl.parse( argc, argv );
 	
 	if( cmdl[ {"-h", "--help"} ] )
@@ -414,7 +326,8 @@ int main( int argc, char **argv )
 
 	cmdl( {"f", "file"} ) >> training_data_file_path;
 	cmdl( {"r", "result"}, "" ) >> result_file_path;
-	cmdl( {"c", "check"}, "" ) >> q_matrix_file_path;
+	cmdl( {"c", "check"}, "" ) >> check_file_path;
+	cmdl( {"m", "matrix"}, "" ) >> matrix_file_path;
 	cmdl( {"t", "timeout"}, 1 ) >> time_budget;
 	cmdl( {"s", "sample"}, 100 ) >> percent_training_set;
 	cmdl( {"w", "weak_learners"}, 1 ) >> weak_learners;
@@ -457,31 +370,61 @@ int main( int argc, char **argv )
 	training_data_file.close();
 	number_samples = static_cast<int>( ( total_training_set_size * percent_training_set ) / 100 );
 
-	if( q_matrix_file_path != "" )
+	if( check_file_path != "" )
 	{
-		q_matrix_file.open( q_matrix_file_path );
+		check_file.open( check_file_path );
+		
+		size_t matrix_side = number_variables * domain_size;
+		if( complementary_variable )
+			++matrix_side;
+		Eigen::MatrixXi Q = Eigen::MatrixXi::Zero( matrix_side, matrix_side );
 		vector<int> q_matrix;
 
-		int row = 0;
-		while( getline( q_matrix_file, line ) )
+		getline( check_file, line );
+		if( line == "Matrix" )
 		{
-			int count = 0;
-			stringstream line_stream( line );
-			while( line_stream >> string_number )
+			int row = 0;
+			while( getline( check_file, line ) )
 			{
-				++count;
-				if( count < row + 1 )
-					continue;
-				stringstream number_stream( string_number );
-				number_stream >> value;
-				q_matrix.push_back( value );
+				int count = 0;
+				stringstream line_stream( line );
+				while( line_stream >> string_number )
+				{
+					++count;
+					if( count < row + 1 )
+						continue;
+					stringstream number_stream( string_number );
+					number_stream >> value;
+					q_matrix.push_back( value );
+				}
+				++row;
 			}
-			++row;
+				
+			for( size_t length = matrix_side ; length > 0 ; --length )
+			{
+				int row_number = matrix_side - length;
+				
+				int shift = row_number * ( row_number - 1 ) / 2;
+				
+				for( int i = 0 ; i < length ; ++i )
+					Q( row_number, row_number + i ) = q_matrix[ ( row_number * matrix_side ) - shift + i ];
+			}
 		}
+		else
+		{
+			getline( check_file, line );
+			stringstream line_stream( line );
 
-		q_matrix_file.close();
+			solution.reserve( BLOCK_MODEL_SIZE );
+			for( int i = 0 ; i < BLOCK_MODEL_SIZE; ++i )
+				line_stream >> solution[i];
+			
+			Q = fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
+		}
+		
+		check_file.close();
 
-		check_solution( q_matrix,
+		check_solution( Q,
 		                candidates,
 		                labels,
 		                number_variables,
@@ -490,6 +433,7 @@ int main( int argc, char **argv )
 		                starting_value,
 		                complementary_variable,
 		                silent,
+		                "",
 		                "",
 		                parameter,
 		                false );
@@ -577,7 +521,6 @@ int main( int argc, char **argv )
 		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable, parameter );
 		Solver solver( builder );
 
-		vector<int> solution;
 		double cost;
 		bool solved = true;
 		Options options;
@@ -625,7 +568,7 @@ int main( int argc, char **argv )
 		}
 		
 		bool check = false;
-		if( cmdl[ {"c", "check"} ] && q_matrix_file_path == "" )
+		if( cmdl[ {"c", "check"} ] && check_file_path == "" )
 			check = true;
 
 #if defined BLOCK or defined BLOCK_SAT or defined BLOCK_OPT
@@ -639,10 +582,27 @@ int main( int argc, char **argv )
 		                      complementary_variable,
 		                      silent,
 		                      result_file_path,
+		                      matrix_file_path,
 		                      parameter,
 		                      check );
 #else
-		check_solution( solution,
+		size_t matrix_side = number_variables * domain_size;
+		if( complementary_variable )
+			++matrix_side;
+		
+		Eigen::MatrixXi Q = Eigen::MatrixXi::Zero( matrix_side, matrix_side );
+		
+		for( size_t length = matrix_side ; length > 0 ; --length )
+		{
+			int row_number = matrix_side - length;
+			
+			int shift = row_number * ( row_number - 1 ) / 2;
+			
+			for( int i = 0 ; i < length ; ++i )
+				Q( row_number, row_number + i ) = solution[ ( row_number * matrix_side ) - shift + i ];
+		}
+		
+		check_solution( Q,
 		                candidates,
 		                labels,
 		                number_variables,
@@ -652,6 +612,7 @@ int main( int argc, char **argv )
 		                complementary_variable,
 		                silent,
 		                result_file_path,
+		                matrix_file_path,
 		                parameter,
 		                check );
 #endif

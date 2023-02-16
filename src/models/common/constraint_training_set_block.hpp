@@ -4,7 +4,6 @@
 
 #include <ghost/variable.hpp>
 #include <ghost/constraint.hpp>
-#include <Eigen/Dense>
 
 using namespace std;
 using namespace ghost;
@@ -23,9 +22,6 @@ class TrainingSet : public Constraint
 	std::vector<double> _error_vector;
 	int _parameter;
 	
-	Eigen::VectorXi fill_vector( const std::vector<int>& candidate ) const;
-	Eigen::MatrixXi fill_matrix( const std::vector<int>& variable_values ) const;
-
 	double compute_error( const std::vector<int>& variable_values ) const;
 	double required_error( const vector<Variable*>& variables ) const override;
 	// double optional_delta_error( const std::vector<Variable*> &variables, const std::vector<int> &indexes, const std::vector<int> &candidate_values ) const override;
