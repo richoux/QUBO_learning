@@ -29,15 +29,15 @@ BuilderQUBO::BuilderQUBO( const std::vector<int>& training_data,
 void BuilderQUBO::declare_variables()
 {
 	// The first variable encodes the half-block pattern
-	// The 8 following variables are Boolean and encode selected full-block patterns
-	// Among these 8 variables, the 6 first ones are mutually exclusive (LinearEquationEq constraint)
+	// The 14 following variables are Boolean and encode selected full-block patterns
+	// Among these 14 variables, some are mutually exclusive (see LinearEquationEq constraints)
 
 	// half-block variable
 	/*
 	 * half-block domain
 	 * 
-	 * 1: 0-diagonal 
-	 * 2: -1-diagonal
+	 * 1: 0 diagonal 
+	 * 2: -1 diagonal
 	 * 3: linear combinatorics -(2a-b_xi)b_xi
 	 *
 	 */	
@@ -46,26 +46,35 @@ void BuilderQUBO::declare_variables()
 	/*
 	 * full-block variables (indices)
 	 * 
+	 * ## arithmetic
 	 *  1: neq
 	 *  2: eq
 	 *  3: leq
 	 *  4: le
 	 *  5: geq
 	 *  6: ge
-	 *  7: linear combinatorics (2.b_xi.b_xj
-	 *  8: repel
-	 *  9: attract
-	 * 10: swapped values
+	 * ## position-based
+	 *  7: favor assigning the current position, ie, x_i = i 
+	 *  8: avoid assigning the current position
+	 *  9: favor assigning a different position, ie, x_ia.x_jb = -1 for a,b not in {i,j}
+	 * 10: avoid assigning a different position
+	 * 11: swap values regarding positions, ie, x_i = j and x_j = i
+	 * ## complex
+	 * 12: repel
+	 * 13: attract
+	 * 14: linear combinatorics (2.b_xi.b_xj
 	 *
 	 */	
-	for( size_t i = 0 ; i < 10 ; ++i )
+	for( size_t i = 0 ; i < 14 ; ++i )
 		variables.emplace_back( std::initializer_list<int>( {0, 1} ) );
 }
 
 void BuilderQUBO::declare_constraints()
 {
 	constraints.emplace_back( make_shared< ghost::global_constraints::LinearEquationLeq >( std::vector<int>{1,2,3,4,5,6}, 1 ) );
-	constraints.emplace_back( make_shared< ghost::global_constraints::LinearEquationLeq >( std::vector<int>{8,9}, 1 ) );
+	constraints.emplace_back( make_shared< ghost::global_constraints::LinearEquationLeq >( std::vector<int>{7,8}, 1 ) );
+	constraints.emplace_back( make_shared< ghost::global_constraints::LinearEquationLeq >( std::vector<int>{9,10}, 1 ) );
+	constraints.emplace_back( make_shared< ghost::global_constraints::LinearEquationLeq >( std::vector<int>{12,13}, 1 ) );
 	constraints.emplace_back( make_shared<TrainingSet>( variables, _training_data, _size_training_set, _candidate_length, _domain_size, _starting_value, _error_vector, _parameter ) );
 }
 

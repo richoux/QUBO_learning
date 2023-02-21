@@ -35,7 +35,7 @@
 #include "builder_force_pattern.hpp"
 #endif
 
-#define BLOCK_MODEL_SIZE 11
+#define BLOCK_MODEL_SIZE 15
 
 using namespace ghost;
 using namespace std::literals::chrono_literals;
