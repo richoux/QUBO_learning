@@ -1,5 +1,5 @@
 #EXEC=qubo_ghost_scam qubo_ghost_svn qubo_ghost_sparse qubo_ghost_force_pattern qubo_ghost_force_preference qubo_block qubo_block_sat
-EXEC=q_learning_opt q_learning_sat make_spaces make_complete_spaces
+EXEC=q_learning_opt q_learning_sat make_spaces make_complete_spaces make_test_spaces
 #EXEC_DEBUG=qubo_ghost_scam_debug qubo_ghost_svn_debug qubo_ghost_sparse_debug qubo_ghost_force_pattern_debug qubo_ghost_force_preference_debug qubo_block_debug qubo_block_sat_debug
 
 # Compiler flags
@@ -34,6 +34,7 @@ OBJ_block_sat=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_blo
 OBJ_block_opt=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_opt.o learn_qubo_block_opt.o objective_short_expression.o matrix.o)
 OBJ_make_spaces=$(addprefix $(OBJDIR)/,make_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
 OBJ_make_complete_spaces=$(addprefix $(OBJDIR)/,make_complete_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
+OBJ_make_test_spaces=$(addprefix $(OBJDIR)/,make_test_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
 BINDIR=bin
 INCLUDEDIR=./include
 LIBDIR=./lib
@@ -116,6 +117,9 @@ make_spaces: $(OBJ_make_spaces)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
 make_complete_spaces: $(OBJ_make_complete_spaces)
+	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
+
+make_test_spaces: $(OBJ_make_test_spaces)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
 q_learning_opt: $(OBJ_block_opt)
