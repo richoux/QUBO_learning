@@ -46,7 +46,7 @@ void BuilderQUBO::declare_variables()
 	/*
 	 * full-block variables (indices)
 	 * 
-	 * ## arithmetic
+	 * ## comparison
 	 *  1: neq
 	 *  2: eq
 	 *  3: leq
