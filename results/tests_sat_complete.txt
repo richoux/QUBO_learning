@@ -1,0 +1,22 @@
+100 runs for each constraint
+Mean runtimes concern the matrix learning. Testing learned matrices may take a while.
+
+AllDiff
+Mean learning runtime in microseconds: 1174.03
+Mean error: 0
+
+Ordered
+Mean learning runtime in microseconds: 165.14
+Mean error: 0
+
+LinearEquation
+Mean learning runtime in microseconds: 834.90
+Mean error: 0
+
+NoOverlap
+Mean learning runtime in microseconds: 48.49
+Mean error: 0
+
+Channel
+Mean learning runtime in microseconds: 41.15
+Mean error: 0
