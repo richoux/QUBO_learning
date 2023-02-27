@@ -226,6 +226,8 @@ int main( int argc, char** argv )
 			need_to_increase = ( sum < params_value );				
 		}
 
+		rng.shuffle( config );
+
 		has_been_drawned[ convert_to_string( config ) ] = true;
 		output_file << "0 : ";
 		std::copy( config.begin(),
@@ -242,6 +244,9 @@ int main( int argc, char** argv )
 				++config[ index ];
 				--config[ index + 1 ];
 			}
+
+			rng.shuffle( config );
+
 			if( constraint_concept->constraint_concept( config, 0, nb_vars ) )
 			{
 				if( !has_been_drawned.contains( convert_to_string( config ) ) )
@@ -268,9 +273,9 @@ int main( int argc, char** argv )
 			{
 				if( value < max_value )
 				{
-					if( rng.uniform( 0, 100 ) < 5 ) // 5% of chance
+					if( rng.uniform( 0, 100 ) < 50 ) // 50% of chance
 					{
-						if( rng.uniform( 0, 100 ) < 25 ) // 25% of chance
+						if( rng.uniform( 0, 100 ) < 50 && value + 1 < max_value ) // 50% of chance
 							value += 2;
 						else
 							++value;
@@ -303,7 +308,7 @@ int main( int argc, char** argv )
 		{
 			int total_length = nb_vars * length;
 			int remain = max_value - total_length;
-			int last_value = 0;
+			int last_value = 1;
 			int value = 0;
 			
 			for( int i = 0 ; i < nb_vars ; ++i )
@@ -311,7 +316,7 @@ int main( int argc, char** argv )
 				value = last_value;
 				
 				if( remain > 0 )
-					value += rng.uniform( 0, remain );
+					value += rng.uniform( 0, std::max<int>( 1, remain / 3 ) );
 				
 				config[i] = value;
 				
@@ -319,6 +324,8 @@ int main( int argc, char** argv )
 				total_length -= length;
 				remain = max_value - ( total_length + last_value );
 			}
+
+			rng.shuffle( config );
 			
 			if( constraint_concept->constraint_concept( config, 0, nb_vars ) )
 			{
@@ -342,7 +349,7 @@ int main( int argc, char** argv )
 		{
 			std::iota( config.begin(), config.end(), 1 );
 
-			int number_swaps = rng.uniform( 1, 10 );
+			int number_swaps = rng.uniform( 1, 50 );
 			for( int i = 0 ; i < number_swaps ; ++i )
 			{
 				int var1 = rng.uniform( 0, nb_vars );
