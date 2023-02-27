@@ -1,0 +1,16 @@
+alldiff-n_d: AllDifferent of n variables with domains of size d
+
+linear_equation-3_3_3: x + y + z = 3, x,y,z in {0,1,2}
+linear_equation-3_3_4: x + y + z = 4, x,y,z in {1,2,3}
+linear_equation-3_3_5: x + y + z = 5, x,y,z in {1,2,3}
+linear_equation-3_3_6: x + y + z = 6, x,y,z in {1,2,3}
+linear_equation-3_3_6: x + y + z = 6, x,y,z in {1,2,3}
+linear_equation-+x+y-z: x + y - z = 0, x,y,z in {1,2,3}
+
+linear_inequation_leq-3_3_6: x + y + z <= 6, x,y,z in {1,2,3}
+
+connection_minimum_geq-n_d_p: x1,...,xn in {1,...,d} s.t. for all i, xi >= p
+
+ordered-n_d: x1 <= ... <= xn, xi in {1,..,d}
+
+no_overlap_1D-n_d_p: n tasks of length p, in a d-length box.
