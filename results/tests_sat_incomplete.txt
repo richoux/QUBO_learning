@@ -2,21 +2,21 @@
 Mean runtimes concern the matrix learning. Testing learned matrices may take a while.
 
 AllDiff
-Mean learning runtime in microseconds: 658.69
-Mean error: 0
+Mean learning runtime in milliseconds: 90.71
+Imperfect representations (bad learning): 0
 
 Ordered
-Mean learning runtime in microseconds: 553.68
-Mean error: 0
+Mean learning runtime in milliseconds: 303.97
+Imperfect representations (bad learning): 0
 
 LinearEquation
-Mean learning runtime in microseconds: 330.54
-Mean error: 0
+Mean learning runtime in milliseconds: 390.09
+Imperfect representations (bad learning): 1
 
 NoOverlap
-Mean learning runtime in microseconds: 7965.98
-Mean error: 0
+Mean learning runtime in milliseconds: 429.35
+Imperfect representations (bad learning): 38
 
 Channel
-Mean learning runtime in microseconds: 41.62
-Mean error: 0
+Mean learning runtime in milliseconds: 63.06
+Imperfect representations (bad learning): 0
