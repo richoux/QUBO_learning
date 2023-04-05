@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/485604706.svg)](https://zenodo.org/badge/latestdoi/485604706)
+
 # Learning QUBO matrix from data
 
 This program aims to learn pattern composition representing a Q matrix from data. 
