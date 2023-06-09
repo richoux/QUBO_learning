@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <string>
 #include <cmath>
+#include <algorithm>
 
 #include "print_qubo.hpp"
 

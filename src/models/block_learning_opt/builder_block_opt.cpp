@@ -24,7 +24,14 @@ BuilderQUBO::BuilderQUBO( const std::vector<int>& training_data,
 	  _starting_value( starting_value ),
 	  _error_vector( error_vector ),
 	  _parameter( parameter )
-{ }
+{
+	for( int i = 0 ; i < number_samples ; ++i )
+	{
+		for(int j = 0 ; j < number_variables ; ++j )
+			std::cout << _training_data[i*number_variables + j] << " ";
+		std::cout << "\n";
+	}
+}
 
 void BuilderQUBO::declare_variables()
 {

@@ -1,6 +1,6 @@
 #EXEC=qubo_ghost_scam qubo_ghost_svn qubo_ghost_sparse qubo_ghost_force_pattern qubo_ghost_force_preference qubo_block qubo_block_sat
 EXEC=q_learning_opt q_learning_sat make_incomplete_spaces make_complete_spaces make_test_spaces
-#EXEC_DEBUG=qubo_ghost_scam_debug qubo_ghost_svn_debug qubo_ghost_sparse_debug qubo_ghost_force_pattern_debug qubo_ghost_force_preference_debug qubo_block_debug qubo_block_sat_debug
+EXEC_DEBUG=q_learning_opt_debug
 
 # Compiler flags
 MYFLAGS=
@@ -30,8 +30,8 @@ OBJDIR=obj
 # OBJ_force_pattern=$(addprefix $(OBJDIR)/,objective_supervised_learning.o builder_force_pattern.o print_qubo.o learn_qubo_force_pattern.o)
 # OBJ_force_preference=$(addprefix $(OBJDIR)/,objective_supervised_learning.o builder_force_preference.o print_qubo.o learn_qubo_force_preference.o)
 # OBJ_block=$(addprefix $(OBJDIR)/,objective_block.o builder_block.o learn_qubo_block.o constraint_parameter.o)
-OBJ_block_sat=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_sat.o learn_qubo_block_sat.o matrix.o)
-OBJ_block_opt=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_opt.o learn_qubo_block_opt.o objective_short_expression.o matrix.o)
+OBJ_block_sat=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_sat.o learn_qubo_block_sat.o matrix.o print_qubo.o)
+OBJ_block_opt=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_opt.o learn_qubo_block_opt.o objective_short_expression.o matrix.o print_qubo.o)
 OBJ_make_incomplete_spaces=$(addprefix $(OBJDIR)/,make_incomplete_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
 OBJ_make_complete_spaces=$(addprefix $(OBJDIR)/,make_complete_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
 OBJ_make_test_spaces=$(addprefix $(OBJDIR)/,make_test_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
@@ -49,9 +49,9 @@ VPATH=src/models/common:src/models/model_scam:src/models/model_svn:src/models/mo
 # Rules
 all: $(EXEC)
 
-# debug: CXXFLAGS=$(CXXFLAGSDEBUG)
-# debug: LDFLAGS=$(LDFLAGSDEBUG)
-# debug: $(EXEC_DEBUG)
+debug: CXXFLAGS=$(CXXFLAGSDEBUG)
+debug: LDFLAGS=$(LDFLAGSDEBUG)
+debug: $(EXEC_DEBUG)
 
 # qubo_ghost_scam: $(OBJ_scam)
 # 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
@@ -123,6 +123,9 @@ make_test_spaces: $(OBJ_make_test_spaces)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
 q_learning_opt: $(OBJ_block_opt)
+	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
+
+q_learning_opt_debug: $(OBJ_block_opt)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
 q_learning_sat: $(OBJ_block_sat)

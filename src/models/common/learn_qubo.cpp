@@ -35,27 +35,29 @@
 #include "builder_force_pattern.hpp"
 #endif
 
-#define BLOCK_MODEL_SIZE 15
+#define BLOCK_MODEL_SIZE 15 // directly linked to the number of patterns
 
 using namespace ghost;
 using namespace std::literals::chrono_literals;
 
 void usage( char **argv )
 {
-	cout << "Usage: " << argv[0] << " -f FILE_TRAINING_DATA [-t TIME_BUDGET] [-s PERCENT] [-p]\n"
-	     << "OR : " << argv[0] << " -f FILE_TRAINING_DATA -c [FILE_Q_MATRIX]\n"
-	     << "Arguments:\n"
+	cout << "Usage examples:\n" << argv[0] << " -f TRAINING_DATAFILE [-t TIME_BUDGET] [-s PERCENT] [-p]\n"
+	     << argv[0] << " -f TRAINING_DATAFILE -w NUMBER_LEARNERS -n NUMBER_SAMPLES -r RESULT_FILE\n"
+	     << argv[0] << " -f TEST_DATAFILE -c [RESULT_FILE]\n"
+	     << "\nArguments:\n"
 	     << "-h, --help, printing this message.\n"
-	     << "-f, --file FILE_TRAINING_DATA.\n"
-	     << "-c, --check [FILE_RESULT], to compute xt.Q.x results if a file is provided containing either Q or the solution produced by GHOST, or to display all xt.Q.x results after the learning of Q if no files are given.\n"
-	     << "-r, --result FILE_RESULT, to write the solution in FILE_RESULT\n"
-	     << "-m, --matrix FILE_RESULT, to write the learned Q matrix in FILE_RESULT\n"
+	     << "-f, --file DATAFILE.\n"
+	     << "-c, --check [RESULT_FILE], to compute xt.Q.x results if a file is provided containing either Q or the solution produced by GHOST, or to display all xt.Q.x results after the learning of Q if no files are given.\n"
+	     << "-r, --result RESULT_FILE, to write the solution in RESULT_FILE\n"
+	     << "-m, --matrix RESULT_FILE, to write the learned Q matrix in RESULT_FILE\n"
 	     << "-t, --timeout TIME_BUDGET, in seconds (1 by default)\n"
 	     << "-b, --benchmark, to limit prints.\n"
-	     << "-s, --sample PERCENT [--force_positive], to sample candidates from PERCENT of the training set (100 by default). --force_positive forces considering all positive candidates.\n"
+	     << "-ps, --percent PERCENT [--force_positive], to sample candidates from PERCENT of the training set (100 by default). --force_positive forces considering all positive candidates.\n"
+	     << "-n, --number NUMBER_SAMPLES, to sample NUMBER_SAMPLES candidates from the training set (the full set by default). Samples here are such that we got NUMBER_SAMPLES/2 positive and NUMBER_SAMPLES/2 negative candidates.\n"
 	     << "-p, --parallel, to make parallel search\n"
-	     << "-d, --debug, to print additional information\n"
 	     << "-w, --weak_learners NUMBER_LEARNERS, to learn NUMBER_LEARNERS Q matrices and merge them into an average matrix (disabled by default).\n"
+	     << "-d, --debug, to print additional information\n"
 	     << "--complementary, to force one complementary variable\n";
 }
 
@@ -293,6 +295,7 @@ int main( int argc, char **argv )
 	ifstream check_file;
 
 	size_t number_samples = 0;
+	bool custom_number_samples = false;
 	int number_remains_to_sample = 0;
 	size_t total_training_set_size = 0;
 	vector<int> candidates;
@@ -309,7 +312,7 @@ int main( int argc, char **argv )
 	vector<int> solution;
 
 	randutils::mt19937_rng rng;
-	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-s", "--sample", "-c", "--check", "-w", "--weak_learners", "-r", "--result", "-m", "--matrix" } );
+	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-ps", "--percent", "-n", "--number", "-c", "--check", "-w", "--weak_learners", "-r", "--result", "-m", "--matrix" } );
 	cmdl.parse( argc, argv );
 	
 	if( cmdl[ {"-h", "--help"} ] )
@@ -324,12 +327,18 @@ int main( int argc, char **argv )
 		return EXIT_FAILURE;
 	}
 
+	if( ( cmdl( {"n", "number"} ) ) )
+	{
+		custom_number_samples = true;
+	}
+	
 	cmdl( {"f", "file"} ) >> training_data_file_path;
 	cmdl( {"r", "result"}, "" ) >> result_file_path;
 	cmdl( {"c", "check"}, "" ) >> check_file_path;
 	cmdl( {"m", "matrix"}, "" ) >> matrix_file_path;
 	cmdl( {"t", "timeout"}, 1 ) >> time_budget;
-	cmdl( {"s", "sample"}, 100 ) >> percent_training_set;
+	cmdl( {"ps", "percent"}, 100 ) >> percent_training_set;
+	cmdl( {"n", "number"} ) >> number_samples;
 	cmdl( {"w", "weak_learners"}, 1 ) >> weak_learners;
 	time_budget *= 1000000; // GHOST needs microseconds
 	cmdl[ {"-p", "--parallel"} ] ? parallel = true : parallel = false;
@@ -368,7 +377,8 @@ int main( int argc, char **argv )
 	}
 
 	training_data_file.close();
-	number_samples = static_cast<int>( ( total_training_set_size * percent_training_set ) / 100 );
+	if( !custom_number_samples )
+		number_samples = static_cast<int>( ( total_training_set_size * percent_training_set ) / 100 );
 
 	if( check_file_path != "" )
 	{
@@ -538,20 +548,156 @@ int main( int argc, char **argv )
 		{
 			vector<vector<int>> solutions( weak_learners );
 			double sum_cost = 0.;
-				
+			std::vector<int> indexes( total_training_set_size );
+			std::iota( indexes.begin(), indexes.end(), 0 );
+			int number_positive = std::ceil( number_samples / 2 );
+			int number_negative = std::floor( number_samples / 2 );
+			options.custom_starting_point = true; 
+
 			for( int i = 0 ; i < weak_learners ; ++i )
 			{
+				if( custom_number_samples ) // sample a random, different sub-training set for each weak learner
+				{
+					vector<int> sub_samples;
+					vector<double> sub_sampled_labels;
+
+					rng.shuffle( indexes );
+
+					int i = 0;
+					int count_positive = 0;
+					int count_negative = 0;
+
+					while( count_positive < number_positive || count_negative < number_negative )
+					{
+						if( labels[ indexes[i] ] == 0 && count_positive < number_positive ) // if candidate[i] is positive and we still need some
+						{
+							std::copy_n( candidates.begin() + ( indexes[i] * ( number_variables + additional_variable ) ), number_variables + additional_variable, std::back_inserter( sub_samples ) );
+							sub_sampled_labels.push_back( 0 );
+							++count_positive;
+						}
+
+						if( labels[ indexes[i] ] == 1 && count_negative < number_negative ) // if candidate[i] is negative and we still need some
+						{
+							std::copy_n( candidates.begin() + ( indexes[i] * ( number_variables + additional_variable ) ), number_variables + additional_variable, std::back_inserter( sub_samples ) );
+							sub_sampled_labels.push_back( 1 );
+							++count_negative;
+						}
+	
+						++i;
+					}
+					
+					BuilderQUBO builder( sub_samples, number_samples, number_variables, domain_size, starting_value, sub_sampled_labels, complementary_variable, parameter );
+					solver = Solver( builder );
+				}
+				
 				solved = solved && solver.solve( cost, solutions[i], time_budget, options );
 				sum_cost += cost;
 			}
 
+			// print solutions
+			for( int i = 0 ; i < weak_learners ; ++i )
+			{
+				std::cout << "Solution of weak learner " << i << ": ";
+				std::copy( solutions[i].begin(), solutions[i].end(), std::ostream_iterator<int>( std::cout, " " ) );
+				std::cout << "\n";
+			}
+			
 			solution = std::vector<int>( solutions[0].size(), 0 );
-				
-			for( auto& sol : solutions )
-				std::transform( sol.cbegin(), sol.cend(), solution.cbegin(), solution.begin(), std::plus<>{} );
+			
+			// mean solution
+			// for( auto& sol : solutions )
+			// 	std::transform( sol.cbegin(), sol.cend(), solution.cbegin(), solution.begin(), std::plus<>{} );
 
-			std::transform( solution.cbegin(), solution.cend(), solution.begin(), [&](auto s){ return static_cast<int>( std::round( s / weak_learners ) ); } );
-				
+			// std::transform( solution.cbegin(), solution.cend(), solution.begin(), [&](auto s){ return static_cast<int>( std::round( s / weak_learners ) ); } );
+
+			// majority solution
+			int triangle_1 = 0;
+			int triangle_2 = 0;
+			int triangle_3 = 0;
+			int sum_element;
+			
+			for( int i = 0 ; i < solutions[0].size() ; ++i )
+			{
+				sum_element = 0;
+				for( int s = 0 ; s < weak_learners ; ++s )
+				{
+					if( i == 0 )
+					{
+						if( solutions[s][0] == 1 )
+							++triangle_1;
+						else
+							if( solutions[s][0] == 2 )
+								++triangle_2;
+							else
+								++triangle_3;
+					}
+					else
+					{
+						if( solutions[s][i] == 1 )
+							++sum_element;
+					}
+				}
+
+				if( i == 0 )
+				{
+					if( static_cast<double>( triangle_1 ) == ( static_cast<double>( weak_learners ) / 3 ) ) // if we have a draw among triangle patterns, select one randomly
+					{
+						solution[0] = rng.uniform(1,3);
+					}
+					else
+					{
+						if( triangle_1 == triangle_2 && triangle_1 > triangle_3 )
+							solution[0] = rng.uniform(1,2);
+						else
+						{
+							if( triangle_3 == triangle_2 && triangle_3 > triangle_1 )
+								solution[0] = rng.uniform(2,3);
+							else
+							{
+								if( triangle_1 == triangle_3 && triangle_1 > triangle_2 )
+								{
+									int flip_coin = rng.uniform(0,1);
+									if( flip_coin == 0 )
+										solution[0] = 1;
+									else
+										solution[0] = 3;
+								}
+								else
+								{						
+									if( triangle_1 > triangle_2 )
+									{
+										
+										if( triangle_1 > triangle_3 )
+											solution[0] = 1;
+										else
+											solution[0] = 3;
+									}
+									else
+									{
+										if( triangle_2 > triangle_3 )
+											solution[0] = 2;
+										else
+											solution[0] = 3;
+									}
+								}
+							}
+						}
+					}
+				}
+				else
+				{
+					if( static_cast<double>( sum_element ) == static_cast<double>( weak_learners ) / 2 )
+						solution[i] = rng.uniform(0,1);
+					else
+					{
+						if( static_cast<double>( sum_element ) > static_cast<double>( weak_learners ) / 2 )
+							solution[i] = 1;
+						else
+							solution[i] = 0;
+					}
+				}
+			}
+			
 			cost = sum_cost / weak_learners;
 		}
 
@@ -560,10 +706,11 @@ int main( int argc, char **argv )
 			std::cout << "\nConstraints satisfied: " << std::boolalpha << solved << "\n"
 			          << "Objective function cost: " << cost << "\n";
 			
-			std::cout << "v[0]: " << solution[0];
-			for( int i = 1 ; i < static_cast<int>( solution.size() ) ; ++i )
-				std::cout << ", v[" << i << "]: " << solution[i];
-			//std::copy( solution.begin(), solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
+			// std::cout << "v[0]: " << solution[0];
+			// for( int i = 1 ; i < static_cast<int>( solution.size() ) ; ++i )
+			// 	std::cout << ", v[" << i << "]: " << solution[i];
+			std::cout << "Majority solution: ";
+			std::copy( solution.begin(), solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
 			std::cout << "\n";
 		}
 		
