@@ -1,6 +1,6 @@
 #EXEC=qubo_ghost_scam qubo_ghost_svn qubo_ghost_sparse qubo_ghost_force_pattern qubo_ghost_force_preference qubo_block qubo_block_sat
-EXEC=q_learning_opt q_learning_sat make_incomplete_spaces make_complete_spaces make_test_spaces
-EXEC_DEBUG=q_learning_opt_debug
+EXEC=learn_q_opt learn_q_sat weak_learn_q_opt weak_learn_q_sat make_incomplete_spaces make_complete_spaces make_test_spaces
+EXEC_DEBUG=learn_q_opt_debug
 
 # Compiler flags
 MYFLAGS=
@@ -32,6 +32,8 @@ OBJDIR=obj
 # OBJ_block=$(addprefix $(OBJDIR)/,objective_block.o builder_block.o learn_qubo_block.o constraint_parameter.o)
 OBJ_block_sat=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_sat.o learn_qubo_block_sat.o matrix.o print_qubo.o)
 OBJ_block_opt=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_opt.o learn_qubo_block_opt.o objective_short_expression.o matrix.o print_qubo.o)
+OBJ_weak_block_sat=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_sat.o weak_learn_qubo_block_sat.o matrix.o print_qubo.o)
+OBJ_weak_block_opt=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_opt.o weak_learn_qubo_block_opt.o objective_short_expression.o matrix.o print_qubo.o)
 OBJ_make_incomplete_spaces=$(addprefix $(OBJDIR)/,make_incomplete_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
 OBJ_make_complete_spaces=$(addprefix $(OBJDIR)/,make_complete_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
 OBJ_make_test_spaces=$(addprefix $(OBJDIR)/,make_test_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
@@ -122,19 +124,31 @@ make_complete_spaces: $(OBJ_make_complete_spaces)
 make_test_spaces: $(OBJ_make_test_spaces)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
-q_learning_opt: $(OBJ_block_opt)
+learn_q_opt: $(OBJ_block_opt)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
-q_learning_opt_debug: $(OBJ_block_opt)
+learn_q_opt_debug: $(OBJ_block_opt)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
-q_learning_sat: $(OBJ_block_sat)
+learn_q_sat: $(OBJ_block_sat)
+	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
+
+weak_learn_q_opt: $(OBJ_weak_block_opt)
+	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
+
+weak_learn_q_sat: $(OBJ_weak_block_sat)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
 $(OBJDIR)/learn_qubo_block_opt.o: learn_qubo.cpp builder_block_opt.cpp 
 	$(CXX) $(CXXFLAGS) -c -DBLOCK_OPT -I$(INCLUDEDIR) -I./src/models/block_learning_opt -I./src/models/common $< -o $@
 
 $(OBJDIR)/learn_qubo_block_sat.o: learn_qubo.cpp builder_block_sat.cpp 
+	$(CXX) $(CXXFLAGS) -c -DBLOCK_SAT -I$(INCLUDEDIR) -I./src/models/block_learning_sat -I./src/models/common $< -o $@
+
+$(OBJDIR)/weak_learn_qubo_block_opt.o: weak_learn_qubo.cpp builder_block_opt.cpp 
+	$(CXX) $(CXXFLAGS) -c -DBLOCK_OPT -I$(INCLUDEDIR) -I./src/models/block_learning_opt -I./src/models/common $< -o $@
+
+$(OBJDIR)/weak_learn_qubo_block_sat.o: weak_learn_qubo.cpp builder_block_sat.cpp 
 	$(CXX) $(CXXFLAGS) -c -DBLOCK_SAT -I$(INCLUDEDIR) -I./src/models/block_learning_sat -I./src/models/common $< -o $@
 
 $(OBJDIR)/%.o: %.cpp
