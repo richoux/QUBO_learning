@@ -16,28 +16,17 @@
 #include <Eigen/Dense>
 
 #include "matrix.hpp"
+#include "checks.hpp"
 #include "print_qubo.hpp"
-#if defined SVN
-#include "builder_svn.hpp"
-#elif defined SPARSE
-#include "builder_sparse.hpp"
-#elif defined SCAM
-#include "builder_scam.hpp"
-#elif defined PREF
-#include "builder_force_preference.hpp"
-#elif defined BLOCK
-#include "builder_block.hpp"
-#elif defined BLOCK_SAT
+
+#if defined BLOCK_SAT
 #include "builder_block_sat.hpp"
-#elif defined BLOCK_OPT
-#include "builder_block_opt.hpp"
 #else
-#include "builder_force_pattern.hpp"
+#include "builder_block_opt.hpp"
 #endif
 
 #define BLOCK_MODEL_SIZE 15 // directly linked to the number of patterns
 
-using namespace ghost;
 using namespace std::literals::chrono_literals;
 
 void usage( char **argv )
@@ -60,221 +49,6 @@ void usage( char **argv )
 	     << "--complementary, to force one complementary variable\n";
 }
 
-void check_solution_block( const std::vector<int>& solution,
-                           const std::vector<int>& samples,
-                           const std::vector<double>& labels,
-                           size_t number_variables,
-                           size_t domain_size,
-                           size_t number_samples,
-                           int starting_value,
-                           bool complementary_variable,
-                           bool silent,
-                           string result_file_path,
-                           string matrix_file_path,
-                           int parameter,
-                           bool full_check = false )
-{
-	if( silent )
-		full_check = false;
-
-	size_t matrix_side = number_variables * domain_size;
-	if( complementary_variable )
-		++matrix_side;
-	
-	Eigen::MatrixXi Q = fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
-	int errors = 0;
-
-	int min_scalar = std::numeric_limits<int>::max();
-	std::vector<int> scalars( number_samples );
-
-	int additional_variable = 0;
-	if( complementary_variable )
-		additional_variable = 1;
-
-	for( size_t index_sample = 0 ; index_sample < number_samples ; ++index_sample )
-	{
-		Eigen::VectorXi X = Eigen::VectorXi::Zero( matrix_side );
-		
-		for( size_t index_var = 0 ; index_var < number_variables ; ++index_var )
-			X( index_var * domain_size + ( samples[ index_sample * ( number_variables + additional_variable ) + index_var ] - starting_value ) ) = 1;
-
-		if( complementary_variable )
-			X( matrix_side - 1 ) = 1;
-		
-		scalars[ index_sample ] = ( X.transpose() * Q ) * X;
-		if( min_scalar > scalars[ index_sample ]	)
-			min_scalar = scalars[ index_sample ];		
-	}
-	
-	for( size_t index_sample = 0 ; index_sample < number_samples ; ++index_sample )
-	{
-		std::string candidate = "[";
-		for( size_t index_var = 0 ; index_var < number_variables + additional_variable ; ++index_var )
-		{
-			if( index_var > 0 )
-				candidate += " ";
-			candidate += std::to_string( samples[ index_sample * ( number_variables + additional_variable ) + index_var ] );
-		}
-
-		candidate += "]";
-		
-		if( labels[ index_sample ] == 0 )
-		{
-			if( scalars[ index_sample ] != min_scalar )
-			{
-				++errors;
-				if( !silent )
-					std::cout << "/!\\ Candidate " << candidate << " is a solution but has not a minimal scalar: " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
-			}
-			else
-				if( full_check )
-					std::cout << "Candidate " << candidate << " (solution): " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
-		}
-		else
-			if( scalars[ index_sample ] == min_scalar )
-			{
-				++errors;
-				if( !silent )
-					std::cout << "/!\\ Candidate " << candidate << " is not a solution but has the minimal scalar " << std::setw( 3 ) << min_scalar << "\n";
-			}
-			else
-				if( full_check )
-					std::cout << "Candidate " << candidate << ": " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
-	}
-
-	if( !silent )
-		std::cout << "\nQ matrix:\n" << Q
-		          << "\n\nMin scalar = " << min_scalar << "\n"
-		          << "Number of errors: " << errors << "\n\n";
-
-	if( matrix_file_path != "" )
-	{
-		if( !silent )
-			std::cout << "Matrix file: " << matrix_file_path << "\n";
-		ofstream matrix_file;
-		matrix_file.open( matrix_file_path );
-		std::streambuf *coutbuf = std::cout.rdbuf();
-		std::cout.rdbuf( matrix_file.rdbuf() );
-		std::cout << "Matrix\n";
-		std::cout << Q << "\n";
-		std::cout.rdbuf( coutbuf );
-		matrix_file.close();
-	}
-
-	if( result_file_path != "" )
-	{
-		if( !silent )
-			std::cout << "Result file: " << result_file_path << "\n";
-		ofstream result_file;
-		result_file.open( result_file_path );
-		result_file << "Solution\n";
-		for( int value : solution )
-			result_file << value << " ";
-		result_file << "\n";
-		result_file.close();
-	}
-}
-
-void check_solution( const Eigen::MatrixXi& Q,
-                     const std::vector<int>& samples,
-                     const std::vector<double>& labels,
-                     size_t number_variables,
-                     size_t domain_size,
-                     size_t number_samples,
-                     int starting_value,
-                     bool complementary_variable,
-                     bool silent,
-                     string result_file_path,
-                     string matrix_file_path,
-                     int parameter,
-                     bool full_check = false )
-{
-	if( silent )
-		full_check = false;
-		
-	size_t matrix_side = number_variables * domain_size;
-	if( complementary_variable )
-		++matrix_side;
-	
-	int errors = 0;
-	int min_scalar = std::numeric_limits<int>::max();
-	std::vector<int> scalars( number_samples );
-
-	int additional_variable = 0;
-	if( complementary_variable )
-		additional_variable = 1;
-
-	for( size_t index_sample = 0 ; index_sample < number_samples ; ++index_sample )
-	{
-		Eigen::VectorXi X = Eigen::VectorXi::Zero( matrix_side );
-		
-		for( size_t index_var = 0 ; index_var < number_variables ; ++index_var )
-			X( index_var * domain_size + ( samples[ index_sample * ( number_variables + additional_variable ) + index_var ] - starting_value ) ) = 1;
-
-		if( complementary_variable )
-			X( matrix_side - 1 ) = 1;
-		
-		scalars[ index_sample ] = ( X.transpose() * Q ) * X;
-		if( min_scalar > scalars[ index_sample ]	)
-			min_scalar = scalars[ index_sample ];		
-	}
-
-	for( size_t index_sample = 0 ; index_sample < number_samples ; ++index_sample )
-	{
-		std::string candidate = "[";
-		for( size_t index_var = 0 ; index_var < number_variables + additional_variable ; ++index_var )
-		{
-			if( index_var > 0 )
-				candidate += " ";
-			candidate += std::to_string( samples[ index_sample * ( number_variables + additional_variable ) + index_var ] );
-		}
-
-		candidate += "]";
-		
-		if( labels[ index_sample ] == 0 )
-		{
-			if( scalars[ index_sample ] != min_scalar )
-			{
-				++errors;
-				if( !silent )
-					std::cout << "/!\\ Candidate " << candidate << " is a solution but has not a minimal scalar: " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
-			}
-			else
-				if( full_check )
-					std::cout << "Candidate " << candidate << " (solution): " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
-		}
-		else
-			if( scalars[ index_sample ] == min_scalar )
-			{
-				++errors;
-				if( !silent )
-					std::cout << "/!\\ Candidate " << candidate << " is not a solution but has the minimal scalar " << std::setw( 3 ) << min_scalar << "\n";
-			}
-			else
-				if( full_check )
-					std::cout << "Candidate " << candidate << ": " << std::setw( 3 ) << scalars[ index_sample ] << "\n";
-	}
-
-	if( !silent )
-		std::cout << "\nQ matrix:\n" << Q
-		          << "\n\nMin scalar = " << min_scalar << "\n";
-	std::cout << "Number of errors: " << errors << "\n\n";
-
-	if( matrix_file_path != "" )
-	{
-		if( !silent )
-			std::cout << "Matrix file: " << matrix_file_path << "\n";
-		ofstream matrix_file;
-		matrix_file.open( matrix_file_path );
-		std::streambuf *coutbuf = std::cout.rdbuf();
-		std::cout.rdbuf( matrix_file.rdbuf() );
-		std::cout << "Matrix\n";
-		std::cout << Q << "\n";
-		std::cout.rdbuf( coutbuf );
-		matrix_file.close();
-	}
-}
-
 int main( int argc, char **argv )
 {
 	size_t number_variables;
@@ -284,22 +58,22 @@ int main( int argc, char **argv )
 	int time_budget;
 	int weak_learners;
 	
-	string training_data_file_path;
-	string result_file_path;
-	string matrix_file_path;
-	string check_file_path;
-	string line, string_number;
-	ifstream training_data_file;
-	ifstream check_file;
+	std::string training_data_file_path;
+	std::string result_file_path;
+	std::string matrix_file_path;
+	std::string check_file_path;
+	std::string line, string_number;
+	std::ifstream training_data_file;
+	std::ifstream check_file;
 
 	size_t number_samples = 0;
 	bool custom_number_samples = false;
 	int number_remains_to_sample = 0;
 	size_t total_training_set_size = 0;
-	vector<int> candidates;
-	vector<int> samples;
-	vector<double> labels;
-	vector<double> sampled_labels;
+	std::vector<int> candidates;
+	std::vector<int> samples;
+	std::vector<double> labels;
+	std::vector<double> sampled_labels;
 
 	bool parallel;
 	bool debug;
@@ -307,7 +81,7 @@ int main( int argc, char **argv )
 	bool force_positive;
 	bool silent;
 
-	vector<int> solution;
+	std::vector<int> solution;
 
 	randutils::mt19937_rng rng;
 	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-n", "--number", "-c", "--check", "-w", "--weak_learners", "-r", "--result", "-m", "--matrix" } );
@@ -355,7 +129,7 @@ int main( int argc, char **argv )
 	double error;
 
 	getline( training_data_file, line );
-	stringstream line_stream( line );
+	std::stringstream line_stream( line );
 	line_stream >> number_variables >> domain_size >> starting_value >> parameter;
 				
 	while( getline( training_data_file, line ) )
@@ -363,14 +137,14 @@ int main( int argc, char **argv )
 		++total_training_set_size;
 		auto delimiter = line.find(" : ");
 		std::string label = line.substr( 0, delimiter );
-		stringstream label_stream( label );
+		std::stringstream label_stream( label );
 		label_stream >> error;
 		labels.push_back( error );
 		line.erase( 0, delimiter + 3 );
-		stringstream line_stream( line );
+		std::stringstream line_stream( line );
 		while( line_stream >> string_number )
 		{
-			stringstream number_stream( string_number );
+			std::stringstream number_stream( string_number );
 			number_stream >> value;
 			candidates.push_back( value );
 		}
@@ -391,7 +165,7 @@ int main( int argc, char **argv )
 		if( complementary_variable )
 			++matrix_side;
 		Eigen::MatrixXi Q = Eigen::MatrixXi::Zero( matrix_side, matrix_side );
-		vector<int> q_matrix;
+		std::vector<int> q_matrix;
 
 		getline( check_file, line );
 		if( line == "Matrix" )
@@ -400,13 +174,13 @@ int main( int argc, char **argv )
 			while( getline( check_file, line ) )
 			{
 				int count = 0;
-				stringstream line_stream( line );
+				std::stringstream line_stream( line );
 				while( line_stream >> string_number )
 				{
 					++count;
 					if( count < row + 1 )
 						continue;
-					stringstream number_stream( string_number );
+					std::stringstream number_stream( string_number );
 					number_stream >> value;
 					q_matrix.push_back( value );
 				}
@@ -426,7 +200,7 @@ int main( int argc, char **argv )
 		else
 		{
 			getline( check_file, line );
-			stringstream line_stream( line );
+			std::stringstream line_stream( line );
 
 			solution.reserve( BLOCK_MODEL_SIZE );
 			for( int i = 0 ; i < BLOCK_MODEL_SIZE; ++i )
@@ -475,18 +249,18 @@ int main( int argc, char **argv )
 		}
 			
 		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable, parameter );
-		Solver solver( builder );
+		ghost::Solver solver( builder );
 
 		double cost;
 		bool solved = true;
-		Options options;
+		ghost::Options options;
 #if not defined BLOCK and not defined BLOCK_SAT and not defined BLOCK_OPT
 		options.print = make_shared<PrintQUBO>( number_variables * domain_size );
 #endif
 		if( parallel )
 			options.parallel_runs = true;
 			
-		vector<vector<int>> solutions( weak_learners );
+		std::vector<std::vector<int>> solutions( weak_learners );
 		double sum_cost = 0.;
 		std::vector<int> indexes( total_training_set_size );
 		std::iota( indexes.begin(), indexes.end(), 0 );
@@ -498,8 +272,8 @@ int main( int argc, char **argv )
 		{
 			if( custom_number_samples ) // sample a random, different sub-training set for each weak learner
 			{
-				vector<int> sub_samples;
-				vector<double> sub_sampled_labels;
+				std::vector<int> sub_samples;
+				std::vector<double> sub_sampled_labels;
 				
 				rng.shuffle( indexes );
 				

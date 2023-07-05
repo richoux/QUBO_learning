@@ -23,10 +23,10 @@ endif
 
 # Directories
 OBJDIR=obj
-OBJ_block_sat=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_sat.o learn_qubo_block_sat.o matrix.o print_qubo.o)
-OBJ_block_opt=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_opt.o learn_qubo_block_opt.o objective_short_expression.o matrix.o print_qubo.o)
-OBJ_weak_block_sat=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_sat.o weak_learn_qubo_block_sat.o matrix.o print_qubo.o)
-OBJ_weak_block_opt=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_opt.o weak_learn_qubo_block_opt.o objective_short_expression.o matrix.o print_qubo.o)
+OBJ_block_sat=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_sat.o learn_qubo_block_sat.o matrix.o print_qubo.o checks.o)
+OBJ_block_opt=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_opt.o learn_qubo_block_opt.o objective_short_expression.o matrix.o print_qubo.o checks.o)
+OBJ_weak_block_sat=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_sat.o weak_learn_qubo_block_sat.o matrix.o print_qubo.o checks.o)
+OBJ_weak_block_opt=$(addprefix $(OBJDIR)/,constraint_training_set_block.o builder_block_opt.o weak_learn_qubo_block_opt.o objective_short_expression.o matrix.o print_qubo.o checks.o)
 OBJ_make_incomplete_spaces=$(addprefix $(OBJDIR)/,make_incomplete_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
 OBJ_make_complete_spaces=$(addprefix $(OBJDIR)/,make_complete_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
 OBJ_make_test_spaces=$(addprefix $(OBJDIR)/,make_test_spaces.o increment.o latin.o random_draw.o all_different.o concept.o linear_equation.o no_overlap_1d.o ordered.o element.o channel.o)
