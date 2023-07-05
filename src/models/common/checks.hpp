@@ -27,7 +27,6 @@ void check_solution( const Eigen::MatrixXi& Q,
                      int starting_value,
                      bool complementary_variable,
                      bool silent,
-                     std::string result_file_path,
                      std::string matrix_file_path,
                      int parameter,
                      bool full_check = false );

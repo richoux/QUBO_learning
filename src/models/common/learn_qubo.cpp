@@ -207,7 +207,6 @@ int main( int argc, char **argv )
 		                complementary_variable,
 		                silent,
 		                "",
-		                "",
 		                parameter,
 		                false );
 	}
@@ -353,7 +352,6 @@ int main( int argc, char **argv )
 		                starting_value,
 		                complementary_variable,
 		                silent,
-		                result_file_path,
 		                matrix_file_path,
 		                parameter,
 		                check );
