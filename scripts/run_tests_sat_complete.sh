@@ -5,7 +5,7 @@
 # 		exit
 # fi
 
-EXE="../bin/q_learning_sat"
+EXE="../bin/learn_q_sat"
 
 echo "100 runs for each constraint"
 echo "Mean runtimes concern the matrix learning. Testing learned matrices may take a while."

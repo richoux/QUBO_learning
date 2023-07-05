@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXE="../bin/q_learning_opt"
+EXE="../bin/learn_q_opt"
 
 CORE=$(grep -c '^processor' /proc/cpuinfo)
 if ! [[ ${CORE%.*} -eq 16 ]]; then

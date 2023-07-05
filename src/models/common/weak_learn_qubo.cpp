@@ -93,7 +93,7 @@ int main( int argc, char **argv )
 		return EXIT_SUCCESS;
 	}
 
-	if( !( cmdl( {"f", "file"} ) ) || !( cmdl( {"w", "weak_learners"} ) ) )
+	if( !( cmdl( {"f", "file"} ) ) )
 	{
 		usage( argv );
 		return EXIT_FAILURE;
@@ -118,7 +118,7 @@ int main( int argc, char **argv )
 	cmdl[ {"--complementary"} ] ? complementary_variable = true : complementary_variable = false;
 	cmdl[ {"--force_positive"} ] ? force_positive = true : force_positive = false;
 
-	if( weak_learners <= 1 )
+	if( weak_learners <= 1 && !( cmdl( {"c", "check"} ) ))
 	{
 		std::cout << "You must assign at least 2 weak learners.\n";
 		return EXIT_FAILURE;
@@ -345,7 +345,7 @@ int main( int argc, char **argv )
 
 			if( i == 0 )
 			{
-				if( static_cast<double>( triangle_1 ) == ( static_cast<double>( weak_learners ) / 3 ) ) // if we have a draw among triangle patterns, select one randomly
+				if( static_cast<double>( triangle_1 ) == ( static_cast<double>( weak_learners ) / 3 ) && static_cast<double>( triangle_2 ) == ( static_cast<double>( weak_learners ) / 3 ) ) // if we have a draw among triangle patterns, select one randomly
 				{
 					majority_solution[0] = rng.uniform(1,3);
 				}
@@ -422,53 +422,53 @@ int main( int argc, char **argv )
 			check = true;
 
 #if defined BLOCK or defined BLOCK_SAT or defined BLOCK_OPT
+		// std::cout << "Check solution by mean\n";
+		// check_solution_block( mean_solution,
+		//                       candidates,
+		//                       labels,
+		//                       number_variables,
+		//                       domain_size,
+		//                       total_training_set_size,
+		//                       starting_value,
+		//                       complementary_variable,
+		//                       silent,
+		//                       result_file_path,
+		//                       matrix_file_path,
+		//                       parameter,
+		//                       check );
+
+		// std::cout << "Check solution by minimum\n";
+		// check_solution_block( min_solution,
+		//                       candidates,
+		//                       labels,
+		//                       number_variables,
+		//                       domain_size,
+		//                       total_training_set_size,
+		//                       starting_value,
+		//                       complementary_variable,
+		//                       silent,
+		//                       result_file_path,
+		//                       matrix_file_path,
+		//                       parameter,
+		//                       check );
+
+		// std::cout << "Check solution by maximum\n";
+		// check_solution_block( max_solution,
+		//                       candidates,
+		//                       labels,
+		//                       number_variables,
+		//                       domain_size,
+		//                       total_training_set_size,
+		//                       starting_value,
+		//                       complementary_variable,
+		//                       silent,
+		//                       result_file_path,
+		//                       matrix_file_path,
+		//                       parameter,
+		//                       check );
+		
 		std::cout << "Check solution by majority\n";
 		check_solution_block( majority_solution,
-		                      candidates,
-		                      labels,
-		                      number_variables,
-		                      domain_size,
-		                      total_training_set_size,
-		                      starting_value,
-		                      complementary_variable,
-		                      silent,
-		                      result_file_path,
-		                      matrix_file_path,
-		                      parameter,
-		                      check );
-
-		std::cout << "Check solution by mean\n";
-		check_solution_block( mean_solution,
-		                      candidates,
-		                      labels,
-		                      number_variables,
-		                      domain_size,
-		                      total_training_set_size,
-		                      starting_value,
-		                      complementary_variable,
-		                      silent,
-		                      result_file_path,
-		                      matrix_file_path,
-		                      parameter,
-		                      check );
-
-		std::cout << "Check solution by minimum\n";
-		check_solution_block( min_solution,
-		                      candidates,
-		                      labels,
-		                      number_variables,
-		                      domain_size,
-		                      total_training_set_size,
-		                      starting_value,
-		                      complementary_variable,
-		                      silent,
-		                      result_file_path,
-		                      matrix_file_path,
-		                      parameter,
-		                      check );
-
-		std::cout << "Check solution by maximum\n";
-		check_solution_block( max_solution,
 		                      candidates,
 		                      labels,
 		                      number_variables,

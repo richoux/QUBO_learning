@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXE="../bin/q_learning_opt"
+EXE="../bin/learn_q_opt"
 
 echo "100 runs for each constraint"
 
