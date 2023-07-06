@@ -1,5 +1,5 @@
 EXEC=learn_q_opt learn_q_sat weak_learn_q_opt weak_learn_q_sat make_incomplete_spaces make_complete_spaces make_test_spaces
-EXEC_DEBUG=learn_q_opt_debug
+EXEC_DEBUG=learn_q_opt_debug weak_learn_q_opt_debug
 
 # Compiler flags
 MYFLAGS=
@@ -70,6 +70,9 @@ weak_learn_q_opt: $(OBJ_weak_block_opt)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
 weak_learn_q_sat: $(OBJ_weak_block_sat)
+	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
+
+weak_learn_q_opt_debug: $(OBJ_weak_block_opt)
 	$(CXX) -o $(BINDIR)/$@ $^ -L$(LIBDIR) $(LDFLAGS)
 
 $(OBJDIR)/learn_qubo_block_opt.o: learn_qubo.cpp builder_block_opt.cpp 

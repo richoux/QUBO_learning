@@ -306,7 +306,14 @@ int main( int argc, char **argv )
 			solved = solved && solver.solve( cost, solutions[i], time_budget, options );
 			sum_cost += cost;
 		}
-			
+
+		for( int i = 0 ; i < weak_learners ; ++i )
+		{
+			std::cout << "Solution of weak learner " << i << ": ";
+			std::copy( solutions[i].begin(), solutions[i].end(), std::ostream_iterator<int>( std::cout, " " ) );
+			std::cout << "\n";
+		}
+		
 		// mean solution
 		std::vector<int> mean_solution( solutions[0].size(), 0 );
 		for( auto& sol : solutions )
