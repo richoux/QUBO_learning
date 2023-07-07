@@ -82,7 +82,7 @@ Eigen::MatrixXi fill_matrix( const std::vector<int>& variables, size_t candidate
 					}
 					if( row_domain > col_domain )
 					{
-						if( variables[2] == 1 ) // different pattern
+						if( variables[2] == 1 ) // equality pattern
 							Q( row, col ) += 1;
 						if( variables[3] == 1 ) // less-than-or-equals-to pattern
 							Q( row, col ) += 1;
@@ -140,6 +140,105 @@ Eigen::MatrixXi fill_matrix( const std::vector<int>& variables, size_t candidate
 
 					if( variables[14] == 1 ) // linear combinatorics pattern
 						Q( row, col ) += 2 * ( row_domain + starting_value ) * ( col_domain + starting_value );
+				}
+			}
+		}
+	}
+	
+	return Q;
+}
+
+Eigen::MatrixXd fill_matrix_reals( const std::vector<double>& variables, size_t candidate_length, size_t domain_size, int starting_value, int parameter )
+{
+	size_t matrix_side;
+	matrix_side	= candidate_length * domain_size;
+		
+	Eigen::MatrixXd Q = Eigen::MatrixXd::Zero( matrix_side, matrix_side );
+
+	int row_variable;
+	int col_variable;
+	int row_domain;
+	int col_domain;
+	
+	bool triangle_element;
+	int param;
+	
+	for( size_t row = 0 ; row < matrix_side ; ++row )
+	{
+		row_variable = row / domain_size;
+		row_domain = row % domain_size;
+		for( size_t col = row ; col < matrix_side ; ++col )
+		{
+			col_variable = col / domain_size;
+			col_domain = col % domain_size;
+			triangle_element = ( col < row + domain_size - row_domain ? true : false );
+			
+			if( col == row ) //diagonal
+			{
+				if( parameter == std::numeric_limits<int>::max() )
+					param = 1;
+				else
+					param = parameter;
+				Q( row, col ) += (-1 * variables[1]); // -1-diagonal pattern
+				Q( row, col ) += (-( 2 * param - ( row_domain + starting_value ) ) * ( row_domain + starting_value ) * variables[2] ); // linear combinatorics pattern
+			}
+			else // non-diagonal
+			{
+				if( triangle_element )
+				{
+					Q( row, col ) += 2; // one-hot constraint
+					Q( row, col ) += ( 2 * ( row_domain + starting_value ) * ( col_domain + starting_value ) * variables[2] ); // linear combinatorics pattern
+				}
+				else // full-block
+				{
+					if( parameter == std::numeric_limits<int>::max() )
+						param = 0;
+					else
+						param = parameter;							
+
+					if( row_domain == col_domain )
+					{
+						Q( row, col ) += variables[3]; // different pattern
+						Q( row, col ) += variables[6]; // less-than pattern
+						Q( row, col ) += variables[8]; // greater-than pattern
+					}
+					if( row_domain < col_domain )
+					{
+						Q( row, col ) += variables[4]; // equality pattern
+						Q( row, col ) += variables[7]; // greater-than-or-equals-to pattern
+						Q( row, col ) += variables[8]; // greater-than pattern
+					}
+					if( row_domain > col_domain )
+					{
+						Q( row, col ) += variables[4]; // equality pattern
+						Q( row, col ) += variables[5]; // less-than-or-equals-to pattern
+						Q( row, col ) += variables[6]; // less-than pattern
+					}
+
+					if( row_variable == row_domain || col_variable == col_domain )
+					{
+						Q( row, col ) -= variables[9]; // favor assigning the current position
+						Q( row, col ) += variables[10]; // avoid assigning the current position
+					}
+					
+					if( row_variable != row_domain &&
+					    row_variable != col_domain &&
+					    col_variable != row_domain &&
+					    col_variable != col_domain )
+					{
+						Q( row, col ) -= variables[11]; // favor assigning a different position
+						Q( row, col ) += variables[12]; // avoid assigning a different position
+					}
+					
+					if( row_variable == col_domain && col_variable == row_domain )
+						Q( row, col ) -= variables[13]; // swap values pattern
+					else
+						if( row_variable == col_domain || col_variable == row_domain )
+							Q( row, col ) += variables[13]; // swap values pattern
+					
+					Q( row, col ) += ( std::max( 0, param - ( std::abs( col_domain - row_domain ) ) ) * variables[14] ); // repel pattern
+					Q( row, col ) += ( std::max( 0, std::abs( col_domain - row_domain ) - ( static_cast<int>( domain_size ) - 1 - param ) ) * variables[15] ); // attract pattern
+					Q( row, col ) += ( 2 * ( row_domain + starting_value ) * ( col_domain + starting_value ) * variables[16] ); // linear combinatorics pattern
 				}
 			}
 		}
