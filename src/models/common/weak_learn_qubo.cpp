@@ -263,8 +263,9 @@ int main( int argc, char **argv )
 		double sum_cost = 0.;
 		std::vector<int> indexes( total_training_set_size );
 		std::iota( indexes.begin(), indexes.end(), 0 );
-		int number_positive = std::ceil( number_samples / 2 );
-		int number_negative = std::floor( number_samples / 2 );
+		int number_positive = static_cast<int>( std::ceil( static_cast<double>( number_samples ) / 2 ) );
+		int number_negative = static_cast<int>( std::floor( static_cast<double>( number_samples ) / 2 ) );
+		
 		options.custom_starting_point = true; 
 		
 		for( int i = 0 ; i < weak_learners ; ++i )
@@ -303,7 +304,7 @@ int main( int argc, char **argv )
 				solver = Solver( builder );
 			}
 			
-			solved = solved && solver.solve( cost, solutions[i], time_budget, options );
+			solved = solved & solver.solve( cost, solutions[i], time_budget, options );
 			sum_cost += cost;
 		}
 
