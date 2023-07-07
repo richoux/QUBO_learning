@@ -16,7 +16,8 @@ void check_solution_block( const std::vector<int>& solution,
                            std::string result_file_path,
                            std::string matrix_file_path,
                            int parameter,
-                           bool full_check = false );
+                           bool full_check = false,
+                           std::string suffix = "" );
 
 void check_solution( const Eigen::MatrixXi& Q,
                      const std::vector<int>& samples,
@@ -43,7 +44,8 @@ void check_solution_block_reals( const std::vector<double>& solution,
                                  std::string result_file_path,
                                  std::string matrix_file_path,
                                  int parameter,
-                                 bool full_check = false );
+                                 bool full_check = false,
+                                 std::string suffix = "" );
 
 void check_solution_reals( const Eigen::MatrixXd& Q,
                            const std::vector<int>& samples,

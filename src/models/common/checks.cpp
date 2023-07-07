@@ -18,7 +18,8 @@ void check_solution_block( const std::vector<int>& solution,
                            std::string result_file_path,
                            std::string matrix_file_path,
                            int parameter,
-                           bool full_check )
+                           bool full_check,
+                           std::string suffix )
 {
 	Eigen::MatrixXi Q = fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
 		
@@ -37,6 +38,7 @@ void check_solution_block( const std::vector<int>& solution,
 	
 	if( result_file_path != "" )
 	{
+		result_file_path += suffix;
 		if( !silent )
 			std::cout << "Result file: " << result_file_path << "\n";
 		std::ofstream result_file;
@@ -131,7 +133,7 @@ void check_solution( const Eigen::MatrixXi& Q,
 	if( !silent )
 		std::cout << "\nQ matrix:\n" << Q
 		          << "\n\nMin scalar = " << min_scalar << "\n";
-	std::cout << "Number of errors: " << errors << "\n\n";
+	std::cout << errors << "\n";
 
 	if( matrix_file_path != "" )
 	{
@@ -160,7 +162,8 @@ void check_solution_block_reals( const std::vector<double>& solution,
                                  std::string result_file_path,
                                  std::string matrix_file_path,
                                  int parameter,
-                                 bool full_check )
+                                 bool full_check,
+                                 std::string suffix )
 {
 	Eigen::MatrixXd Q = fill_matrix_reals( solution, number_variables, domain_size, starting_value, parameter );
 		
@@ -176,9 +179,10 @@ void check_solution_block_reals( const std::vector<double>& solution,
 	                      matrix_file_path,
 	                      parameter,
 	                      full_check );
-	
+
 	if( result_file_path != "" )
 	{
+		result_file_path += suffix;
 		if( !silent )
 			std::cout << "Result file: " << result_file_path << "\n";
 		std::ofstream result_file;
@@ -221,7 +225,7 @@ void check_solution_reals( const Eigen::MatrixXd& Q,
 
 	for( size_t index_sample = 0 ; index_sample < number_samples ; ++index_sample )
 	{
-		Eigen::VectorXi X = Eigen::VectorXi::Zero( matrix_side );
+		Eigen::VectorXd X = Eigen::VectorXd::Zero( matrix_side );
 		
 		for( size_t index_var = 0 ; index_var < number_variables ; ++index_var )
 			X( index_var * domain_size + ( samples[ index_sample * ( number_variables + additional_variable ) + index_var ] - starting_value ) ) = 1;
@@ -273,7 +277,7 @@ void check_solution_reals( const Eigen::MatrixXd& Q,
 	if( !silent )
 		std::cout << "\nQ matrix:\n" << Q
 		          << "\n\nMin scalar = " << min_scalar << "\n";
-	std::cout << "Number of errors: " << errors << "\n\n";
+	std::cout << errors << "\n";
 
 	if( matrix_file_path != "" )
 	{

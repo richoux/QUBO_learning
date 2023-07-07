@@ -164,65 +164,96 @@ int main( int argc, char **argv )
 		size_t matrix_side = number_variables * domain_size;
 		if( complementary_variable )
 			++matrix_side;
-		Eigen::MatrixXi Q = Eigen::MatrixXi::Zero( matrix_side, matrix_side );
+
 		std::vector<int> q_matrix;
 
-		getline( check_file, line );
-		if( line == "Matrix" )
+		if( check_file_path.ends_with( "_mean" ) )
 		{
-			int row = 0;
-			while( getline( check_file, line ) )
-			{
-				int count = 0;
-				std::stringstream line_stream( line );
-				while( line_stream >> string_number )
-				{
-					++count;
-					if( count < row + 1 )
-						continue;
-					std::stringstream number_stream( string_number );
-					number_stream >> value;
-					q_matrix.push_back( value );
-				}
-				++row;
-			}
-				
-			for( size_t length = matrix_side ; length > 0 ; --length )
-			{
-				int row_number = matrix_side - length;
-				
-				int shift = row_number * ( row_number - 1 ) / 2;
-				
-				for( int i = 0 ; i < length ; ++i )
-					Q( row_number, row_number + i ) = q_matrix[ ( row_number * matrix_side ) - shift + i ];
-			}
-		}
-		else
-		{
+			Eigen::MatrixXd Q = Eigen::MatrixXd::Zero( matrix_side, matrix_side );
+			getline( check_file, line );
 			getline( check_file, line );
 			std::stringstream line_stream( line );
-
-			solution.reserve( BLOCK_MODEL_SIZE );
-			for( int i = 0 ; i < BLOCK_MODEL_SIZE; ++i )
-				line_stream >> solution[i];
 			
-			Q = fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
+			std::vector<double> solution_real( BLOCK_MODEL_SIZE + 2, 0. );
+			for( int i = 0 ; i < BLOCK_MODEL_SIZE + 2; ++i )
+				line_stream >> solution_real[i];
+			
+			Q = fill_matrix_reals( solution_real, number_variables, domain_size, starting_value, parameter );
+			
+			check_solution_reals( Q,
+			                      candidates,
+			                      labels,
+			                      number_variables,
+			                      domain_size,
+			                      total_training_set_size,
+			                      starting_value,
+			                      complementary_variable,
+			                      silent,
+			                      "",
+			                      parameter,
+			                      false );
+		}
+		else
+		{		
+			Eigen::MatrixXi Q = Eigen::MatrixXi::Zero( matrix_side, matrix_side );
+			
+			getline( check_file, line );
+			if( line == "Matrix" )
+			{
+				int row = 0;
+				while( getline( check_file, line ) )
+				{
+					int count = 0;
+					std::stringstream line_stream( line );
+					while( line_stream >> string_number )
+					{
+						++count;
+						if( count < row + 1 )
+							continue;
+						std::stringstream number_stream( string_number );
+						number_stream >> value;
+						q_matrix.push_back( value );
+					}
+					++row;
+				}
+				
+				for( size_t length = matrix_side ; length > 0 ; --length )
+				{
+					int row_number = matrix_side - length;
+					
+					int shift = row_number * ( row_number - 1 ) / 2;
+					
+					for( int i = 0 ; i < length ; ++i )
+						Q( row_number, row_number + i ) = q_matrix[ ( row_number * matrix_side ) - shift + i ];
+				}
+			}
+			else
+			{
+				getline( check_file, line );
+				std::stringstream line_stream( line );
+				
+				solution.reserve( BLOCK_MODEL_SIZE );
+				for( int i = 0 ; i < BLOCK_MODEL_SIZE; ++i )
+					line_stream >> solution[i];
+				
+				Q = fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
+			}
+
+			check_solution( Q,
+			                candidates,
+			                labels,
+			                number_variables,
+			                domain_size,
+			                total_training_set_size,
+			                starting_value,
+			                complementary_variable,
+			                silent,
+			                "",
+			                parameter,
+			                false );		
 		}
 		
 		check_file.close();
-
-		check_solution( Q,
-		                candidates,
-		                labels,
-		                number_variables,
-		                domain_size,
-		                total_training_set_size,
-		                starting_value,
-		                complementary_variable,
-		                silent,
-		                "",
-		                parameter,
-		                false );
 	}
 	else
 	{
@@ -243,8 +274,8 @@ int main( int argc, char **argv )
 			          << ", Number samples: " << number_samples
 			          << ", Training set size: " << total_training_set_size
 			          << ", Starting value: " << starting_value
-			          << "\nParallel run: " << std::boolalpha << parallel << "\n"
-			          << "Weak learners: " << weak_learners << "\n";
+			          << "\nParallel run: " << std::boolalpha << parallel
+			          << "\nWeak learners: " << weak_learners << "\n";
 		}
 			
 		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable, parameter );
@@ -253,9 +284,6 @@ int main( int argc, char **argv )
 		double cost;
 		bool solved = true;
 		ghost::Options options;
-#if not defined BLOCK and not defined BLOCK_SAT and not defined BLOCK_OPT
-		options.print = make_shared<PrintQUBO>( number_variables * domain_size );
-#endif
 		if( parallel )
 			options.parallel_runs = true;
 			
@@ -303,33 +331,48 @@ int main( int argc, char **argv )
 				BuilderQUBO builder( sub_samples, number_samples, number_variables, domain_size, starting_value, sub_sampled_labels, complementary_variable, parameter );
 				solver = Solver( builder );
 			}
-			
+
+			std::chrono::duration<double,std::micro> elapsed_time( 0 );
+			std::chrono::time_point<std::chrono::steady_clock> start( std::chrono::steady_clock::now() );
 			solved = solved & solver.solve( cost, solutions[i], time_budget, options );
+			elapsed_time = std::chrono::steady_clock::now() - start;
+			std::cout << "Weak learner " << i << " runtime: " << elapsed_time.count() << "us\n";
+			
 			sum_cost += cost;
 		}
 
+		// mean solution
+		std::vector<double> mean_solution( BLOCK_MODEL_SIZE + 2, 0 );
+		// for( auto& sol : solutions )
+		// 	std::transform( sol.cbegin(), sol.cend(), mean_solution.cbegin(), mean_solution.begin(), std::plus<>{} );
 		for( int i = 0 ; i < weak_learners ; ++i )
 		{
-			std::cout << "Solution of weak learner " << i << ": ";
-			std::copy( solutions[i].begin(), solutions[i].end(), std::ostream_iterator<int>( std::cout, " " ) );
-			std::cout << "\n";
-		}
 		
-		// mean solution
-		std::vector<int> mean_solution( solutions[0].size(), 0 );
-		for( auto& sol : solutions )
-			std::transform( sol.cbegin(), sol.cend(), mean_solution.cbegin(), mean_solution.begin(), std::plus<>{} );
+			switch( solutions[i][0] )
+			{
+			case 1:
+				mean_solution[0] += 1;
+				break;
+			case 2:
+				mean_solution[1] += 1;
+				break;
+			default:
+				mean_solution[2] += 1;
+			}
+			
+			std::transform( solutions[i].cbegin()+1, solutions[i].cend(), mean_solution.cbegin()+3, mean_solution.begin()+3, std::plus<>{} );
+		}
 
-		std::transform( mean_solution.cbegin(), mean_solution.cend(), mean_solution.begin(), [&](auto s){ return static_cast<int>( std::round( s / weak_learners ) ); } );
+		std::transform( mean_solution.cbegin(), mean_solution.cend(), mean_solution.begin(), [&](auto s){ return s / weak_learners; } );
 
 		// majority solution
-		std::vector<int> majority_solution( solutions[0].size(), 0 );
+		std::vector<int> majority_solution( BLOCK_MODEL_SIZE, 0 );
 		int triangle_1 = 0;
 		int triangle_2 = 0;
 		int triangle_3 = 0;
 		int sum_element;
 			
-		for( int i = 0 ; i < solutions[0].size() ; ++i )
+		for( int i = 0 ; i < BLOCK_MODEL_SIZE ; ++i )
 		{
 			sum_element = 0;
 			for( int s = 0 ; s < weak_learners ; ++s )
@@ -412,13 +455,13 @@ int main( int argc, char **argv )
 		}
 
 		// min solution
-		std::vector<int> min_solution( solutions[0].size(), 0 );
+		std::vector<int> min_solution( BLOCK_MODEL_SIZE, 0 );
 		std::copy( solutions[0].begin(), solutions[0].end(), min_solution.begin() );
 		for( auto& sol : solutions )
 			std::transform( sol.cbegin(), sol.cend(), min_solution.cbegin(), min_solution.begin(), [](auto a, auto b){ return std::min(a,b); } );
 
 		// max solution
-		std::vector<int> max_solution( solutions[0].size(), 0 );
+		std::vector<int> max_solution( BLOCK_MODEL_SIZE, 0 );
 		for( auto& sol : solutions )
 			std::transform( sol.cbegin(), sol.cend(), max_solution.cbegin(), max_solution.begin(), [](auto a, auto b){ return std::max(a,b); } );
 		
@@ -428,22 +471,6 @@ int main( int argc, char **argv )
 		bool check = false;
 		if( cmdl[ {"c", "check"} ] && check_file_path == "" )
 			check = true;
-
-#if defined BLOCK or defined BLOCK_SAT or defined BLOCK_OPT
-		// std::cout << "Check solution by mean\n";
-		// check_solution_block( mean_solution,
-		//                       candidates,
-		//                       labels,
-		//                       number_variables,
-		//                       domain_size,
-		//                       total_training_set_size,
-		//                       starting_value,
-		//                       complementary_variable,
-		//                       silent,
-		//                       result_file_path,
-		//                       matrix_file_path,
-		//                       parameter,
-		//                       check );
 
 		// std::cout << "Check solution by minimum\n";
 		// check_solution_block( min_solution,
@@ -475,7 +502,23 @@ int main( int argc, char **argv )
 		//                       parameter,
 		//                       check );
 		
-		std::cout << "Check solution by majority\n";
+		std::cout << "Errors by mean: ";
+		check_solution_block_reals( mean_solution,
+		                            candidates,
+		                            labels,
+		                            number_variables,
+		                            domain_size,
+		                            total_training_set_size,
+		                            starting_value,
+		                            complementary_variable,
+		                            silent,
+		                            result_file_path,
+		                            matrix_file_path,
+		                            parameter,
+		                            check,
+		                            "_mean" );
+
+		std::cout << "Errors by majority: ";
 		check_solution_block( majority_solution,
 		                      candidates,
 		                      labels,
@@ -488,37 +531,38 @@ int main( int argc, char **argv )
 		                      result_file_path,
 		                      matrix_file_path,
 		                      parameter,
-		                      check );
-#else
-		size_t matrix_side = number_variables * domain_size;
-		if( complementary_variable )
-			++matrix_side;
+		                      check,
+		                      "_majority" );
+// #else
+// 		size_t matrix_side = number_variables * domain_size;
+// 		if( complementary_variable )
+// 			++matrix_side;
 		
-		Eigen::MatrixXi Q = Eigen::MatrixXi::Zero( matrix_side, matrix_side );
+// 		Eigen::MatrixXi Q = Eigen::MatrixXi::Zero( matrix_side, matrix_side );
 		
-		for( size_t length = matrix_side ; length > 0 ; --length )
-		{
-			int row_number = matrix_side - length;
+// 		for( size_t length = matrix_side ; length > 0 ; --length )
+// 		{
+// 			int row_number = matrix_side - length;
 			
-			int shift = row_number * ( row_number - 1 ) / 2;
+// 			int shift = row_number * ( row_number - 1 ) / 2;
 			
-			for( int i = 0 ; i < length ; ++i )
-				Q( row_number, row_number + i ) = majority_solution[ ( row_number * matrix_side ) - shift + i ];
-		}
+// 			for( int i = 0 ; i < length ; ++i )
+// 				Q( row_number, row_number + i ) = majority_solution[ ( row_number * matrix_side ) - shift + i ];
+// 		}
 		
-		check_solution( Q,
-		                candidates,
-		                labels,
-		                number_variables,
-		                domain_size,
-		                total_training_set_size,
-		                starting_value,
-		                complementary_variable,
-		                silent,
-		                matrix_file_path,
-		                parameter,
-		                check );
-#endif
+// 		check_solution( Q,
+// 		                candidates,
+// 		                labels,
+// 		                number_variables,
+// 		                domain_size,
+// 		                total_training_set_size,
+// 		                starting_value,
+// 		                complementary_variable,
+// 		                silent,
+// 		                matrix_file_path,
+// 		                parameter,
+// 		                check );
+// #endif
 
 		// print solutions
 		for( int i = 0 ; i < weak_learners ; ++i )
@@ -528,26 +572,22 @@ int main( int argc, char **argv )
 			std::cout << "\n";
 		}
 
-		if( !silent )
-		{
-			std::cout << "\nConstraints satisfied: " << std::boolalpha << solved << "\n"
-			          << "Objective function cost: " << cost << "\n";
-			
-			std::cout << "Majority solution: ";
-			std::copy( majority_solution.begin(), majority_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
-
-			std::cout << "\nMean solution: ";
-			std::copy( mean_solution.begin(), mean_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
-
-			std::cout << "\nMin solution: ";
-			std::copy( min_solution.begin(), min_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
-
-			std::cout << "\nMax solution: ";
-			std::copy( max_solution.begin(), max_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
-
-			std::cout << "\n";
-		}
-
+		std::cout << "Constraints satisfied: " << std::boolalpha << solved << "\n"
+		          << "Objective function cost: " << cost << "\n";
+		
+		std::cout << "Majority solution: ";
+		std::copy( majority_solution.begin(), majority_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
+		
+		std::cout << "\nMean solution: ";
+		std::copy( mean_solution.begin(), mean_solution.end(), std::ostream_iterator<double>( std::cout, " " ) );
+		
+		std::cout << "\nMin solution: ";
+		std::copy( min_solution.begin(), min_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
+		
+		std::cout << "\nMax solution: ";
+		std::copy( max_solution.begin(), max_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
+		
+		std::cout << "\n";		
 	}
 	
 	return EXIT_SUCCESS;
