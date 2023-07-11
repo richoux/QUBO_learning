@@ -277,12 +277,16 @@ int main( int argc, char **argv )
 			          << "\nParallel run: " << std::boolalpha << parallel
 			          << "\nWeak learners: " << weak_learners << "\n";
 		}
+
+		std::chrono::time_point<std::chrono::steady_clock> start_program( std::chrono::steady_clock::now() );
+		std::chrono::duration<double,std::micro> elapsed_time_program( 0 );
 			
 		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable, parameter );
 		ghost::Solver solver( builder );
 
 		double cost;
 		bool solved = true;
+		std::vector<bool> weak_solved( weak_learners, true );
 		ghost::Options options;
 		if( parallel )
 			options.parallel_runs = true;
@@ -332,11 +336,15 @@ int main( int argc, char **argv )
 				solver = Solver( builder );
 			}
 
-			std::chrono::duration<double,std::micro> elapsed_time( 0 );
-			std::chrono::time_point<std::chrono::steady_clock> start( std::chrono::steady_clock::now() );
-			solved = solved & solver.solve( cost, solutions[i], time_budget, options );
-			elapsed_time = std::chrono::steady_clock::now() - start;
-			std::cout << "Weak learner " << i << " runtime: " << elapsed_time.count() << "us\n";
+			std::chrono::duration<double,std::micro> elapsed_time_solver( 0 );
+			std::chrono::time_point<std::chrono::steady_clock> start_solver( std::chrono::steady_clock::now() );
+			weak_solved[i] = solver.solve( cost, solutions[i], time_budget, options );
+			solved = solved && weak_solved[i];
+			elapsed_time_solver = std::chrono::steady_clock::now() - start_solver;
+			std::cout << "Solution of weak learner " << i << ": ";
+			std::copy( solutions[i].begin(), solutions[i].end(), std::ostream_iterator<int>( std::cout, " " ) );
+			std::cout << "\nValid solution: " << std::boolalpha << weak_solved[i];
+			std::cout << "\nWeak learner " << i << " runtime: " << elapsed_time_solver.count() << "us\n";
 			
 			sum_cost += cost;
 		}
@@ -467,6 +475,7 @@ int main( int argc, char **argv )
 		
 		cost = sum_cost / weak_learners;
 		
+		elapsed_time_program = std::chrono::steady_clock::now() - start_program;
 		
 		bool check = false;
 		if( cmdl[ {"c", "check"} ] && check_file_path == "" )
@@ -502,7 +511,9 @@ int main( int argc, char **argv )
 		//                       parameter,
 		//                       check );
 		
-		std::cout << "Errors by mean: ";
+		std::cout << "Mean solution: ";
+		std::copy( mean_solution.begin(), mean_solution.end(), std::ostream_iterator<double>( std::cout, " " ) );
+		std::cout << "\nErrors by mean: ";
 		check_solution_block_reals( mean_solution,
 		                            candidates,
 		                            labels,
@@ -518,7 +529,9 @@ int main( int argc, char **argv )
 		                            check,
 		                            "_mean" );
 
-		std::cout << "Errors by majority: ";
+		std::cout << "Majority solution: ";
+		std::copy( majority_solution.begin(), majority_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
+		std::cout << "\nErrors by majority: ";
 		check_solution_block( majority_solution,
 		                      candidates,
 		                      labels,
@@ -564,30 +577,22 @@ int main( int argc, char **argv )
 // 		                check );
 // #endif
 
-		// print solutions
-		for( int i = 0 ; i < weak_learners ; ++i )
-		{
-			std::cout << "Solution of weak learner " << i << ": ";
-			std::copy( solutions[i].begin(), solutions[i].end(), std::ostream_iterator<int>( std::cout, " " ) );
-			std::cout << "\n";
-		}
-
-		std::cout << "Constraints satisfied: " << std::boolalpha << solved << "\n"
-		          << "Objective function cost: " << cost << "\n";
+		std::cout << "All weak learners valid: " << std::boolalpha << solved;
+		          // << "Objective function cost: " << cost << "\n";
 		
-		std::cout << "Majority solution: ";
-		std::copy( majority_solution.begin(), majority_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
+		// std::cout << "Majority solution: ";
+		// std::copy( majority_solution.begin(), majority_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
 		
-		std::cout << "\nMean solution: ";
-		std::copy( mean_solution.begin(), mean_solution.end(), std::ostream_iterator<double>( std::cout, " " ) );
+		// std::cout << "\nMean solution: ";
+		// std::copy( mean_solution.begin(), mean_solution.end(), std::ostream_iterator<double>( std::cout, " " ) );
 		
-		std::cout << "\nMin solution: ";
-		std::copy( min_solution.begin(), min_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
+		// std::cout << "\nMin solution: ";
+		// std::copy( min_solution.begin(), min_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
 		
-		std::cout << "\nMax solution: ";
-		std::copy( max_solution.begin(), max_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
+		// std::cout << "\nMax solution: ";
+		// std::copy( max_solution.begin(), max_solution.end(), std::ostream_iterator<int>( std::cout, " " ) );
 		
-		std::cout << "\n";		
+		std::cout << "\nWallclock runtime: " << elapsed_time_program.count() << "us\n\n";
 	}
 	
 	return EXIT_SUCCESS;
