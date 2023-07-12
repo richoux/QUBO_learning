@@ -44,7 +44,7 @@ do
 						echo "$constraint"
 						for i in {1..12}
 						do
-								echo "Training"
+								echo -n "Training... "
 								$EXE -f "../spaces/incomplete/$constraint-12_12_100.txt" $SOLVER_ARG -w $w -n $n -r tmp01 --benchmark 2> /dev/null 1>> training01 ; tail -n 1 tmp01_majority >> training01&
 								$EXE -f "../spaces/incomplete/$constraint-12_12_100.txt" $SOLVER_ARG -w $w -n $n -r tmp02 --benchmark 2> /dev/null 1>> training02 ; tail -n 1 tmp02_majority >> training02&
 								$EXE -f "../spaces/incomplete/$constraint-12_12_100.txt" $SOLVER_ARG -w $w -n $n -r tmp03 --benchmark 2> /dev/null 1>> training03 ; tail -n 1 tmp03_majority >> training03&
@@ -54,7 +54,7 @@ do
 								$EXE -f "../spaces/incomplete/$constraint-12_12_100.txt" $SOLVER_ARG -w $w -n $n -r tmp07 --benchmark 2> /dev/null 1>> training07 ; tail -n 1 tmp07_majority >> training07&
 								$EXE -f "../spaces/incomplete/$constraint-12_12_100.txt" $SOLVER_ARG -w $w -n $n -r tmp08 --benchmark 2> /dev/null 1>> training08 ; tail -n 1 tmp08_majority >> training08&
 								wait
-								echo "Testing Majority"
+								echo -n "Testing Majority... "
 								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp01_majority --benchmark >> test_error_01_majority  ; tail -n 1 tmp01_majority >> test_error_01_majority&
 								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp02_majority --benchmark >> test_error_02_majority  ; tail -n 1 tmp02_majority >> test_error_02_majority&
 								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp03_majority --benchmark >> test_error_03_majority  ; tail -n 1 tmp03_majority >> test_error_03_majority&
@@ -64,7 +64,7 @@ do
 								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp07_majority --benchmark >> test_error_07_majority  ; tail -n 1 tmp07_majority >> test_error_07_majority&
 								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp08_majority --benchmark >> test_error_08_majority  ; tail -n 1 tmp08_majority >> test_error_08_majority&
 								wait
-								echo "Testing Mean"
+								echo -n "Testing Mean... "
 								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp01_mean --benchmark >> test_error_01_mean ; tail -n 1 tmp01_mean >> test_error_01_mean&
 								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp02_mean --benchmark >> test_error_02_mean ; tail -n 1 tmp02_mean >> test_error_02_mean&
 								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp03_mean --benchmark >> test_error_03_mean ; tail -n 1 tmp03_mean >> test_error_03_mean&
@@ -79,18 +79,18 @@ do
 
 						rm -f tmp??*
 
-						echo "Training"
+						echo -n "Training... "
 						$EXE -f "../spaces/incomplete/$constraint-12_12_100.txt" $SOLVER_ARG -w $w -n $n -r tmp01 --benchmark 2> /dev/null 1>> training01 ; tail -n 1 tmp01_majority >> training01&
 						$EXE -f "../spaces/incomplete/$constraint-12_12_100.txt" $SOLVER_ARG -w $w -n $n -r tmp02 --benchmark 2> /dev/null 1>> training02 ; tail -n 1 tmp02_majority >> training02&
 						$EXE -f "../spaces/incomplete/$constraint-12_12_100.txt" $SOLVER_ARG -w $w -n $n -r tmp03 --benchmark 2> /dev/null 1>> training03 ; tail -n 1 tmp03_majority >> training03&
 						$EXE -f "../spaces/incomplete/$constraint-12_12_100.txt" $SOLVER_ARG -w $w -n $n -r tmp04 --benchmark 2> /dev/null 1>> training04 ; tail -n 1 tmp04_majority >> training04&
 						wait
-						echo "Testing Majority"
+						echo -n "Testing Majority... "
 						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp01_majority --benchmark >> test_error_01_majority  ; tail -n 1 tmp01_majority >> test_error_01_majority&
 						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp02_majority --benchmark >> test_error_02_majority  ; tail -n 1 tmp02_majority >> test_error_02_majority&
 						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp03_majority --benchmark >> test_error_03_majority  ; tail -n 1 tmp03_majority >> test_error_03_majority&
 						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp04_majority --benchmark >> test_error_04_majority  ; tail -n 1 tmp04_majority >> test_error_04_majority&
-						echo "Testing Mean"
+						echo -n "Testing Mean... "
 						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp01_mean --benchmark >> test_error_01_mean ; tail -n 1 tmp01_mean >> test_error_01_mean&
 						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp02_mean --benchmark >> test_error_02_mean ; tail -n 1 tmp02_mean >> test_error_02_mean&
 						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp03_mean --benchmark >> test_error_03_mean ; tail -n 1 tmp03_mean >> test_error_03_mean&
@@ -107,7 +107,7 @@ do
 				echo "linear_equation"
 				for i in {1..12}
 				do
-						echo "Training"
+						echo -n "Training... "
 						$EXE -f "../spaces/incomplete/linear_equation-12_12_72_100.txt" $SOLVER_ARG -w $w -n $n -r tmp01 --benchmark 2> /dev/null 1>> training01 ; tail -n 1 tmp01_majority >> training01&
 						$EXE -f "../spaces/incomplete/linear_equation-12_12_72_100.txt" $SOLVER_ARG -w $w -n $n -r tmp02 --benchmark 2> /dev/null 1>> training02 ; tail -n 1 tmp02_majority >> training02&
 						$EXE -f "../spaces/incomplete/linear_equation-12_12_72_100.txt" $SOLVER_ARG -w $w -n $n -r tmp03 --benchmark 2> /dev/null 1>> training03 ; tail -n 1 tmp03_majority >> training03&
@@ -117,7 +117,7 @@ do
 						$EXE -f "../spaces/incomplete/linear_equation-12_12_72_100.txt" $SOLVER_ARG -w $w -n $n -r tmp07 --benchmark 2> /dev/null 1>> training07 ; tail -n 1 tmp07_majority >> training07&
 						$EXE -f "../spaces/incomplete/linear_equation-12_12_72_100.txt" $SOLVER_ARG -w $w -n $n -r tmp08 --benchmark 2> /dev/null 1>> training08 ; tail -n 1 tmp08_majority >> training08&
 						wait
-						echo "Testing Majority"
+						echo -n "Testing Majority... "
 						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp01_majority --benchmark >> test_error_01_majority  ; tail -n 1 tmp01_majority >> test_error_01_majority&
 						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp02_majority --benchmark >> test_error_02_majority  ; tail -n 1 tmp02_majority >> test_error_02_majority&
 						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp03_majority --benchmark >> test_error_03_majority  ; tail -n 1 tmp03_majority >> test_error_03_majority&
@@ -127,7 +127,7 @@ do
 						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp07_majority --benchmark >> test_error_07_majority  ; tail -n 1 tmp07_majority >> test_error_07_majority&
 						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp08_majority --benchmark >> test_error_08_majority  ; tail -n 1 tmp08_majority >> test_error_08_majority&
 						wait
-						echo "Testing Mean"
+						echo -n "Testing Mean... "
 						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp01_mean --benchmark >> test_error_01_mean ; tail -n 1 tmp01_mean >> test_error_01_mean&
 						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp02_mean --benchmark >> test_error_02_mean ; tail -n 1 tmp02_mean >> test_error_02_mean&
 						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp03_mean --benchmark >> test_error_03_mean ; tail -n 1 tmp03_mean >> test_error_03_mean&
@@ -142,18 +142,18 @@ do
 
 				rm -f tmp??*
 
-				echo "Training"
+				echo -n "Training... "
 				$EXE -f "../spaces/incomplete/linear_equation-12_12_72_100.txt" $SOLVER_ARG -w $w -n $n -r tmp01 --benchmark 2> /dev/null 1>> training01 ; tail -n 1 tmp01_majority >> training01&
 				$EXE -f "../spaces/incomplete/linear_equation-12_12_72_100.txt" $SOLVER_ARG -w $w -n $n -r tmp02 --benchmark 2> /dev/null 1>> training02 ; tail -n 1 tmp02_majority >> training02&
 				$EXE -f "../spaces/incomplete/linear_equation-12_12_72_100.txt" $SOLVER_ARG -w $w -n $n -r tmp03 --benchmark 2> /dev/null 1>> training03 ; tail -n 1 tmp03_majority >> training03&
 				$EXE -f "../spaces/incomplete/linear_equation-12_12_72_100.txt" $SOLVER_ARG -w $w -n $n -r tmp04 --benchmark 2> /dev/null 1>> training04 ; tail -n 1 tmp04_majority >> training04&
 				wait
-				echo "Testing Majority"
+				echo -n "Testing Majority... "
 				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp01_majority --benchmark >> test_error_01_majority  ; tail -n 1 tmp01_majority >> test_error_01_majority&
 				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp02_majority --benchmark >> test_error_02_majority  ; tail -n 1 tmp02_majority >> test_error_02_majority&
 				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp03_majority --benchmark >> test_error_03_majority  ; tail -n 1 tmp03_majority >> test_error_03_majority&
 				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp04_majority --benchmark >> test_error_04_majority  ; tail -n 1 tmp04_majority >> test_error_04_majority&
-				echo "Testing Mean"
+				echo -n "Testing Mean... "
 				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp01_mean --benchmark >> test_error_01_mean ; tail -n 1 tmp01_mean >> test_error_01_mean&
 				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp02_mean --benchmark >> test_error_02_mean ; tail -n 1 tmp02_mean >> test_error_02_mean&
 				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp03_mean --benchmark >> test_error_03_mean ; tail -n 1 tmp03_mean >> test_error_03_mean&
@@ -169,7 +169,7 @@ do
 				echo "no_overlap_1D"
 				for i in {1..12}
 				do
-						echo "Training"
+						echo -n "Training... "
 						$EXE -f "../spaces/incomplete/no_overlap_1D-8_35_3_100.txt" $SOLVER_ARG -w $w -n $n -r tmp01 --benchmark 2> /dev/null 1>> training01 ; tail -n 1 tmp01_majority >> training01&
 						$EXE -f "../spaces/incomplete/no_overlap_1D-8_35_3_100.txt" $SOLVER_ARG -w $w -n $n -r tmp02 --benchmark 2> /dev/null 1>> training02 ; tail -n 1 tmp02_majority >> training02&
 						$EXE -f "../spaces/incomplete/no_overlap_1D-8_35_3_100.txt" $SOLVER_ARG -w $w -n $n -r tmp03 --benchmark 2> /dev/null 1>> training03 ; tail -n 1 tmp03_majority >> training03&
@@ -179,7 +179,7 @@ do
 						$EXE -f "../spaces/incomplete/no_overlap_1D-8_35_3_100.txt" $SOLVER_ARG -w $w -n $n -r tmp07 --benchmark 2> /dev/null 1>> training07 ; tail -n 1 tmp07_majority >> training07&
 						$EXE -f "../spaces/incomplete/no_overlap_1D-8_35_3_100.txt" $SOLVER_ARG -w $w -n $n -r tmp08 --benchmark 2> /dev/null 1>> training08 ; tail -n 1 tmp08_majority >> training08&
 						wait
-						echo "Testing Majority"
+						echo -n "Testing Majority... "
 						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp01_majority --benchmark >> test_error_01_majority  ; tail -n 1 tmp01_majority >> test_error_01_majority&
 						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp02_majority --benchmark >> test_error_02_majority  ; tail -n 1 tmp02_majority >> test_error_02_majority&
 						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp03_majority --benchmark >> test_error_03_majority  ; tail -n 1 tmp03_majority >> test_error_03_majority&
@@ -189,7 +189,7 @@ do
 						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp07_majority --benchmark >> test_error_07_majority  ; tail -n 1 tmp07_majority >> test_error_07_majority&
 						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp08_majority --benchmark >> test_error_08_majority  ; tail -n 1 tmp08_majority >> test_error_08_majority&
 						wait
-						echo "Testing Mean"
+						echo -n "Testing Mean... "
 						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp01_mean --benchmark >> test_error_01_mean ; tail -n 1 tmp01_mean >> test_error_01_mean&
 						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp02_mean --benchmark >> test_error_02_mean ; tail -n 1 tmp02_mean >> test_error_02_mean&
 						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp03_mean --benchmark >> test_error_03_mean ; tail -n 1 tmp03_mean >> test_error_03_mean&
@@ -204,18 +204,18 @@ do
 
 				rm -f tmp??*
 				
-				echo "Training"
+				echo -n "Training... "
 				$EXE -f "../spaces/incomplete/no_overlap_1D-8_35_3_100.txt" $SOLVER_ARG -w $w -n $n -r tmp01 --benchmark 2> /dev/null 1>> training01 ; tail -n 1 tmp01_majority >> training01&
 				$EXE -f "../spaces/incomplete/no_overlap_1D-8_35_3_100.txt" $SOLVER_ARG -w $w -n $n -r tmp02 --benchmark 2> /dev/null 1>> training02 ; tail -n 1 tmp02_majority >> training02&
 				$EXE -f "../spaces/incomplete/no_overlap_1D-8_35_3_100.txt" $SOLVER_ARG -w $w -n $n -r tmp03 --benchmark 2> /dev/null 1>> training03 ; tail -n 1 tmp03_majority >> training03&
 				$EXE -f "../spaces/incomplete/no_overlap_1D-8_35_3_100.txt" $SOLVER_ARG -w $w -n $n -r tmp04 --benchmark 2> /dev/null 1>> training04 ; tail -n 1 tmp04_majority >> training04&
 				wait
-				echo "Testing Majority"
+				echo -n "Testing Majority... "
 				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp01_majority --benchmark >> test_error_01_majority  ; tail -n 1 tmp01_majority >> test_error_01_majority&
 				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp02_majority --benchmark >> test_error_02_majority  ; tail -n 1 tmp02_majority >> test_error_02_majority&
 				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp03_majority --benchmark >> test_error_03_majority  ; tail -n 1 tmp03_majority >> test_error_03_majority&
 				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp04_majority --benchmark >> test_error_04_majority  ; tail -n 1 tmp04_majority >> test_error_04_majority&
-				echo "Testing Mean"
+				echo -n "Testing Mean... "
 				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp01_mean --benchmark >> test_error_01_mean ; tail -n 1 tmp01_mean >> test_error_01_mean&
 				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp02_mean --benchmark >> test_error_02_mean ; tail -n 1 tmp02_mean >> test_error_02_mean&
 				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp03_mean --benchmark >> test_error_03_mean ; tail -n 1 tmp03_mean >> test_error_03_mean&
