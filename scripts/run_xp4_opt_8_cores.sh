@@ -1,7 +1,7 @@
 #!/bin/bash
 #Weak learners
 
-EXE="../bin/weak_learn_q_sat"
+EXE="../bin/weak_learn_q_opt"
 
 CORE=$(grep -c '^processor' /proc/cpuinfo)
 if [[ ${CORE%.*} -lt 8 ]] ; then
@@ -46,19 +46,19 @@ do
 								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp06_majority --benchmark >> test_error_06_majority&
 								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp07_majority --benchmark >> test_error_07_majority&
 								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp08_majority --benchmark >> test_error_08_majority&
+								# wait
+								# echo "Testing Mean"
+								# $EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp01_mean --benchmark >> test_error_01_mean&
+								# $EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp02_mean --benchmark >> test_error_02_mean&
+								# $EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp03_mean --benchmark >> test_error_03_mean&
+								# $EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp04_mean --benchmark >> test_error_04_mean&
+								# $EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp05_mean --benchmark >> test_error_05_mean&
+								# $EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp06_mean --benchmark >> test_error_06_mean&
+								# $EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp07_mean --benchmark >> test_error_07_mean&
+								# $EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp08_mean --benchmark >> test_error_08_mean&
 								wait
-								echo "Testing Mean"
-								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp01_mean --benchmark >> test_error_01_mean&
-								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp02_mean --benchmark >> test_error_02_mean&
-								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp03_mean --benchmark >> test_error_03_mean&
-								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp04_mean --benchmark >> test_error_04_mean&
-								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp05_mean --benchmark >> test_error_05_mean&
-								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp06_mean --benchmark >> test_error_06_mean&
-								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp07_mean --benchmark >> test_error_07_mean&
-								$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp08_mean --benchmark >> test_error_08_mean&
-								wait
-								cat tmp??_majority >> ../results/weak_learners_sat/"$constraint-12_12_weak_w$w-n$n-majority"
-								cat tmp??_mean >> ../results/weak_learners_sat/"$constraint-12_12_weak_w$w-n$n-mean"
+								cat tmp??_majority >> ../results/weak_learners_opt/"$constraint-12_12_weak_w$w-n$n-majority"
+								# cat tmp??_mean >> ../results/weak_learners_opt/"$constraint-12_12_weak_w$w-n$n-mean"
 								>&2 echo "$((8*i))% done"
 						done
 
@@ -75,18 +75,18 @@ do
 						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp02_majority --benchmark >> test_error_02_majority&
 						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp03_majority --benchmark >> test_error_03_majority&
 						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp04_majority --benchmark >> test_error_04_majority&
-						echo "Testing Mean"
-						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp01_mean --benchmark >> test_error_01_mean&
-						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp02_mean --benchmark >> test_error_02_mean&
-						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp03_mean --benchmark >> test_error_03_mean&
-						$EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp04_mean --benchmark >> test_error_04_mean&
+						# echo "Testing Mean"
+						# $EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp01_mean --benchmark >> test_error_01_mean&
+						# $EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp02_mean --benchmark >> test_error_02_mean&
+						# $EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp03_mean --benchmark >> test_error_03_mean&
+						# $EXE -f "../spaces/test/$constraint-30_30.txt" -c tmp04_mean --benchmark >> test_error_04_mean&
 						wait
 
-						cat tmp??_majority >> ../results/weak_learners_sat/"$constraint-12_12_weak_w$w-n$n-majority"
-						cat tmp??_mean >> ../results/weak_learners_sat/"$constraint-12_12_weak_w$w-n$n-mean"
-						cat training?? > ../results/weak_learners_sat/"$constraint-12_12_weak_w$w-n$n-training"
-						cat test_error_??_majority > ../results/weak_learners_sat/"$constraint-12_12_weak_w$w-n$n-test_error_majority"
-						cat test_error_??_mean > ../results/weak_learners_sat/"$constraint-12_12_weak_w$w-n$n-test_error_mean"
+						cat tmp??_majority >> ../results/weak_learners_opt/"$constraint-12_12_weak_w$w-n$n-majority"
+						# cat tmp??_mean >> ../results/weak_learners_opt/"$constraint-12_12_weak_w$w-n$n-mean"
+						cat training?? > ../results/weak_learners_opt/"$constraint-12_12_weak_w$w-n$n-training"
+						cat test_error_??_majority > ../results/weak_learners_opt/"$constraint-12_12_weak_w$w-n$n-test_error_majority"
+						# cat test_error_??_mean > ../results/weak_learners_opt/"$constraint-12_12_weak_w$w-n$n-test_error_mean"
 						rm -f test_error_??* tmp??* training??
 				done
 
@@ -113,19 +113,19 @@ do
 						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp06_majority --benchmark >> test_error_06_majority&
 						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp07_majority --benchmark >> test_error_07_majority&
 						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp08_majority --benchmark >> test_error_08_majority&
+						# wait
+						# echo "Testing Mean"
+						# $EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp01_mean --benchmark >> test_error_01_mean&
+						# $EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp02_mean --benchmark >> test_error_02_mean&
+						# $EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp03_mean --benchmark >> test_error_03_mean&
+						# $EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp04_mean --benchmark >> test_error_04_mean&
+						# $EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp05_mean --benchmark >> test_error_05_mean&
+						# $EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp06_mean --benchmark >> test_error_06_mean&
+						# $EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp07_mean --benchmark >> test_error_07_mean&
+						# $EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp08_mean --benchmark >> test_error_08_mean&
 						wait
-						echo "Testing Mean"
-						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp01_mean --benchmark >> test_error_01_mean&
-						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp02_mean --benchmark >> test_error_02_mean&
-						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp03_mean --benchmark >> test_error_03_mean&
-						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp04_mean --benchmark >> test_error_04_mean&
-						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp05_mean --benchmark >> test_error_05_mean&
-						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp06_mean --benchmark >> test_error_06_mean&
-						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp07_mean --benchmark >> test_error_07_mean&
-						$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp08_mean --benchmark >> test_error_08_mean&
-						wait
-						cat tmp??_majority >> ../results/weak_learners_sat/"linear_equation-12_12_72_weak_w$w-n$n-majority"
-						cat tmp??_mean >> ../results/weak_learners_sat/"linear_equation-12_12_72_weak_w$w-n$n-mean"
+						cat tmp??_majority >> ../results/weak_learners_opt/"linear_equation-12_12_72_weak_w$w-n$n-majority"
+						# cat tmp??_mean >> ../results/weak_learners_opt/"linear_equation-12_12_72_weak_w$w-n$n-mean"
 						>&2 echo "$((8*i))% done"
 				done
 
@@ -142,18 +142,18 @@ do
 				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp02_majority --benchmark >> test_error_02_majority&
 				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp03_majority --benchmark >> test_error_03_majority&
 				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp04_majority --benchmark >> test_error_04_majority&
-				echo "Testing Mean"
-				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp01_mean --benchmark >> test_error_01_mean&
-				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp02_mean --benchmark >> test_error_02_mean&
-				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp03_mean --benchmark >> test_error_03_mean&
-				$EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp04_mean --benchmark >> test_error_04_mean&
+				# echo "Testing Mean"
+				# $EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp01_mean --benchmark >> test_error_01_mean&
+				# $EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp02_mean --benchmark >> test_error_02_mean&
+				# $EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp03_mean --benchmark >> test_error_03_mean&
+				# $EXE -f "../spaces/test/linear_equation-30_30_600.txt" -c tmp04_mean --benchmark >> test_error_04_mean&
 				wait
 
-				cat tmp??_majority >> ../results/weak_learners_sat/"linear_equation-12_12_72_weak_w$w-n$n-majority"
-				cat tmp??_mean >> ../results/weak_learners_sat/"linear_equation-12_12_72_weak_w$w-n$n-mean"
-				cat training?? > ../results/weak_learners_sat/"linear_equation-12_12_72_weak_w$w-n$n-training"
-				cat test_error_??_majority > ../results/weak_learners_sat/"linear_equation-12_12_72_weak_w$w-n$n-test_error_majority"
-				cat test_error_??_mean > ../results/weak_learners_sat/"linear_equation-12_12_72_weak_w$w-n$n-test_error_mean"
+				cat tmp??_majority >> ../results/weak_learners_opt/"linear_equation-12_12_72_weak_w$w-n$n-majority"
+				# cat tmp??_mean >> ../results/weak_learners_opt/"linear_equation-12_12_72_weak_w$w-n$n-mean"
+				cat training?? > ../results/weak_learners_opt/"linear_equation-12_12_72_weak_w$w-n$n-training"
+				cat test_error_??_majority > ../results/weak_learners_opt/"linear_equation-12_12_72_weak_w$w-n$n-test_error_majority"
+				# cat test_error_??_mean > ../results/weak_learners_opt/"linear_equation-12_12_72_weak_w$w-n$n-test_error_mean"
 				rm -f test_error_??* tmp??* training??
 
 				echo ""
@@ -179,19 +179,19 @@ do
 						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp06_majority --benchmark >> test_error_06_majority&
 						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp07_majority --benchmark >> test_error_07_majority&
 						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp08_majority --benchmark >> test_error_08_majority&
+						# wait
+						# echo "Testing Mean"
+						# $EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp01_mean --benchmark >> test_error_01_mean&
+						# $EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp02_mean --benchmark >> test_error_02_mean&
+						# $EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp03_mean --benchmark >> test_error_03_mean&
+						# $EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp04_mean --benchmark >> test_error_04_mean&
+						# $EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp05_mean --benchmark >> test_error_05_mean&
+						# $EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp06_mean --benchmark >> test_error_06_mean&
+						# $EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp07_mean --benchmark >> test_error_07_mean&
+						# $EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp08_mean --benchmark >> test_error_08_mean&
 						wait
-						echo "Testing Mean"
-						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp01_mean --benchmark >> test_error_01_mean&
-						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp02_mean --benchmark >> test_error_02_mean&
-						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp03_mean --benchmark >> test_error_03_mean&
-						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp04_mean --benchmark >> test_error_04_mean&
-						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp05_mean --benchmark >> test_error_05_mean&
-						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp06_mean --benchmark >> test_error_06_mean&
-						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp07_mean --benchmark >> test_error_07_mean&
-						$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp08_mean --benchmark >> test_error_08_mean&
-						wait
-						cat tmp??_majority >> ../results/weak_learners_sat/"no_overlap_1D-8_35_3_weak_w$w-n$n-majority"
-						cat tmp??_mean >> ../results/weak_learners_sat/"no_overlap_1D-8_35_3_weak_w$w-n$n-mean"
+						cat tmp??_majority >> ../results/weak_learners_opt/"no_overlap_1D-8_35_3_weak_w$w-n$n-majority"
+						# cat tmp??_mean >> ../results/weak_learners_opt/"no_overlap_1D-8_35_3_weak_w$w-n$n-mean"
 						>&2 echo "$((8*i))% done"
 				done
 
@@ -208,18 +208,18 @@ do
 				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp02_majority --benchmark >> test_error_02_majority&
 				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp03_majority --benchmark >> test_error_03_majority&
 				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp04_majority --benchmark >> test_error_04_majority&
-				echo "Testing Mean"
-				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp01_mean --benchmark >> test_error_01_mean&
-				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp02_mean --benchmark >> test_error_02_mean&
-				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp03_mean --benchmark >> test_error_03_mean&
-				$EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp04_mean --benchmark >> test_error_04_mean&
+				# echo "Testing Mean"
+				# $EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp01_mean --benchmark >> test_error_01_mean&
+				# $EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp02_mean --benchmark >> test_error_02_mean&
+				# $EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp03_mean --benchmark >> test_error_03_mean&
+				# $EXE -f "../spaces/test/no_overlap_1D-14_64_3.txt" -c tmp04_mean --benchmark >> test_error_04_mean&
 				wait
 
-				cat tmp??_majority >> ../results/weak_learners_sat/"no_overlap_1D-8_35_3_weak_w$w-n$n-majority"
-				cat tmp??_mean >> ../results/weak_learners_sat/"no_overlap_1D-8_35_3_weak_w$w-n$n-mean"
-				cat training?? > ../results/weak_learners_sat/"no_overlap_1D-8_35_3_weak_w$w-n$n-training"
-				cat test_error_??_majority > ../results/weak_learners_sat/"no_overlap_1D-8_35_3_weak_w$w-n$n-test_error_majority"
-				cat test_error_??_mean > ../results/weak_learners_sat/"no_overlap_1D-8_35_3_weak_w$w-n$n-test_error_mean"
+				cat tmp??_majority >> ../results/weak_learners_opt/"no_overlap_1D-8_35_3_weak_w$w-n$n-majority"
+				# cat tmp??_mean >> ../results/weak_learners_opt/"no_overlap_1D-8_35_3_weak_w$w-n$n-mean"
+				cat training?? > ../results/weak_learners_opt/"no_overlap_1D-8_35_3_weak_w$w-n$n-training"
+				cat test_error_??_majority > ../results/weak_learners_opt/"no_overlap_1D-8_35_3_weak_w$w-n$n-test_error_majority"
+				# cat test_error_??_mean > ../results/weak_learners_opt/"no_overlap_1D-8_35_3_weak_w$w-n$n-test_error_mean"
 				rm -f test_error_??* tmp??* training??
 		done
 done
