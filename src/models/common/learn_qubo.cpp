@@ -44,7 +44,7 @@ void usage( char **argv )
 	     << "-b, --benchmark, to limit prints.\n"
 	     << "-ps, --percent PERCENT [--force_positive], to sample candidates from PERCENT of the training set (100 by default). --force_positive forces considering all positive candidates.\n"
 	     << "-n, --number NUMBER_SAMPLES, to sample NUMBER_SAMPLES candidates from the training set (the full set by default). Samples here are such that we got NUMBER_SAMPLES/2 positive and NUMBER_SAMPLES/2 negative candidates.\n"
-	     << "-p, --parallel, to make parallel search\n"
+	     << "-s, --samestart, to force weak learners to start from the same point in the search space\n"
 	     << "-d, --debug, to print additional information\n"
 	     << "--complementary, to force one complementary variable\n";
 }
@@ -66,6 +66,7 @@ int main( int argc, char **argv )
 	std::ifstream training_data_file;
 	std::ifstream check_file;
 
+	bool custom_starting_point;
 	size_t number_samples = 0;
 	int number_remains_to_sample = 0;
 	size_t total_training_set_size = 0;
@@ -74,7 +75,6 @@ int main( int argc, char **argv )
 	std::vector<double> labels;
 	std::vector<double> sampled_labels;
 
-	bool parallel;
 	bool debug;
 	bool complementary_variable;
 	bool force_positive;
@@ -105,7 +105,7 @@ int main( int argc, char **argv )
 	cmdl( {"t", "timeout"}, 1 ) >> time_budget;
 	cmdl( {"ps", "percent"}, 100 ) >> percent_training_set;
 	time_budget *= 1000000; // GHOST needs microseconds
-	cmdl[ {"-p", "--parallel"} ] ? parallel = true : parallel = false;
+	cmdl[ {"-s", "--samestart"} ] ? custom_starting_point = true : custom_starting_point = false;
 	cmdl[ {"-d", "--debug"} ] ? debug = true : debug = false;
 	cmdl[ {"-b", "--benchmark"} ] ? silent = true : silent = false;
 	cmdl[ {"--complementary"} ] ? complementary_variable = true : complementary_variable = false;
@@ -285,7 +285,7 @@ int main( int argc, char **argv )
 			          << ", Number samples: " << number_samples
 			          << ", Training set size: " << total_training_set_size
 			          << ", Starting value: " << starting_value
-			          << "\nParallel run: " << std::boolalpha << parallel << "\n";
+			          << ", Same starting point: " << std::boolalpha << custom_starting_point << "\n";
 		}
 			
 		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable, parameter );
@@ -297,9 +297,9 @@ int main( int argc, char **argv )
 #if not defined BLOCK and not defined BLOCK_SAT and not defined BLOCK_OPT
 		options.print = make_shared<PrintQUBO>( number_variables * domain_size );
 #endif
-		if( parallel )
-			options.parallel_runs = true;
-			
+
+		options.custom_starting_point = custom_starting_point; 
+
 		solved = solver.solve( cost, solution, time_budget, options );		
 
 		if( !silent )

@@ -43,7 +43,7 @@ void usage( char **argv )
 	     << "-t, --timeout TIME_BUDGET, in seconds (1 by default)\n"
 	     << "-b, --benchmark, to limit prints.\n"
 	     << "-n, --number NUMBER_SAMPLES, to sample NUMBER_SAMPLES random candidates from the training set. Samples here are such that we got NUMBER_SAMPLES/2 positive and NUMBER_SAMPLES/2 negative candidates.\n"
-	     << "-p, --parallel, to make parallel search\n"
+	     << "-s, --samestart, to force weak learners to start from the same point in the search space\n"
 	     << "-w, --weak_learners NUMBER_LEARNERS, to learn NUMBER_LEARNERS Q matrices and merge them into an average matrix (disabled by default).\n"
 	     << "-d, --debug, to print additional information\n"
 	     << "--complementary, to force one complementary variable\n";
@@ -68,6 +68,7 @@ int main( int argc, char **argv )
 
 	size_t number_samples = 0;
 	bool custom_number_samples = false;
+	bool custom_starting_point;
 	int number_remains_to_sample = 0;
 	size_t total_training_set_size = 0;
 	std::vector<int> candidates;
@@ -75,7 +76,6 @@ int main( int argc, char **argv )
 	std::vector<double> labels;
 	std::vector<double> sampled_labels;
 
-	bool parallel;
 	bool debug;
 	bool complementary_variable;
 	bool force_positive;
@@ -112,7 +112,7 @@ int main( int argc, char **argv )
 	cmdl( {"n", "number"} ) >> number_samples;
 	cmdl( {"w", "weak_learners"}, 1 ) >> weak_learners;
 	time_budget *= 1000000; // GHOST needs microseconds
-	cmdl[ {"-p", "--parallel"} ] ? parallel = true : parallel = false;
+	cmdl[ {"-s", "--samestart"} ] ? custom_starting_point = true : custom_starting_point = false;
 	cmdl[ {"-d", "--debug"} ] ? debug = true : debug = false;
 	cmdl[ {"-b", "--benchmark"} ] ? silent = true : silent = false;
 	cmdl[ {"--complementary"} ] ? complementary_variable = true : complementary_variable = false;
@@ -274,7 +274,7 @@ int main( int argc, char **argv )
 			          << ", Number samples: " << number_samples
 			          << ", Training set size: " << total_training_set_size
 			          << ", Starting value: " << starting_value
-			          << "\nParallel run: " << std::boolalpha << parallel
+			          << ", Same starting point: " << std::boolalpha << custom_starting_point
 			          << "\nWeak learners: " << weak_learners << "\n";
 		}
 
@@ -288,8 +288,6 @@ int main( int argc, char **argv )
 		bool solved = true;
 		std::vector<bool> weak_solved( weak_learners, true );
 		ghost::Options options;
-		if( parallel )
-			options.parallel_runs = true;
 			
 		std::vector<std::vector<int>> solutions( weak_learners );
 		double sum_cost = 0.;
@@ -298,7 +296,7 @@ int main( int argc, char **argv )
 		int number_positive = static_cast<int>( std::ceil( static_cast<double>( number_samples ) / 2 ) );
 		int number_negative = static_cast<int>( std::floor( static_cast<double>( number_samples ) / 2 ) );
 		
-		options.custom_starting_point = true; 
+		options.custom_starting_point = custom_starting_point; 
 		
 		for( int i = 0 ; i < weak_learners ; ++i )
 		{
