@@ -1,0 +1,1700 @@
+Solution of weak learner 0: 2 0 0 0 1 0 0 1 0 1 0 0 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 9548.37us
+Solution of weak learner 1: 2 1 0 0 0 0 0 1 0 0 1 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 1778.64us
+Solution of weak learner 2: 3 0 1 0 0 0 0 0 1 0 1 0 1 0 1 
+Valid solution: true
+Weak learner 2 runtime: 1766.58us
+Mean solution: 0 0.666667 0.333333 0.333333 0.333333 0 0.333333 0 0 0.666667 0.333333 0.333333 0.666667 0.333333 0.666667 0 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 0 1 0 1 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 13166.5us
+
+2 0 0 0 0 0 0 1 0 0 1 0 1 0 0 
+Solution of weak learner 0: 1 1 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 66312.2us
+Solution of weak learner 1: 1 0 0 0 0 0 0 1 0 1 0 0 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 5602.39us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 1 0 0 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 4595.39us
+Mean solution: 1 0 0 0.333333 0 0 0 0 0 1 0 1 0 0.333333 0.333333 0 0 
+Errors by mean: 99
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 0 0 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 76581.4us
+
+1 0 0 0 0 0 0 1 0 1 0 0 0 0 0 
+Solution of weak learner 0: 1 0 1 0 0 0 0 0 0 0 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 21755.3us
+Solution of weak learner 1: 1 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+Valid solution: true
+Weak learner 1 runtime: 3564.4us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 8869.83us
+Mean solution: 0.666667 0.333333 0 0 0.333333 0 0 0 0 0.333333 0 0.666667 0 0.666667 0.333333 0 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 0 0 1 0 1 0 0 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 34256.8us
+
+1 0 0 0 0 0 0 0 0 1 0 1 0 0 0 
+Solution of weak learner 0: 3 0 0 0 0 0 0 0 1 0 1 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 1528.41us
+Solution of weak learner 1: 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 20280.6us
+Solution of weak learner 2: 2 0 0 0 0 0 0 0 1 0 0 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 8621.5us
+Mean solution: 0.333333 0.333333 0.333333 0.333333 0 0 0 0 0 0 0.666667 0 0.333333 0.333333 0 0 0 
+Errors by mean: 101
+Majority solution: 3 0 0 0 0 0 0 0 1 0 0 0 0 0 0 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 30499.7us
+
+3 0 0 0 0 0 0 0 1 0 0 0 0 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 2046.09us
+Solution of weak learner 1: 1 0 0 0 0 0 0 0 0 0 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 17325.9us
+Solution of weak learner 2: 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 10834.8us
+Mean solution: 0.666667 0.333333 0 0.333333 0 0 0 0 0 0.333333 0 0.333333 0 0.666667 0.666667 0 0 
+Errors by mean: 96
+Majority solution: 1 0 0 0 0 0 0 0 0 0 0 1 1 0 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 30277.8us
+
+1 0 0 0 0 0 0 0 0 0 0 1 1 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 1 
+Valid solution: true
+Weak learner 0 runtime: 9459.52us
+Solution of weak learner 1: 1 1 0 0 0 0 0 0 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 10955.4us
+Solution of weak learner 2: 3 0 0 0 0 0 1 1 0 1 0 0 1 0 1 
+Valid solution: true
+Weak learner 2 runtime: 3241.35us
+Mean solution: 0.666667 0 0.333333 0.333333 0 0 0 0 0.333333 0.666667 0 1 0 0.666667 0.666667 0 0.666667 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 23729.2us
+
+1 0 0 0 0 0 0 1 0 1 0 1 1 0 1 
+Solution of weak learner 0: 2 0 0 0 0 0 0 0 1 0 1 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 11882.9us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 0 1 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 2211.14us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 3331.32us
+Mean solution: 0.333333 0.666667 0 0 0 0 0 0 0 0.666667 0.333333 0 0.666667 0.666667 0 0.666667 0 
+Errors by mean: 96
+Majority solution: 2 0 0 0 0 0 0 1 0 0 1 1 0 1 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 17496.2us
+
+2 0 0 0 0 0 0 1 0 0 1 1 0 1 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 38018.9us
+Solution of weak learner 1: 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 13845.9us
+Solution of weak learner 2: 1 0 0 1 0 0 0 0 0 0 0 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 28569.7us
+Mean solution: 0.666667 0 0.333333 0 0 0.333333 0 0 0 0.333333 0 0.333333 0 0.666667 0.333333 0 0 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 80508.5us
+
+1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 
+Solution of weak learner 0: 1 1 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 13331.7us
+Solution of weak learner 1: 3 0 0 0 0 0 0 1 0 1 0 1 0 0 1 
+Valid solution: true
+Weak learner 1 runtime: 6598.09us
+Solution of weak learner 2: 3 0 0 0 0 0 0 1 0 0 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 1712.71us
+Mean solution: 0.333333 0 0.666667 0.333333 0 0 0 0 0 1 0 0.666667 0 1 0.333333 0 0.333333 
+Errors by mean: 101
+Majority solution: 3 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 21716.3us
+
+3 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 2 0 0 0 1 0 0 1 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 28950.9us
+Solution of weak learner 1: 1 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+Valid solution: true
+Weak learner 1 runtime: 2180.25us
+Solution of weak learner 2: 1 0 1 0 0 0 0 1 0 0 1 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 1873.94us
+Mean solution: 0.666667 0.333333 0 0 0.666667 0 0.333333 0 0 0.666667 0 0 0.333333 0.333333 0 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 1 0 0 0 0 1 0 0 0 0 0 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 33075.9us
+
+1 0 1 0 0 0 0 1 0 0 0 0 0 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 1 1 0 1 0 0 1 0 1 
+Valid solution: true
+Weak learner 0 runtime: 1790.81us
+Solution of weak learner 1: 3 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+Valid solution: true
+Weak learner 1 runtime: 17777.5us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 19957.9us
+Mean solution: 0 0.666667 0.333333 0 0.333333 0 0 0 0.333333 0.666667 0 0.666667 0 0.333333 0.333333 0 0.666667 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 0 0 0 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 39595.4us
+
+2 0 0 0 0 0 0 1 0 1 0 0 0 0 1 
+Solution of weak learner 0: 1 0 0 0 0 0 0 0 0 0 1 0 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 12950.5us
+Solution of weak learner 1: 2 0 0 1 0 0 0 0 0 0 0 1 0 1 1 
+Valid solution: true
+Weak learner 1 runtime: 5258.58us
+Solution of weak learner 2: 1 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 1711.42us
+Mean solution: 0.666667 0.333333 0 0.333333 0 0.333333 0 0 0 0.333333 0 0.333333 0.333333 0.666667 0.666667 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 0 0 0 0 1 1 0 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 19994us
+
+1 0 0 0 0 0 0 0 0 0 0 1 1 0 0 
+Solution of weak learner 0: 3 0 0 0 0 0 0 1 0 1 0 1 1 0 1 
+Valid solution: true
+Weak learner 0 runtime: 7808.41us
+Solution of weak learner 1: 1 1 0 0 0 0 0 1 0 1 0 1 0 0 1 
+Valid solution: true
+Weak learner 1 runtime: 9406.71us
+Solution of weak learner 2: 3 0 1 0 0 0 0 0 0 0 0 0 1 0 1 
+Valid solution: true
+Weak learner 2 runtime: 18490.6us
+Mean solution: 0.333333 0 0.666667 0.333333 0.333333 0 0 0 0 0.666667 0 0.666667 0 0.666667 0.666667 0 1 
+Errors by mean: 101
+Majority solution: 3 0 0 0 0 0 0 1 0 1 0 1 1 0 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 35775.7us
+
+3 0 0 0 0 0 0 1 0 1 0 1 1 0 1 
+Solution of weak learner 0: 3 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 10759us
+Solution of weak learner 1: 1 1 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 33201.6us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 19431.5us
+Mean solution: 0.333333 0.333333 0.333333 0.333333 0 0 0 0 0 1 0 1 0 1 0.333333 0.333333 0 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 63527.3us
+
+1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 1 0 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 4843.48us
+Solution of weak learner 1: 3 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+Valid solution: true
+Weak learner 1 runtime: 2933.71us
+Solution of weak learner 2: 3 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+Valid solution: true
+Weak learner 2 runtime: 2926.36us
+Mean solution: 0 0.333333 0.666667 0.333333 0 0 0 0 0 0.333333 0 0.333333 0 0 0.333333 0 0.666667 
+Errors by mean: 101
+Majority solution: 3 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 10768.3us
+
+3 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 6462.46us
+Solution of weak learner 1: 1 1 0 0 0 0 0 0 0 0 1 1 1 0 1 
+Valid solution: true
+Weak learner 1 runtime: 1609.17us
+Solution of weak learner 2: 3 1 0 0 0 0 0 0 0 0 0 0 1 0 1 
+Valid solution: true
+Weak learner 2 runtime: 1794.07us
+Mean solution: 0.333333 0.333333 0.333333 0.666667 0 0 0 0 0 0.333333 0 0.333333 0.333333 0.666667 0.666667 0.333333 0.666667 
+Errors by mean: 101
+Majority solution: 2 1 0 0 0 0 0 0 0 0 0 1 1 0 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 9928.67us
+
+2 1 0 0 0 0 0 0 0 0 0 1 1 0 1 
+Solution of weak learner 0: 1 1 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 12570.6us
+Solution of weak learner 1: 2 0 0 0 0 0 0 0 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 2948.95us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 3254us
+Mean solution: 0.333333 0.666667 0 0.333333 0 0 0 0 0 0.333333 0 0.666667 0 0.666667 0.333333 0.666667 0 
+Errors by mean: 94
+Majority solution: 2 0 0 0 0 0 0 0 0 1 0 1 0 1 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 18837.3us
+
+2 0 0 0 0 0 0 0 0 1 0 1 0 1 0 
+Solution of weak learner 0: 1 1 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 58510.4us
+Solution of weak learner 1: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 6830.5us
+Solution of weak learner 2: 1 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 97995.9us
+Mean solution: 1 0 0 0.666667 0 0 0 0 0 0.666667 0 0.666667 0 0.666667 0.666667 0.333333 0 
+Errors by mean: 13
+Majority solution: 1 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 163410us
+
+1 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Solution of weak learner 0: 2 1 0 0 0 0 0 0 0 0 0 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 2734.23us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 1 
+Valid solution: true
+Weak learner 1 runtime: 4060.19us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 0 1 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 14920.6us
+Mean solution: 0.333333 0.666667 0 0.333333 0 0 0 0 0 0.666667 0 0.333333 0.333333 1 0.333333 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 0 0 1 0 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 21779.4us
+
+2 0 0 0 0 0 0 1 0 0 0 1 0 0 0 
+Solution of weak learner 0: 2 1 0 0 0 0 0 1 0 0 1 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 1756.33us
+Solution of weak learner 1: 3 1 0 0 0 0 0 0 0 0 0 0 0 1 1 
+Valid solution: true
+Weak learner 1 runtime: 31652.4us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 2507.63us
+Mean solution: 0 0.666667 0.333333 0.666667 0 0 0 0 0 0.666667 0 0.333333 0.333333 0.666667 0.666667 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 2 1 0 0 0 0 0 1 0 0 0 1 1 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 35982.2us
+
+2 1 0 0 0 0 0 1 0 0 0 1 1 0 0 
+Solution of weak learner 0: 2 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 6403.41us
+Solution of weak learner 1: 2 0 1 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 1936.77us
+Solution of weak learner 2: 2 1 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 33279.9us
+Mean solution: 0 1 0 0.666667 0.333333 0 0 0 0 0.666667 0 0.666667 0 0.666667 1 0 0 
+Errors by mean: 5
+Majority solution: 2 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 41681.4us
+
+2 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 2616.97us
+Solution of weak learner 1: 2 1 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 2748.8us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 53452us
+Mean solution: 0.333333 0.666667 0 0.333333 0 0 0 0 0 1 0 1 0 1 0.333333 0.333333 0 
+Errors by mean: 0
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 58882.3us
+
+2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 1 0 1 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 10062.3us
+Solution of weak learner 1: 1 0 0 0 0 0 0 0 0 0 1 0 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 3303.99us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 1 
+Valid solution: true
+Weak learner 2 runtime: 1591.09us
+Mean solution: 0.666667 0.333333 0 0 0.333333 0 0 0 0 0.666667 0 0.666667 0.333333 0.666667 0.333333 0 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 15023.2us
+
+1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 2192.68us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 2948.12us
+Solution of weak learner 2: 3 0 0 0 0 0 0 1 0 0 0 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 7434.46us
+Mean solution: 0 0.666667 0.333333 0 0 0 0 0 0 1 0 0.333333 0 0.666667 0 0.333333 0 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 0 0 1 0 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 12639.8us
+
+2 0 0 0 0 0 0 1 0 0 0 1 0 0 0 
+Solution of weak learner 0: 1 0 1 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 6241.58us
+Solution of weak learner 1: 2 1 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 7934.58us
+Solution of weak learner 2: 2 0 1 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 11755.7us
+Mean solution: 0.333333 0.666667 0 0.333333 0.666667 0 0 0 0 0.666667 0 0.666667 0 0.666667 0 1 0 
+Errors by mean: 0
+Majority solution: 2 0 1 0 0 0 0 1 0 1 0 1 0 1 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 25997.3us
+
+2 0 1 0 0 0 0 1 0 1 0 1 0 1 0 
+Solution of weak learner 0: 1 0 1 0 0 0 0 0 1 0 1 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 1874.62us
+Solution of weak learner 1: 2 1 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 26667us
+Solution of weak learner 2: 2 0 0 0 0 0 1 1 0 1 0 1 0 1 1 
+Valid solution: true
+Weak learner 2 runtime: 3597.05us
+Mean solution: 0.333333 0.666667 0 0.333333 0.333333 0 0 0 0.333333 0.333333 0.333333 0.333333 0.333333 0.666667 0 1 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 0 0 0 0 1 0 1 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 32203.4us
+
+2 0 0 0 0 0 0 0 0 0 0 1 0 1 0 
+Solution of weak learner 0: 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 6962.46us
+Solution of weak learner 1: 2 0 0 0 0 0 0 0 0 0 0 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 19920.5us
+Solution of weak learner 2: 1 1 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 3895.51us
+Mean solution: 0.333333 0.666667 0 0.666667 0 0 0 0 0 0.333333 0 0.333333 0 0.666667 0 0.333333 0 
+Errors by mean: 98
+Majority solution: 2 1 0 0 0 0 0 0 0 0 0 1 0 0 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 30895.1us
+
+2 1 0 0 0 0 0 0 0 0 0 1 0 0 0 
+Solution of weak learner 0: 2 1 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 18791.1us
+Solution of weak learner 1: 1 0 0 0 0 0 0 0 0 0 1 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 1751.48us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 35001.3us
+Mean solution: 0.333333 0.666667 0 0.333333 0 0 0 0 0 0.333333 0 0.333333 0.333333 0.666667 0.666667 0 0 
+Errors by mean: 99
+Majority solution: 2 0 0 0 0 0 0 0 0 0 0 1 1 0 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 55606.3us
+
+2 0 0 0 0 0 0 0 0 0 0 1 1 0 0 
+Solution of weak learner 0: 2 0 1 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 27487.7us
+Solution of weak learner 1: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 22945.1us
+Solution of weak learner 2: 1 0 1 0 0 0 0 1 0 0 1 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 2074.46us
+Mean solution: 0.666667 0.333333 0 0 0.666667 0 0 0 0 1 0 0.666667 0.333333 1 0.666667 0 0 
+Errors by mean: 96
+Majority solution: 1 0 1 0 0 0 0 1 0 1 0 1 1 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 52569.3us
+
+1 0 1 0 0 0 0 1 0 1 0 1 1 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 2450.32us
+Solution of weak learner 1: 2 1 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 9522.92us
+Solution of weak learner 2: 3 1 0 0 0 0 0 0 1 0 0 1 1 0 1 
+Valid solution: true
+Weak learner 2 runtime: 1669.45us
+Mean solution: 0.333333 0.333333 0.333333 0.666667 0 0 0 0 0 0.666667 0.333333 0.666667 0 1 0.666667 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 1 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 13706.4us
+
+1 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 5993.9us
+Solution of weak learner 1: 3 0 1 0 0 0 0 0 0 0 0 0 0 1 1 
+Valid solution: true
+Weak learner 1 runtime: 4661.69us
+Solution of weak learner 2: 2 1 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 12088.6us
+Mean solution: 0 0.666667 0.333333 0.333333 0.333333 0 0 0 0 0.333333 0 0 0 0 0 0.666667 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Errors by majority: 100
+All weak learners valid: true
+Wallclock runtime: 22815.1us
+
+2 0 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Solution of weak learner 0: 1 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+Valid solution: true
+Weak learner 0 runtime: 9455.86us
+Solution of weak learner 1: 1 1 0 0 0 0 0 1 0 0 1 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 1800.78us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 58136us
+Mean solution: 0.666667 0.333333 0 0.666667 0 0 0 0 0 0.666667 0 0.333333 0.333333 0.666667 0.333333 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 1 1 0 0 0 0 0 1 0 0 0 1 0 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 69456us
+
+1 1 0 0 0 0 0 1 0 0 0 1 0 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 22744.1us
+Solution of weak learner 1: 3 0 1 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 4106.34us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 0 1 0 1 
+Valid solution: true
+Weak learner 2 runtime: 8794.32us
+Mean solution: 0 0.666667 0.333333 0 0.333333 0 0 0 0 0.666667 0 0.666667 0 0.333333 1 0 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 0 1 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 35705.3us
+
+2 0 0 0 0 0 0 1 0 1 0 0 1 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 12279.4us
+Solution of weak learner 1: 2 1 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 27762.3us
+Solution of weak learner 2: 3 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+Valid solution: true
+Weak learner 2 runtime: 15210.7us
+Mean solution: 0 0.666667 0.333333 0.333333 0 0 0 0 0 0.666667 0 0.666667 0 0.666667 0.333333 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 55313.6us
+
+2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 0 0 0 1 0 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 3620.86us
+Solution of weak learner 1: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 32824.8us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 30515.1us
+Mean solution: 0.333333 0.666667 0 0 0 0 0 0 0 0.666667 0 0.666667 0.333333 0.666667 0.666667 0 0 
+Errors by mean: 96
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 67023.2us
+
+2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Solution of weak learner 0: 1 0 0 0 0 1 0 1 0 1 0 0 0 0 1 
+Valid solution: true
+Weak learner 0 runtime: 5195.42us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 2790.06us
+Solution of weak learner 2: 2 1 0 0 0 0 0 0 1 0 1 1 1 0 1 
+Valid solution: true
+Weak learner 2 runtime: 1717.78us
+Mean solution: 0.333333 0.666667 0 0.333333 0 0 0 0.333333 0 0.666667 0.333333 0.666667 0.333333 0.666667 0.666667 0 0.666667 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 9764.84us
+
+2 0 0 0 0 0 0 1 0 1 0 1 1 0 1 
+Solution of weak learner 0: 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 9046.61us
+Solution of weak learner 1: 3 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 23710.8us
+Solution of weak learner 2: 1 0 0 0 0 0 0 0 0 0 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 10492.5us
+Mean solution: 0.666667 0 0.333333 0.333333 0 0 0 0 0 0.333333 0 0.333333 0 0.666667 0.333333 0.333333 0 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 43405.1us
+
+1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 
+Solution of weak learner 0: 3 0 1 0 0 0 0 0 0 0 1 1 1 0 1 
+Valid solution: true
+Weak learner 0 runtime: 2044.01us
+Solution of weak learner 1: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 21629.3us
+Solution of weak learner 2: 2 0 1 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 19166.8us
+Mean solution: 0.333333 0.333333 0.333333 0 0.666667 0 0 0 0 0.666667 0 0.666667 0.333333 1 0.666667 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 3 0 1 0 0 0 0 1 0 1 0 1 1 0 0 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 42902.3us
+
+3 0 1 0 0 0 0 1 0 1 0 1 1 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+Valid solution: true
+Weak learner 0 runtime: 13914.2us
+Solution of weak learner 1: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 5046.58us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 21425.7us
+Mean solution: 0.333333 0.666667 0 0 0 0 0 0 0 0.666667 0 0.666667 0 0.666667 0.333333 0.666667 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 40451.4us
+
+2 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Solution of weak learner 0: 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 15071.1us
+Solution of weak learner 1: 3 0 0 0 0 0 0 0 1 1 0 0 1 0 1 
+Valid solution: true
+Weak learner 1 runtime: 3799.68us
+Solution of weak learner 2: 1 1 0 0 0 0 0 1 0 1 0 0 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 2480.49us
+Mean solution: 0.333333 0.333333 0.333333 0.666667 0 0 0 0 0 0.333333 0.333333 0.666667 0 0 0.666667 0 0.333333 
+Errors by mean: 101
+Majority solution: 1 1 0 0 0 0 0 0 0 1 0 0 1 0 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 21419.7us
+
+1 1 0 0 0 0 0 0 0 1 0 0 1 0 0 
+Solution of weak learner 0: 3 0 0 0 0 0 0 1 0 1 0 1 0 1 1 
+Valid solution: true
+Weak learner 0 runtime: 42422.2us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 0 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 19319.2us
+Solution of weak learner 2: 2 0 0 0 0 0 0 0 0 1 0 0 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 6963.85us
+Mean solution: 0 0.666667 0.333333 0 0 0 0 0 0 0.666667 0 1 0 0.333333 0.333333 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 0 0 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 68916us
+
+2 0 0 0 0 0 0 1 0 1 0 0 0 0 0 
+Solution of weak learner 0: 1 0 0 0 1 0 0 1 0 1 0 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 5574.4us
+Solution of weak learner 1: 3 0 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 5374.68us
+Solution of weak learner 2: 3 0 1 0 0 0 0 0 0 0 0 0 0 1 1 
+Valid solution: true
+Weak learner 2 runtime: 2173.26us
+Mean solution: 0.333333 0 0.666667 0 0.333333 0 0.333333 0 0 0.333333 0 0.333333 0 0 0.333333 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 13184us
+
+3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Solution of weak learner 0: 3 0 0 0 0 1 0 0 0 0 0 1 1 0 1 
+Valid solution: true
+Weak learner 0 runtime: 10685.5us
+Solution of weak learner 1: 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 9784.36us
+Solution of weak learner 2: 2 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+Valid solution: true
+Weak learner 2 runtime: 12066.3us
+Mean solution: 0.333333 0.333333 0.333333 0.333333 0 0 0 0.333333 0 0 0 0 0 0.333333 0.666667 0.333333 0.666667 
+Errors by mean: 101
+Majority solution: 3 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 32598.7us
+
+3 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+Solution of weak learner 0: 2 1 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 9698.19us
+Solution of weak learner 1: 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 16742.7us
+Solution of weak learner 2: 3 0 0 0 0 0 0 0 1 0 1 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 2863.11us
+Mean solution: 0.333333 0.333333 0.333333 0.333333 0 0 0 0 0 0 0.333333 0 0.666667 0.333333 0 0.666667 0 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 0 0 0 1 0 0 1 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 29398.8us
+
+1 0 0 0 0 0 0 0 0 0 1 0 0 1 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 0 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 5606.44us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 7949.9us
+Solution of weak learner 2: 1 1 0 0 0 0 0 0 0 1 0 0 0 1 1 
+Valid solution: true
+Weak learner 2 runtime: 567.436us
+Mean solution: 0.333333 0.666667 0 0.333333 0 0 0 0 0 0.666667 0 0.666667 0 0.666667 0 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 14184.4us
+
+2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 1 0 0 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 14657.8us
+Solution of weak learner 1: 3 0 1 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 17723.4us
+Solution of weak learner 2: 3 0 1 0 0 0 0 0 0 0 0 0 0 1 1 
+Valid solution: true
+Weak learner 2 runtime: 18207.6us
+Mean solution: 0 0.333333 0.666667 0 0.666667 0 0 0 0 0.333333 0 0.333333 0 0 0.333333 0.666667 0.333333 
+Errors by mean: 101
+Majority solution: 3 0 1 0 0 0 0 0 0 0 0 0 0 1 0 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 50649.3us
+
+3 0 1 0 0 0 0 0 0 0 0 0 0 1 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 0 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 5359.41us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 0 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 4712.6us
+Solution of weak learner 2: 2 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 10822.8us
+Mean solution: 0.333333 0.666667 0 0.333333 0 0 0 0 0 1 0 0.666667 0 0.666667 0.666667 0 0 
+Errors by mean: 96
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 20956.4us
+
+2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Solution of weak learner 0: 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 74187.4us
+Solution of weak learner 1: 3 0 0 0 0 0 0 0 1 0 0 1 1 0 1 
+Valid solution: true
+Weak learner 1 runtime: 2146.52us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 83203.8us
+Mean solution: 0.666667 0 0.333333 0.333333 0 0 0 0 0 0.333333 0.333333 0.333333 0 0.666667 0.666667 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 0 0 0 0 1 1 0 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 159602us
+
+1 0 0 0 0 0 0 0 0 0 0 1 1 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 0 1 0 1 1 0 1 1 
+Valid solution: true
+Weak learner 0 runtime: 9190.29us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 0 1 1 
+Valid solution: true
+Weak learner 1 runtime: 5276.75us
+Solution of weak learner 2: 1 0 0 1 0 0 0 0 1 0 1 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 2572.49us
+Mean solution: 0.333333 0.666667 0 0 0 0.333333 0 0 0 0.333333 0.666667 0.333333 0.666667 1 0.333333 0.666667 0.666667 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 0 1 0 1 1 0 1 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 17101.7us
+
+2 0 0 0 0 0 0 0 1 0 1 1 0 1 1 
+Solution of weak learner 0: 3 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+Valid solution: true
+Weak learner 0 runtime: 2254.08us
+Solution of weak learner 1: 2 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 19982.6us
+Solution of weak learner 2: 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 18506.9us
+Mean solution: 0.333333 0.333333 0.333333 0.666667 0 0.333333 0 0 0 0.333333 0 0.333333 0 0.333333 0.333333 0 0.333333 
+Errors by mean: 101
+Majority solution: 3 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 40828.6us
+
+3 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 0 1 0 0 1 0 0 1 
+Valid solution: true
+Weak learner 0 runtime: 20928.4us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 37180.4us
+Solution of weak learner 2: 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 22402.2us
+Mean solution: 0.333333 0.666667 0 0.333333 0 0 0 0 0 0.333333 0.333333 0.333333 0 0.666667 0 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 0 0 0 0 1 0 0 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 80574.1us
+
+2 0 0 0 0 0 0 0 0 0 0 1 0 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 0 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 2660.45us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 0 0 1 1 
+Valid solution: true
+Weak learner 1 runtime: 1042.44us
+Solution of weak learner 2: 2 1 0 0 0 0 0 0 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 438.157us
+Mean solution: 0.333333 0.666667 0 0.333333 0 0 0 0 0 0.666667 0 0.666667 0 0.666667 0.333333 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 4203.65us
+
+2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+Valid solution: true
+Weak learner 0 runtime: 6043.26us
+Solution of weak learner 1: 3 0 0 0 0 0 0 0 0 0 0 1 1 0 1 
+Valid solution: true
+Weak learner 1 runtime: 2213.98us
+Solution of weak learner 2: 1 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 32765.8us
+Mean solution: 0.333333 0.333333 0.333333 0.333333 0 0 0 0 0 0.333333 0 0.333333 0 1 0.666667 0 0.666667 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 0 0 0 0 1 1 0 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 41088.7us
+
+1 0 0 0 0 0 0 0 0 0 0 1 1 0 1 
+Solution of weak learner 0: 2 0 1 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 30682.4us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 8510.01us
+Solution of weak learner 2: 1 0 1 0 0 0 0 0 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 1795.47us
+Mean solution: 0.333333 0.666667 0 0 0.666667 0 0 0 0 0.666667 0 1 0 1 0.333333 0.333333 0 
+Errors by mean: 98
+Majority solution: 2 0 1 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 41072.3us
+
+2 0 1 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 15094.8us
+Solution of weak learner 1: 2 0 0 0 0 0 1 0 0 0 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 3163.14us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 14627.5us
+Mean solution: 0.333333 0.666667 0 0 0 0 0 0 0.333333 0.666667 0 0.666667 0 1 0.666667 0.333333 0 
+Errors by mean: 99
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 32948.4us
+
+2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 58477.4us
+Solution of weak learner 1: 1 1 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 16378.6us
+Solution of weak learner 2: 2 0 1 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 21858.2us
+Mean solution: 0.666667 0.333333 0 0.333333 0.333333 0 0 0 0 1 0 1 0 1 0.333333 0.333333 0 
+Errors by mean: 97
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 96783.9us
+
+1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 1 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 14196.5us
+Solution of weak learner 1: 3 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 47019.1us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 0 1 0 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 8560.23us
+Mean solution: 0 0.666667 0.333333 0 0 0 0 0 0.333333 0.666667 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 0 0 0 0 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 69844.2us
+
+2 0 0 0 0 0 0 1 0 0 0 0 0 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 44125.6us
+Solution of weak learner 1: 3 0 0 0 0 0 0 0 0 1 0 0 1 0 1 
+Valid solution: true
+Weak learner 1 runtime: 1880.98us
+Solution of weak learner 2: 2 1 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 75017.9us
+Mean solution: 0.333333 0.333333 0.333333 0.333333 0 0 0 0 0 0.333333 0 0.666667 0 0.333333 0.666667 0 0.333333 
+Errors by mean: 101
+Majority solution: 3 0 0 0 0 0 0 0 0 1 0 0 1 0 0 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 121104us
+
+3 0 0 0 0 0 0 0 0 1 0 0 1 0 0 
+Solution of weak learner 0: 2 1 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 4661.41us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 5403.95us
+Solution of weak learner 2: 2 1 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 13726.1us
+Mean solution: 0 1 0 0.666667 0 0 0 0 0 0.333333 0 0.333333 0 0.333333 0.666667 0 0 
+Errors by mean: 5
+Majority solution: 2 1 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 23851.8us
+
+2 1 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Solution of weak learner 0: 1 0 0 0 1 0 0 1 0 1 0 0 0 0 1 
+Valid solution: true
+Weak learner 0 runtime: 16325.7us
+Solution of weak learner 1: 1 0 0 0 0 0 0 1 0 0 1 0 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 3795.68us
+Solution of weak learner 2: 1 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 17075.3us
+Mean solution: 1 0 0 0.333333 0 0 0.333333 0 0 1 0 0.666667 0.333333 0.333333 0.333333 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 0 0 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 37257.8us
+
+1 0 0 0 0 0 0 1 0 1 0 0 0 0 0 
+Solution of weak learner 0: 1 0 0 0 0 1 0 1 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 50391.6us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 0 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 6625.78us
+Solution of weak learner 2: 1 0 1 0 0 0 0 0 0 0 1 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 4985.13us
+Mean solution: 0.666667 0.333333 0 0 0.333333 0 0 0.333333 0 0.666667 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 
+Errors by mean: 99
+Majority solution: 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 62064.3us
+
+1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 
+Solution of weak learner 0: 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 40703.2us
+Solution of weak learner 1: 2 0 1 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 7119.01us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 43324.9us
+Mean solution: 0 0.666667 0.333333 0 0.333333 0 0 0 0 0.666667 0 0.666667 0 0.666667 0.333333 0.333333 0 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 91210.3us
+
+2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 1 0 0 1 0 0 0 0 0 0 1 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 6507.45us
+Solution of weak learner 1: 2 1 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 21301us
+Solution of weak learner 2: 1 1 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 32405.1us
+Mean solution: 0.666667 0.333333 0 0.666667 0 0.333333 0 0 0 0.333333 0 0.333333 0.333333 0.666667 0 1 0 
+Errors by mean: 99
+Majority solution: 1 1 0 0 0 0 0 0 0 0 0 1 0 1 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 60281.2us
+
+1 1 0 0 0 0 0 0 0 0 0 1 0 1 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 27885.2us
+Solution of weak learner 1: 3 1 0 0 0 0 0 1 0 0 0 0 1 0 1 
+Valid solution: true
+Weak learner 1 runtime: 1657.29us
+Solution of weak learner 2: 2 0 1 0 0 0 0 0 0 0 0 0 1 0 1 
+Valid solution: true
+Weak learner 2 runtime: 15006us
+Mean solution: 0.333333 0.333333 0.333333 0.333333 0.333333 0 0 0 0 0.666667 0 0.333333 0 0.333333 1 0 0.666667 
+Errors by mean: 101
+Majority solution: 3 0 0 0 0 0 0 1 0 0 0 0 1 0 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 44609.9us
+
+3 0 0 0 0 0 0 1 0 0 0 0 1 0 1 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 5745.48us
+Solution of weak learner 1: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 1 
+Valid solution: true
+Weak learner 1 runtime: 29931.5us
+Solution of weak learner 2: 2 1 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 24444.2us
+Mean solution: 0.333333 0.666667 0 0.333333 0 0 0 0 0 0.666667 0 0.666667 0 0.666667 0 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 60185.4us
+
+2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 2 1 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 5437.49us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 3303.02us
+Solution of weak learner 2: 2 0 0 1 0 0 0 0 1 0 1 0 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 4824.54us
+Mean solution: 0 1 0 0.333333 0 0.333333 0 0 0 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0 
+Errors by mean: 99
+Majority solution: 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Errors by majority: 100
+All weak learners valid: true
+Wallclock runtime: 13633.8us
+
+2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 54079.7us
+Solution of weak learner 1: 1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 10157.8us
+Solution of weak learner 2: 1 0 0 0 0 0 0 0 0 0 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 5553.03us
+Mean solution: 0.666667 0.333333 0 0 0 0 0 0 0 0.666667 0 0.666667 0 1 0 0.666667 0 
+Errors by mean: 93
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 69851.4us
+
+1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 324.68us
+Solution of weak learner 1: 2 0 0 0 0 0 0 0 0 0 1 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 17847.6us
+Solution of weak learner 2: 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 33201.2us
+Mean solution: 0.666667 0.333333 0 0.333333 0 0 0 0 0 0.333333 0 0.333333 0.333333 0.333333 0.333333 0 0 
+Errors by mean: 96
+Majority solution: 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Errors by majority: 100
+All weak learners valid: true
+Wallclock runtime: 51485.7us
+
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 12487.8us
+Solution of weak learner 1: 1 0 1 0 0 0 0 0 0 0 1 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 1716.65us
+Solution of weak learner 2: 1 0 1 0 0 0 0 0 1 0 1 1 0 0 1 
+Valid solution: true
+Weak learner 2 runtime: 1920.37us
+Mean solution: 1 0 0 0 0.666667 0 0 0 0 0.333333 0.333333 0.333333 0.666667 1 0.666667 0 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 1 0 0 0 0 0 0 0 1 1 1 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 16189us
+
+1 0 1 0 0 0 0 0 0 0 1 1 1 0 0 
+Solution of weak learner 0: 3 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+Valid solution: true
+Weak learner 0 runtime: 6639.47us
+Solution of weak learner 1: 3 0 0 0 0 0 0 1 0 1 0 0 0 0 1 
+Valid solution: true
+Weak learner 1 runtime: 3962.81us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 1 
+Valid solution: true
+Weak learner 2 runtime: 37890.2us
+Mean solution: 0.333333 0 0.666667 0 0 0 0 0 0 0.666667 0 0.666667 0 0.333333 0 0.333333 1 
+Errors by mean: 101
+Majority solution: 3 0 0 0 0 0 0 1 0 1 0 0 0 0 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 48565.6us
+
+3 0 0 0 0 0 0 1 0 1 0 0 0 0 1 
+Solution of weak learner 0: 2 0 0 0 0 0 0 0 0 1 0 1 0 1 1 
+Valid solution: true
+Weak learner 0 runtime: 8456.88us
+Solution of weak learner 1: 1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 39559us
+Solution of weak learner 2: 3 0 1 0 0 0 0 0 1 1 0 0 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 638.742us
+Mean solution: 0.333333 0.333333 0.333333 0 0.333333 0 0 0 0 0.333333 0.333333 1 0 0.666667 0 0.666667 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 0 0 1 0 1 0 1 0 
+Errors by majority: 92
+All weak learners valid: true
+Wallclock runtime: 48756.7us
+
+1 0 0 0 0 0 0 0 0 1 0 1 0 1 0 
+Solution of weak learner 0: 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 5363.52us
+Solution of weak learner 1: 1 1 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 12383.9us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 2109.24us
+Mean solution: 0.333333 0.666667 0 0.666667 0 0 0 0 0 0.333333 0 0.333333 0 0.333333 0 0.333333 0 
+Errors by mean: 35
+Majority solution: 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 19919.1us
+
+2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 17642.5us
+Solution of weak learner 1: 3 0 1 0 0 0 0 0 0 0 0 0 0 1 1 
+Valid solution: true
+Weak learner 1 runtime: 51283.5us
+Solution of weak learner 2: 1 0 1 0 0 0 0 1 0 1 0 1 1 0 1 
+Valid solution: true
+Weak learner 2 runtime: 18485.2us
+Mean solution: 0.333333 0.333333 0.333333 0 0.666667 0 0 0 0 0.666667 0 0.666667 0 0.666667 0.333333 0.666667 0.666667 
+Errors by mean: 101
+Majority solution: 1 0 1 0 0 0 0 1 0 1 0 1 0 1 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 87473.8us
+
+1 0 1 0 0 0 0 1 0 1 0 1 0 1 1 
+Solution of weak learner 0: 1 1 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 11765.8us
+Solution of weak learner 1: 3 0 0 0 0 0 0 0 0 1 0 1 0 0 1 
+Valid solution: true
+Weak learner 1 runtime: 2232.22us
+Solution of weak learner 2: 2 0 0 0 0 0 1 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 11989.5us
+Mean solution: 0.333333 0.333333 0.333333 0.333333 0 0 0 0 0.333333 0.666667 0 1 0 1 0 0.666667 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 26061.5us
+
+1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 7159.44us
+Solution of weak learner 1: 2 1 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 56141us
+Solution of weak learner 2: 1 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 27531.4us
+Mean solution: 0.666667 0.333333 0 0.666667 0 0 0 0 0 1 0 1 0 1 0.333333 0.333333 0 
+Errors by mean: 0
+Majority solution: 1 1 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 90898.4us
+
+1 1 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 19253us
+Solution of weak learner 1: 2 1 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 14358.8us
+Solution of weak learner 2: 3 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 32180.7us
+Mean solution: 0 0.666667 0.333333 0.666667 0 0 0 0 0 0.333333 0 0.333333 0 0.333333 0.333333 0.333333 0 
+Errors by mean: 101
+Majority solution: 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 65857.3us
+
+2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 4349.92us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+Valid solution: true
+Weak learner 1 runtime: 9101.98us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 0 1 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 8745.29us
+Mean solution: 0.666667 0.333333 0 0 0 0 0 0 0 1 0 0.333333 0.333333 0.666667 0 0 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 1 0 0 0 1 0 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 22259.3us
+
+1 0 0 0 0 0 0 1 0 0 0 1 0 0 0 
+Solution of weak learner 0: 3 0 0 0 0 0 0 0 1 1 0 0 0 0 1 
+Valid solution: true
+Weak learner 0 runtime: 8085.93us
+Solution of weak learner 1: 2 1 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 12102.9us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 18765.8us
+Mean solution: 0.333333 0.333333 0.333333 0.333333 0 0 0 0 0 0.666667 0.333333 1 0 0.666667 0.333333 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 39020.3us
+
+1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 0 1 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 8613.22us
+Solution of weak learner 1: 3 0 0 0 0 0 1 0 1 0 1 1 1 0 1 
+Valid solution: true
+Weak learner 1 runtime: 12026.1us
+Solution of weak learner 2: 1 1 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 20783.8us
+Mean solution: 0.666667 0 0.333333 0.333333 0 0 0 0 0.333333 0.666667 0.333333 0.333333 0.666667 0.666667 0.333333 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 1 0 0 1 1 0 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 41484.8us
+
+1 0 0 0 0 0 0 1 0 0 1 1 0 0 0 
+Solution of weak learner 0: 1 0 1 0 0 0 0 1 0 0 1 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 1915.86us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 58194.5us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 7088.2us
+Mean solution: 0.333333 0.666667 0 0 0.333333 0 0 0 0 1 0 0.666667 0.333333 1 0.666667 0.333333 0 
+Errors by mean: 98
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 67325.1us
+
+2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Solution of weak learner 0: 1 0 0 0 1 0 0 1 0 1 0 0 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 5019.18us
+Solution of weak learner 1: 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 23792.4us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 10137.9us
+Mean solution: 0.333333 0.333333 0.333333 0 0 0 0.333333 0 0 0.666667 0 0.666667 0 0.333333 0 0.666667 0 
+Errors by mean: 101
+Majority solution: 3 0 0 0 0 0 0 1 0 1 0 0 0 1 0 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 39018.6us
+
+3 0 0 0 0 0 0 1 0 1 0 0 0 1 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 5089.28us
+Solution of weak learner 1: 1 0 0 0 0 0 0 0 1 0 0 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 2537.32us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 20627.7us
+Mean solution: 0.666667 0.333333 0 0 0 0 0 0 0 0.666667 0.333333 0.666667 0 1 0.333333 0 0 
+Errors by mean: 93
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 28321.2us
+
+1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 5328.54us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 0 0 0 1 0 1 
+Valid solution: true
+Weak learner 1 runtime: 470.32us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 15070us
+Mean solution: 0.333333 0.666667 0 0 0 0 0 0 0 1 0 0.666667 0 0.666667 0.333333 0.333333 0.333333 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 20983.5us
+
+2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 3 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 7113.83us
+Solution of weak learner 1: 1 0 1 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 8819.11us
+Solution of weak learner 2: 1 0 0 0 1 0 0 0 1 0 1 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 5997us
+Mean solution: 0.666667 0 0.333333 0 0.333333 0 0.333333 0 0 0.666667 0.333333 0.666667 0.333333 1 0 0.666667 0 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 22034.5us
+
+1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Solution of weak learner 0: 1 0 1 0 0 0 0 1 0 0 0 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 17149.8us
+Solution of weak learner 1: 1 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 3168.23us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 33788.1us
+Mean solution: 1 0 0 0.333333 0.333333 0 0 0 0 1 0 0.666667 0 1 0.333333 0.333333 0 
+Errors by mean: 96
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 54167.2us
+
+1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 2 0 0 0 0 0 0 0 0 0 1 0 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 13332.8us
+Solution of weak learner 1: 1 0 0 0 0 0 0 1 0 0 1 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 5101.88us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 1 0 1 0 1 1 
+Valid solution: true
+Weak learner 2 runtime: 5058.55us
+Mean solution: 0.666667 0.333333 0 0 0 0 0 0 0 0.666667 0 0.333333 0.666667 0.666667 0 0.666667 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 1 0 0 1 1 0 1 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 23674.8us
+
+1 0 0 0 0 0 0 1 0 0 1 1 0 1 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 40609.9us
+Solution of weak learner 1: 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 8511.6us
+Solution of weak learner 2: 2 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 19378.3us
+Mean solution: 0.666667 0.333333 0 0.666667 0 0 0 0 0 0.666667 0 0.666667 0 0.666667 0.666667 0.333333 0 
+Errors by mean: 4
+Majority solution: 1 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 68561.7us
+
+1 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Solution of weak learner 0: 2 1 0 0 0 0 0 1 0 1 0 1 0 0 1 
+Valid solution: true
+Weak learner 0 runtime: 18171.6us
+Solution of weak learner 1: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 7209.84us
+Solution of weak learner 2: 3 1 0 0 0 0 0 0 1 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 1652.95us
+Mean solution: 0.333333 0.333333 0.333333 0.666667 0 0 0 0 0 0.666667 0.333333 0.666667 0 0.666667 0.666667 0 0.333333 
+Errors by mean: 101
+Majority solution: 3 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 27095.8us
+
+3 1 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+Valid solution: true
+Weak learner 0 runtime: 4168.43us
+Solution of weak learner 1: 2 0 0 0 0 1 0 0 0 0 1 0 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 6001.43us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 0 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 5477.54us
+Mean solution: 0.666667 0.333333 0 0 0 0 0 0.333333 0 0.333333 0 0 0.333333 0.333333 0 1 0.333333 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Errors by majority: 100
+All weak learners valid: true
+Wallclock runtime: 15710.9us
+
+1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Solution of weak learner 0: 1 1 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 14757.1us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 4223.54us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 0 1 0 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 2520.81us
+Mean solution: 0.666667 0.333333 0 0.333333 0 0 0 0 0 1 0 0.666667 0.333333 0.666667 0.333333 0 0 
+Errors by mean: 99
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 21563.4us
+
+1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 3 0 1 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 4362.36us
+Solution of weak learner 1: 1 0 0 0 0 0 0 0 0 1 0 1 0 1 1 
+Valid solution: true
+Weak learner 1 runtime: 3433.35us
+Solution of weak learner 2: 3 0 1 0 0 0 0 0 0 0 1 0 1 0 1 
+Valid solution: true
+Weak learner 2 runtime: 2180.08us
+Mean solution: 0.333333 0 0.666667 0 0.666667 0 0 0 0 0 0 0.333333 0.333333 0.333333 0.666667 0.333333 0.666667 
+Errors by mean: 101
+Majority solution: 3 0 1 0 0 0 0 0 0 0 0 0 1 0 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 10036.4us
+
+3 0 1 0 0 0 0 0 0 0 0 0 1 0 1 
+Solution of weak learner 0: 1 0 1 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 28894.2us
+Solution of weak learner 1: 1 1 0 0 0 0 0 0 0 0 1 0 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 3449.49us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 39074.2us
+Mean solution: 0.666667 0.333333 0 0.333333 0.333333 0 0 0 0 0.666667 0 0.666667 0.333333 0.666667 0.333333 0.333333 0 
+Errors by mean: 96
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 71486.5us
+
+1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 2 1 0 0 0 0 0 0 0 0 0 0 1 0 0 
+Valid solution: true
+Weak learner 0 runtime: 9351.25us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 0 1 0 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 3881.32us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 15938.9us
+Mean solution: 0.333333 0.666667 0 0.333333 0 0 0 0 0 0.666667 0 0.333333 0.333333 0.333333 0.666667 0 0 
+Errors by mean: 97
+Majority solution: 2 0 0 0 0 0 0 1 0 0 0 0 1 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 29236.4us
+
+2 0 0 0 0 0 0 1 0 0 0 0 1 0 0 
+Solution of weak learner 0: 3 1 0 0 0 0 0 0 0 0 0 0 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 14628.2us
+Solution of weak learner 1: 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 4108.02us
+Solution of weak learner 2: 2 1 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 30205.3us
+Mean solution: 0.333333 0.333333 0.333333 1 0 0 0 0 0 0.333333 0 0.333333 0 0.333333 0 0.333333 0 
+Errors by mean: 101
+Majority solution: 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 49006.6us
+
+1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Solution of weak learner 0: 1 0 1 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 16678.8us
+Solution of weak learner 1: 3 0 1 0 0 0 0 0 0 0 1 0 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 2883.27us
+Solution of weak learner 2: 2 0 0 0 0 0 0 0 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 2 runtime: 4444.2us
+Mean solution: 0.333333 0.333333 0.333333 0 0.666667 0 0 0 0 0.333333 0 0.666667 0.333333 0.666667 0.333333 0 0 
+Errors by mean: 101
+Majority solution: 3 0 1 0 0 0 0 0 0 1 0 1 0 0 0 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 24096.9us
+
+3 0 1 0 0 0 0 0 0 1 0 1 0 0 0 
+Solution of weak learner 0: 1 0 1 0 0 0 0 1 0 0 1 0 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 1662us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 27612.7us
+Solution of weak learner 2: 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 8918.78us
+Mean solution: 0.666667 0.333333 0 0 0.333333 0 0 0 0.333333 0.666667 0 0.333333 0.333333 0.333333 0 0.333333 0 
+Errors by mean: 99
+Majority solution: 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 
+Errors by majority: 96
+All weak learners valid: true
+Wallclock runtime: 38256.2us
+
+1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 
+Solution of weak learner 0: 1 0 0 0 0 0 0 1 0 1 0 1 1 0 1 
+Valid solution: true
+Weak learner 0 runtime: 12580.4us
+Solution of weak learner 1: 2 0 0 0 0 0 0 0 0 0 0 1 0 0 0 
+Valid solution: true
+Weak learner 1 runtime: 14147.6us
+Solution of weak learner 2: 3 1 0 0 0 0 0 0 0 0 0 0 1 0 1 
+Valid solution: true
+Weak learner 2 runtime: 14331.2us
+Mean solution: 0.333333 0.333333 0.333333 0.333333 0 0 0 0 0 0.333333 0 0.333333 0 0.666667 0.666667 0 0.666667 
+Errors by mean: 101
+Majority solution: 1 0 0 0 0 0 0 0 0 0 0 1 1 0 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 41120.2us
+
+1 0 0 0 0 0 0 0 0 0 0 1 1 0 1 
+Solution of weak learner 0: 1 1 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 0 runtime: 14412.1us
+Solution of weak learner 1: 2 0 0 0 0 0 0 1 0 1 0 1 1 0 0 
+Valid solution: true
+Weak learner 1 runtime: 6984.63us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 14129.1us
+Mean solution: 0.666667 0.333333 0 0.333333 0 0 0 0 0 1 0 1 0 1 0.333333 0.666667 0 
+Errors by mean: 0
+Majority solution: 1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 35694.8us
+
+1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Solution of weak learner 0: 3 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 0 runtime: 8900.3us
+Solution of weak learner 1: 2 0 0 0 0 0 0 0 0 0 0 1 0 1 0 
+Valid solution: true
+Weak learner 1 runtime: 5023.39us
+Solution of weak learner 2: 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Valid solution: true
+Weak learner 2 runtime: 50469.6us
+Mean solution: 0.333333 0.333333 0.333333 0 0 0 0 0 0 0.666667 0 0.666667 0 1 0 0.333333 0 
+Errors by mean: 101
+Majority solution: 2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Errors by majority: 0
+All weak learners valid: true
+Wallclock runtime: 64453.8us
+
+2 0 0 0 0 0 0 1 0 1 0 1 0 0 0 
+Solution of weak learner 0: 3 0 0 0 0 0 0 0 0 1 0 1 0 0 1 
+Valid solution: true
+Weak learner 0 runtime: 4004.83us
+Solution of weak learner 1: 3 1 0 0 0 0 0 0 1 0 0 1 0 1 1 
+Valid solution: true
+Weak learner 1 runtime: 2254.71us
+Solution of weak learner 2: 2 0 0 0 0 0 0 1 0 1 0 1 0 1 0 
+Valid solution: true
+Weak learner 2 runtime: 9650.07us
+Mean solution: 0 0.333333 0.666667 0.333333 0 0 0 0 0 0.333333 0.333333 0.666667 0 1 0 0.666667 0.666667 
+Errors by mean: 101
+Majority solution: 3 0 0 0 0 0 0 0 0 1 0 1 0 1 1 
+Errors by majority: 101
+All weak learners valid: true
+Wallclock runtime: 15971.2us
+
+3 0 0 0 0 0 0 0 0 1 0 1 0 1 1 
