@@ -280,7 +280,9 @@ int main( int argc, char **argv )
 
 		std::chrono::time_point<std::chrono::steady_clock> start_program( std::chrono::steady_clock::now() );
 		std::chrono::duration<double,std::micro> elapsed_time_program( 0 );
-			
+
+		// So far with GHOST v2.8, there is no default Solver constructor.
+		// The unique constructor requires a Builder as parameter, so the two next lines are necessary.
 		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable, parameter );
 		ghost::Solver solver( builder );
 

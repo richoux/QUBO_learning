@@ -66,6 +66,7 @@ int main( int argc, char **argv )
 	std::ifstream training_data_file;
 	std::ifstream check_file;
 
+	bool custom_number_samples = false;
 	bool custom_starting_point;
 	size_t number_samples = 0;
 	int number_remains_to_sample = 0;
@@ -83,7 +84,7 @@ int main( int argc, char **argv )
 	std::vector<int> solution;
 
 	randutils::mt19937_rng rng;
-	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-ps", "--percent", "-c", "--check", "-r", "--result", "-m", "--matrix" } );
+	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-n", "--number", "-ps", "--percent", "-c", "--check", "-r", "--result", "-m", "--matrix" } );
 	cmdl.parse( argc, argv );
 	
 	if( cmdl[ {"-h", "--help"} ] )
@@ -98,11 +99,24 @@ int main( int argc, char **argv )
 		return EXIT_FAILURE;
 	}
 
+	if( cmdl( {"n", "number"} ) && cmdl( {"ps", "percent"} ) )
+	{
+		std::cout << "Invalid arguments: -n/--number and -ps/--percent are mutually exclusive.\n";
+		usage( argv );
+		return EXIT_FAILURE;
+	}
+
+	if( cmdl( {"n", "number"} ) )
+	{
+		custom_number_samples = true;
+	}
+	
 	cmdl( {"f", "file"} ) >> training_data_file_path;
 	cmdl( {"r", "result"}, "" ) >> result_file_path;
 	cmdl( {"c", "check"}, "" ) >> check_file_path;
 	cmdl( {"m", "matrix"}, "" ) >> matrix_file_path;
 	cmdl( {"t", "timeout"}, 1 ) >> time_budget;
+	cmdl( {"n", "number"} ) >> number_samples;
 	cmdl( {"ps", "percent"}, 100 ) >> percent_training_set;
 	time_budget *= 1000000; // GHOST needs microseconds
 	cmdl[ {"-s", "--samestart"} ] ? custom_starting_point = true : custom_starting_point = false;
@@ -141,7 +155,8 @@ int main( int argc, char **argv )
 	}
 
 	training_data_file.close();
-	number_samples = static_cast<int>( ( total_training_set_size * percent_training_set ) / 100 );
+	if( !custom_number_samples )
+		number_samples = static_cast<int>( ( total_training_set_size * percent_training_set ) / 100 );
 
 	if( check_file_path != "" )
 	{
@@ -222,7 +237,8 @@ int main( int argc, char **argv )
 			std::iota( indexes.begin(), indexes.end(), 0 );
 				
 			if( debug )
-				std::cout << "List of sampled candidates:\n";
+				std::cout << "Sampling " << percent_training_set << "% of the training set\n"
+				          << "List of sampled candidates:\n";
 
 			int number_positive_candidates = 0;
 
@@ -271,11 +287,60 @@ int main( int argc, char **argv )
 		}
 		else
 		{
-			samples.resize( total_training_set_size * ( number_variables + additional_variable ) );
-			std::copy( candidates.begin(), candidates.end(), samples.begin() );
+			if( custom_number_samples )
+			{
+				if( debug )
+					std::cout << "Sampling " << number_samples << " candidates for the training set\n"
+					          << "List of sampled candidates:\n";
+										
+				std::vector<int> indexes( total_training_set_size );
+				std::iota( indexes.begin(), indexes.end(), 0 );
+				int number_positive = static_cast<int>( std::ceil( static_cast<double>( number_samples ) / 2 ) );
+				int number_negative = static_cast<int>( std::floor( static_cast<double>( number_samples ) / 2 ) );
+				
+				rng.shuffle( indexes );
+				
+				int i = 0;
+				int count_positive = 0;
+				int count_negative = 0;
+				
+				while( count_positive < number_positive || count_negative < number_negative )
+				{
+					if( labels[ indexes[i] ] == 0 && count_positive < number_positive ) // if candidate[i] is positive and we still need some
+					{
+						std::copy_n( candidates.begin() + ( indexes[i] * ( number_variables + additional_variable ) ), number_variables + additional_variable, std::back_inserter( samples ) );
+						sampled_labels.push_back( 0 );
+						++count_positive;
+					}
+					
+					if( labels[ indexes[i] ] == 1 && count_negative < number_negative ) // if candidate[i] is negative and we still need some
+					{
+						std::copy_n( candidates.begin() + ( indexes[i] * ( number_variables + additional_variable ) ), number_variables + additional_variable, std::back_inserter( samples ) );
+						sampled_labels.push_back( 1 );
+						++count_negative;
+					}
+					
+					++i;
+				}
 
-			sampled_labels.resize( total_training_set_size );
-			std::copy( labels.begin(), labels.end(), sampled_labels.begin() );
+				if( debug )
+				{
+					for( int i = 0 ; i < number_samples ; ++i )
+					{
+						std::copy_n( samples.begin() + ( i * ( number_variables + additional_variable ) ), number_variables + additional_variable, std::ostream_iterator<int>( std::cout, " " ) );
+						std::cout << ": " << sampled_labels[ i ] << "\n";
+					}
+					std::cout << "\n";
+				}
+			}
+			else
+			{			
+				samples.resize( total_training_set_size * ( number_variables + additional_variable ) );
+				std::copy( candidates.begin(), candidates.end(), samples.begin() );
+				
+				sampled_labels.resize( total_training_set_size );
+				std::copy( labels.begin(), labels.end(), sampled_labels.begin() );
+			}
 		}
 
 		if( debug )
