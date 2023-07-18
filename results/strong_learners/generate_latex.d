@@ -26,18 +26,19 @@ int main( string[] args )
 	if( !endsWith( path, "/" ) )
 		path ~= "/";
 
-	string caption = "Strong learners success rate and statistics of their training and test errors over 100 runs. ";
+	string caption_errors = "Strong learners success rate and statistics of their training and test errors over 100 runs. ";
+	string caption_solutions = "Strong learners solutions and their statistics over 100 runs. ";
 
 	string output_name = "";
 	if( canFind( path, "random" ) )
 	{
 		output_name ~= "random";
-		caption ~= "Random starting point, ";
+		caption_errors ~= "Random starting point, ";
 	}
 	else
 	{
 		output_name ~= "same";
-		caption ~= "Fixed starting point, ";
+		caption_errors ~= "Fixed starting point, ";
 	}
 	
 	string sampled = "";
@@ -45,23 +46,23 @@ int main( string[] args )
 	{
 		sampled = "n";
 		output_name ~= "_sampled";
-		caption ~= "sampled training set, ";
+		caption_errors ~= "sampled training set, ";
 	}
 	else
 	{
 		output_name ~= "_fixed";
-		caption ~= "fixed training set, ";
+		caption_errors ~= "fixed training set, ";
 	}
 	
 	if( canFind( path, "sat" ) )
 	{
 		output_name ~= "_sat.tex";
-		caption ~= "satisfaction runs.";
+		caption_errors ~= "satisfaction runs.";
 	}
 	else
 	{
 		output_name ~= "_opt.tex";
-		caption ~= "optimization runs.";
+		caption_errors ~= "optimization runs.";
 	}
 		
 	auto output = File( output_name, "w" );
@@ -84,6 +85,8 @@ int main( string[] args )
 	double[5][5] std_training;
 	double[5][5] std_test;
 
+	string[10][string][5] solutions;
+	
 	foreach( index_c, constraint; ["alldiff-12_12_","ordered-12_12_","linear_equation-12_12_72_","no_overlap_1D-8_35_3_","channel-12_12_"] )
 	{
 		foreach( index_n, n; [1,2,3,4,5] )
@@ -92,7 +95,7 @@ int main( string[] args )
 			if( sampled == "n" )
 				samples *= 2;
 				
-			auto command = "./analyse_results.d " ~ path ~ constraint ~ sampled ~ to!string(samples) ~ " sumup";
+			auto command = "./analyse_results.d " ~ path ~ constraint ~ sampled ~ to!string(samples);
 			auto buf = executeShell( command );
 			auto lines = buf.output.split("\n");
 
@@ -105,8 +108,24 @@ int main( string[] args )
 				if( startsWith( line, "Training success rate" ) )
 					success_training[index_c][index_n] = to!double(words[1]);
 
+				if( startsWith( line, "Training solution" ) )
+				{
+					string solution = (words[0].replace("Training solution ", "")).replace("  success rate", "");
+					if( ! ( solution in solutions[index_c] ) )
+						solutions[index_c][solution] = new string[10]; 
+					solutions[index_c][solution][index_n] = to!string(words[1]);
+				}
+				
 				if( startsWith( line, "Test success rate" ) )
 					success_test[index_c][index_n] = to!double(words[1]);
+
+				if( startsWith( line, "Test solution" ) )
+				{
+					string solution = (words[0].replace("Test solution ", "")).replace("  success rate", "");
+					if( ! ( solution in solutions[index_c] ) )
+						solutions[index_c][solution] = new string[10]; 
+					solutions[index_c][solution][index_n+5] = to!string(words[1]);
+				}
 
 				if( startsWith( line, "Mean training error" ) )
 					mean_training[index_c][index_n] = to!double(words[1]);
@@ -144,7 +163,7 @@ int main( string[] args )
 	output.write("
 \\begin{table*}[h]
   \\small
-  \\caption{", caption, "}
+  \\caption{", caption_errors, "}
   \\begin{center}
     \\begin{tabular}{|c|c||r|r|r|r|r||r|r|r|r|r|}
       \\cline{3-12}
@@ -198,6 +217,44 @@ int main( string[] args )
 		output.writeln( line_min );
 		output.writeln( line_max );
 		output.writeln( line_std );
+		output.writeln("      \\hline");
+	}
+
+	output.write("      \\end{tabular}
+  \\end{center}
+\\end{table*}\n\n\n");
+
+	output.write("
+\\begin{table*}[h]
+  \\small
+  \\caption{", caption_solutions, "}
+  \\begin{center}
+    \\begin{tabular}{|c|c||r|r|r|r|r||r|r|r|r|r|}
+      \\cline{3-12}
+      \\multicolumn{2}{c|}{} & \\multicolumn{5}{c||}{Training (train size)} & \\multicolumn{5}{c|}{Test (train size)}\\\\
+      \\cline{3-12}
+      \\multicolumn{2}{c|}{} & 2 & 4 & 6 & 8 & 10 & 2 & 4 & 6 & 8 & 10\\\\
+      \\hline
+");
+
+	foreach( index_c, constraint; ["AllDifferent","Ordered","Linear Equation","NoOverlap1D","Channel"] )
+	{
+		output.write("      \\parbox[t]{2mm}{\\multirow{6}{*}{\\rotatebox[origin=c]{90}{" , constraint, "}}} & ");
+
+		foreach( sol_key, sol_value; solutions[index_c] )
+		{
+			auto line = sol_key;
+	
+			foreach( index; [0,1,2,3,4,5,6,7,8,9] )
+			{
+				line ~= ( " & " ~ to!string( sol_value[index] ) );
+			}
+						
+			line ~= "\\\\\n";
+
+			output.writeln( line );
+		}
+		
 		output.writeln("      \\hline");
 	}
 
