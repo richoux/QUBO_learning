@@ -221,8 +221,8 @@ int main( string[] args )
 
 	if( verbose )
 		writeln("*** Training results ***");
-	writeln("Majority training success rate: ", success_training_majority );
-	writeln("Mean training success rate: ", success_training_mean );
+	writeln("Training majority success rate: ", success_training_majority );
+	writeln("Training mean success rate: ", success_training_mean );
 	if( verbose )
 	{
 		writeln();
@@ -231,7 +231,7 @@ int main( string[] args )
 			uint success = 0;
 			if( key in success_training_majority_per_solution )
 				success = success_training_majority_per_solution[key];
-			writeln("Majority ", key, " training success rate: ", success, "/", value );
+			writeln("Training majority solution ", key, " success rate: ", success, "/", value );
 		}
 		
 		writeln();
@@ -240,7 +240,7 @@ int main( string[] args )
 			uint success = 0;
 			if( key in success_training_mean_per_solution )
 				success = success_training_mean_per_solution[key];
-			writeln("Mean ", key, " training success rate: ", success, "/", value );
+			writeln("Training mean solution ", key, " success rate: ", success, "/", value );
 		}
 	}
 
@@ -305,8 +305,8 @@ int main( string[] args )
 
 	if( verbose )
 		writeln("\n\n*** Test results ***");
-	writeln("Majority test success rate: ", success_test_majority );
-	writeln("Mean test success rate: ", success_test_mean );
+	writeln("Test majority success rate: ", success_test_majority );
+	writeln("Test mean success rate: ", success_test_mean );
 	if( verbose )
 	{
 		writeln();
@@ -315,7 +315,7 @@ int main( string[] args )
 			uint success = 0;
 			if( key in success_test_majority_per_solution )
 				success = success_test_majority_per_solution[key];
-			writeln("Majority ", key, " test success rate: ", success, "/", value );
+			writeln("Test majority solution ", key, " success rate: ", success, "/", value );
 		}
 		
 		writeln();
@@ -324,7 +324,7 @@ int main( string[] args )
 			uint success = 0;
 			if( key in success_test_mean_per_solution )
 				success = success_test_mean_per_solution[key];
-			writeln("Mean ", key, " test success rate: ", success, "/", value );
+			writeln("Test mean solution ", key, " success rate: ", success, "/", value );
 		}
 	}
 
