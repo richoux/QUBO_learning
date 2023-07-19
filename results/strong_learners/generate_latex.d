@@ -4,6 +4,7 @@ import std.stdio;
 import std.string;
 import std.math;
 import std.algorithm;
+import std.uni: isWhite;
 import std.conv;
 import std.process;
 
@@ -27,7 +28,7 @@ int main( string[] args )
 		path ~= "/";
 
 	string caption_errors = "Strong learners success rate and statistics of their training and test errors over 100 runs. ";
-	string caption_solutions = "Strong learners solutions and their statistics over 100 runs. ";
+	string caption_solutions = "Strong learners solutions and their statistics over 100 runs ";
 
 	string output_name = "";
 	if( canFind( path, "random" ) )
@@ -85,10 +86,10 @@ int main( string[] args )
 	double[5][5] std_training;
 	double[5][5] std_test;
 
-	string[10][string][5] solutions;
-	
+	string[][string][5] solutions; // array of 5 constraints (index) of associative arrays (solutions) of arrays of strings (training size)
+
 	foreach( index_c, constraint; ["alldiff-12_12_","ordered-12_12_","linear_equation-12_12_72_","no_overlap_1D-8_35_3_","channel-12_12_"] )
-	{
+	{		
 		foreach( index_n, n; [1,2,3,4,5] )
 		{
 			double samples = n;
@@ -103,17 +104,16 @@ int main( string[] args )
 			{
 				auto words = line.split(": ");
 
-				//writeln("words[1]=", words[1], ", constraint=", index_c, ", index_n=", index_n);
-				
 				if( startsWith( line, "Training success rate" ) )
 					success_training[index_c][index_n] = to!double(words[1]);
 
 				if( startsWith( line, "Training solution" ) )
 				{
-					string solution = (words[0].replace("Training solution ", "")).replace("  success rate", "");
-					if( ! ( solution in solutions[index_c] ) )
-						solutions[index_c][solution] = new string[10]; 
-					solutions[index_c][solution][index_n] = to!string(words[1]);
+					string solution = to!string(((words[0].replace("Training solution ", "")).replace("  success rate", "")).filter!(c => !c.isWhite));
+					if( solution !in solutions[index_c] )					
+						solutions[index_c][solution] = new string[10];
+
+					solutions[index_c][solution][index_n] = words[1];					
 				}
 				
 				if( startsWith( line, "Test success rate" ) )
@@ -121,10 +121,11 @@ int main( string[] args )
 
 				if( startsWith( line, "Test solution" ) )
 				{
-					string solution = (words[0].replace("Test solution ", "")).replace("  success rate", "");
-					if( ! ( solution in solutions[index_c] ) )
-						solutions[index_c][solution] = new string[10]; 
-					solutions[index_c][solution][index_n+5] = to!string(words[1]);
+					string solution = to!string(((words[0].replace("Test solution ", "")).replace("  success rate", "")).filter!(c => !c.isWhite));
+					if( solution !in solutions[index_c] )					
+						solutions[index_c][solution] = new string[10];
+
+					solutions[index_c][solution][index_n+5] = words[1];					
 				}
 
 				if( startsWith( line, "Mean training error" ) )
@@ -160,8 +161,7 @@ int main( string[] args )
 		}
 	}	
 	
-	output.write("
-\\begin{table*}[h]
+	output.write("\\begin{table*}[h]
   \\small
   \\caption{", caption_errors, "}
   \\begin{center}
@@ -204,12 +204,12 @@ int main( string[] args )
 			line_std ~= ( " & \\cellcolor{LightCyan}" ~ to!string( std_test[index_c][index] ) );
 		}
 
-		line_rate ~= "\\\\\n";
-		line_mean ~= "\\\\\n";
-		line_median ~= "\\\\\n";
-		line_min ~= "\\\\\n";
-		line_max ~= "\\\\\n";
-		line_std ~= "\\\\\n";
+		line_rate ~= "\\\\";
+		line_mean ~= "\\\\";
+		line_median ~= "\\\\";
+		line_min ~= "\\\\";
+		line_max ~= "\\\\";
+		line_std ~= "\\\\";
 
 		output.writeln( line_rate );
 		output.writeln( line_mean );
@@ -220,47 +220,54 @@ int main( string[] args )
 		output.writeln("      \\hline");
 	}
 
-	output.write("      \\end{tabular}
+	output.writeln("      \\end{tabular}
   \\end{center}
-\\end{table*}\n\n\n");
-
-	output.write("
-\\begin{table*}[h]
-  \\small
-  \\caption{", caption_solutions, "}
-  \\begin{center}
-    \\begin{tabular}{|c|c||r|r|r|r|r||r|r|r|r|r|}
-      \\cline{3-12}
-      \\multicolumn{2}{c|}{} & \\multicolumn{5}{c||}{Training (train size)} & \\multicolumn{5}{c|}{Test (train size)}\\\\
-      \\cline{3-12}
-      \\multicolumn{2}{c|}{} & 2 & 4 & 6 & 8 & 10 & 2 & 4 & 6 & 8 & 10\\\\
-      \\hline
-");
+\\end{table*}");
 
 	foreach( index_c, constraint; ["AllDifferent","Ordered","Linear Equation","NoOverlap1D","Channel"] )
 	{
-		output.write("      \\parbox[t]{2mm}{\\multirow{6}{*}{\\rotatebox[origin=c]{90}{" , constraint, "}}} & ");
+			output.write("
+\\afterpage{%
+  \\clearpage%
+  \\thispagestyle{empty}%
+  \\begin{landscape}
+  \\begin{table*}[h]
+    \\small
+    \\caption{", caption_solutions, "for the constraint ", constraint, ".}
+    \\begin{center}
+      \\begin{tabular}{|c|c||c|c|c|c|c||c|c|c|c|c|}
+        \\cline{3-12}
+        \\multicolumn{2}{c|}{} & \\multicolumn{5}{c||}{Training (train size)} & \\multicolumn{5}{c|}{Test (train size)}\\\\
+        \\cline{3-12}
+        \\multicolumn{2}{c|}{} & 2 & 4 & 6 & 8 & 10 & 2 & 4 & 6 & 8 & 10\\\\
+        \\hline
+");
 
-		foreach( sol_key, sol_value; solutions[index_c] )
+		output.write("        \\parbox[t]{2mm}{\\multirow{", solutions[index_c].length, "}{*}{\\rotatebox[origin=c]{90}{" , constraint, "}}} ");
+
+		foreach( sol, values; solutions[index_c] )
 		{
-			auto line = sol_key;
+			auto line = "        & " ~ sol;
 	
 			foreach( index; [0,1,2,3,4,5,6,7,8,9] )
 			{
-				line ~= ( " & " ~ to!string( sol_value[index] ) );
+				line ~= ( " & " ~ to!string( values[index] ) );
 			}
 						
-			line ~= "\\\\\n";
+			line ~= "\\\\";
 
 			output.writeln( line );
 		}
 		
-		output.writeln("      \\hline");
-	}
+		output.writeln("        \\hline");
 
-	output.write("      \\end{tabular}
-  \\end{center}
-\\end{table*}\n\n\n");
+		output.writeln("        \\end{tabular}
+    \\end{center}
+  \\end{table*}
+  \\end{landscape}
+  \\clearpage%
+}");
+	}
 	
 	output.close();	
 	return 0;
