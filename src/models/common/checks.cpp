@@ -4,7 +4,6 @@
 #include <fstream>
 
 #include "checks.hpp"
-#include "matrix.hpp"
 
 void check_solution_block( const std::vector<int>& solution,
                            const std::vector<int>& samples,
@@ -18,10 +17,11 @@ void check_solution_block( const std::vector<int>& solution,
                            std::string result_file_path,
                            std::string matrix_file_path,
                            int parameter,
+                           Encoding *encoding,
                            bool full_check,
                            std::string suffix )
 {
-	Eigen::MatrixXi Q = fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
+	Eigen::MatrixXi Q = encoding->fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
 		
 	check_solution( Q,
 	                samples,
@@ -34,6 +34,7 @@ void check_solution_block( const std::vector<int>& solution,
 	                silent,
 	                matrix_file_path,
 	                parameter,
+	                encoding,
 	                full_check );
 	
 	if( result_file_path != "" )
@@ -62,14 +63,15 @@ void check_solution( const Eigen::MatrixXi& Q,
                      bool silent,
                      std::string matrix_file_path,
                      int parameter,
+                     Encoding *encoding,
                      bool full_check )
 {
 	if( silent )
 		full_check = false;
 		
-	size_t matrix_side = number_variables * domain_size;
-	if( complementary_variable )
-		++matrix_side;
+	// size_t matrix_side = number_variables * domain_size;
+	// if( complementary_variable )
+	// 	++matrix_side;
 	
 	int errors = 0;
 	int min_scalar = std::numeric_limits<int>::max();
@@ -81,14 +83,21 @@ void check_solution( const Eigen::MatrixXi& Q,
 
 	for( size_t index_sample = 0 ; index_sample < number_samples ; ++index_sample )
 	{
-		Eigen::VectorXi X = Eigen::VectorXi::Zero( matrix_side );
+		// Eigen::VectorXi X = Eigen::VectorXi::Zero( matrix_side );
 		
-		for( size_t index_var = 0 ; index_var < number_variables ; ++index_var )
-			X( index_var * domain_size + ( samples[ index_sample * ( number_variables + additional_variable ) + index_var ] - starting_value ) ) = 1;
+		// for( size_t index_var = 0 ; index_var < number_variables ; ++index_var )
+		// 	X( index_var * domain_size + ( samples[ index_sample * ( number_variables + additional_variable ) + index_var ] - starting_value ) ) = 1;
 
-		if( complementary_variable )
-			X( matrix_side - 1 ) = 1;
-		
+		// if( complementary_variable )
+		// 	X( matrix_side - 1 ) = 1;
+
+		Eigen::VectorXi X = encoding->fill_vector_from_samples( samples,
+		                                                        index_sample,
+		                                                        number_variables,
+		                                                        domain_size,
+		                                                        starting_value,
+		                                                        additional_variable );
+
 		scalars[ index_sample ] = ( X.transpose() * Q ) * X;
 		if( min_scalar > scalars[ index_sample ]	)
 			min_scalar = scalars[ index_sample ];		
@@ -162,10 +171,11 @@ void check_solution_block_reals( const std::vector<double>& solution,
                                  std::string result_file_path,
                                  std::string matrix_file_path,
                                  int parameter,
+                                 Encoding *encoding,
                                  bool full_check,
                                  std::string suffix )
 {
-	Eigen::MatrixXd Q = fill_matrix_reals( solution, number_variables, domain_size, starting_value, parameter );
+	Eigen::MatrixXd Q = encoding->fill_matrix_reals( solution, number_variables, domain_size, starting_value, parameter );
 		
 	check_solution_reals( Q,
 	                      samples,
@@ -178,6 +188,7 @@ void check_solution_block_reals( const std::vector<double>& solution,
 	                      silent,
 	                      matrix_file_path,
 	                      parameter,
+	                      encoding,
 	                      full_check );
 
 	if( result_file_path != "" )
@@ -206,14 +217,15 @@ void check_solution_reals( const Eigen::MatrixXd& Q,
                            bool silent,
                            std::string matrix_file_path,
                            int parameter,
+                           Encoding *encoding,
                            bool full_check )
 {
 	if( silent )
 		full_check = false;
 		
-	size_t matrix_side = number_variables * domain_size;
-	if( complementary_variable )
-		++matrix_side;
+	// size_t matrix_side = number_variables * domain_size;
+	// if( complementary_variable )
+	// 	++matrix_side;
 	
 	int errors = 0;
 	double min_scalar = std::numeric_limits<double>::max();
@@ -225,14 +237,21 @@ void check_solution_reals( const Eigen::MatrixXd& Q,
 
 	for( size_t index_sample = 0 ; index_sample < number_samples ; ++index_sample )
 	{
-		Eigen::VectorXd X = Eigen::VectorXd::Zero( matrix_side );
+		// Eigen::VectorXd X = Eigen::VectorXd::Zero( matrix_side );
 		
-		for( size_t index_var = 0 ; index_var < number_variables ; ++index_var )
-			X( index_var * domain_size + ( samples[ index_sample * ( number_variables + additional_variable ) + index_var ] - starting_value ) ) = 1;
+		// for( size_t index_var = 0 ; index_var < number_variables ; ++index_var )
+		// 	X( index_var * domain_size + ( samples[ index_sample * ( number_variables + additional_variable ) + index_var ] - starting_value ) ) = 1;
 
-		if( complementary_variable )
-			X( matrix_side - 1 ) = 1;
-		
+		// if( complementary_variable )
+		// 	X( matrix_side - 1 ) = 1;
+
+		Eigen::VectorXd X = encoding->fill_vector_reals_from_samples( samples,
+		                                                              index_sample,
+		                                                              number_variables,
+		                                                              domain_size,
+		                                                              starting_value,
+		                                                              additional_variable );
+
 		scalars[ index_sample ] = ( X.transpose() * Q ) * X;
 		if( min_scalar > scalars[ index_sample ]	)
 			min_scalar = scalars[ index_sample ];		

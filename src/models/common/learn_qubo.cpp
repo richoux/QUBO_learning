@@ -15,7 +15,10 @@
 #include <randutils.hpp>
 #include <Eigen/Dense>
 
-#include "matrix.hpp"
+#include "encoding.hpp"
+#include "onehot.hpp"
+#include "unary.hpp"
+
 #include "checks.hpp"
 #include "print_qubo.hpp"
 
@@ -24,8 +27,6 @@
 #else
 #include "builder_block_opt.hpp"
 #endif
-
-#define BLOCK_MODEL_SIZE 15 // directly linked to the number of patterns
 
 using namespace std::literals::chrono_literals;
 
@@ -41,6 +42,7 @@ void usage( char **argv )
 	     << "-r, --result RESULT_FILE, to write the solution in RESULT_FILE\n"
 	     << "-m, --matrix RESULT_FILE, to write the learned Q matrix in RESULT_FILE\n"
 	     << "-t, --timeout TIME_BUDGET, in seconds (1 by default)\n"
+	     << "-e, --encoding ENCODING_CODE, 0 for one-hot, 1 for unary (one-hot by default)\n"
 	     << "-b, --benchmark, to limit prints.\n"
 	     << "-ps, --percent PERCENT [--force_positive], to sample candidates from PERCENT of the training set (100 by default). --force_positive forces considering all positive candidates.\n"
 	     << "-n, --number NUMBER_SAMPLES, to sample NUMBER_SAMPLES candidates from the training set (the full set by default). Samples here are such that we got NUMBER_SAMPLES/2 positive and NUMBER_SAMPLES/2 negative candidates.\n"
@@ -81,10 +83,13 @@ int main( int argc, char **argv )
 	bool force_positive;
 	bool silent;
 
+	int encoding_type;
+	Encoding *encoding;
+	
 	std::vector<int> solution;
 
 	randutils::mt19937_rng rng;
-	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-n", "--number", "-ps", "--percent", "-c", "--check", "-r", "--result", "-m", "--matrix" } );
+	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-n", "--number", "-ps", "--percent", "-c", "--check", "-r", "--result", "-m", "--matrix", "-e", "--encoding" } );
 	cmdl.parse( argc, argv );
 	
 	if( cmdl[ {"-h", "--help"} ] )
@@ -117,6 +122,7 @@ int main( int argc, char **argv )
 	cmdl( {"m", "matrix"}, "" ) >> matrix_file_path;
 	cmdl( {"t", "timeout"}, 1 ) >> time_budget;
 	cmdl( {"n", "number"} ) >> number_samples;
+	cmdl( {"e", "encoding"}, 0 ) >> encoding_type;
 	cmdl( {"ps", "percent"}, 100 ) >> percent_training_set;
 	time_budget *= 1000000; // GHOST needs microseconds
 	cmdl[ {"-s", "--samestart"} ] ? custom_starting_point = true : custom_starting_point = false;
@@ -124,6 +130,15 @@ int main( int argc, char **argv )
 	cmdl[ {"-b", "--benchmark"} ] ? silent = true : silent = false;
 	cmdl[ {"--complementary"} ] ? complementary_variable = true : complementary_variable = false;
 	cmdl[ {"--force_positive"} ] ? force_positive = true : force_positive = false;
+
+	switch( encoding_type )
+	{
+	case 1:
+		encoding = new Unary();
+		break;
+	default:
+		encoding = new Onehot();
+	}
 	
 	training_data_file.open( training_data_file_path );
 	int value;
@@ -203,11 +218,12 @@ int main( int argc, char **argv )
 			getline( check_file, line );
 			std::stringstream line_stream( line );
 
-			solution.reserve( BLOCK_MODEL_SIZE );
-			for( int i = 0 ; i < BLOCK_MODEL_SIZE; ++i )
+			int number_patterns = encoding->number_square_patterns() + 1; // since triangle patterns are encoded on a unique variable
+			solution.reserve( number_patterns );
+			for( int i = 0 ; i < number_patterns; ++i )
 				line_stream >> solution[i];
 			
-			Q = fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
+			Q = encoding->fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
 		}
 		
 		check_file.close();
@@ -223,6 +239,7 @@ int main( int argc, char **argv )
 		                silent,
 		                "",
 		                parameter,
+		                encoding,
 		                false );
 	}
 	else
@@ -353,7 +370,7 @@ int main( int argc, char **argv )
 			          << ", Same starting point: " << std::boolalpha << custom_starting_point << "\n";
 		}
 			
-		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable, parameter );
+		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable, parameter, encoding );
 		ghost::Solver solver( builder );
 
 		double cost;
@@ -370,7 +387,8 @@ int main( int argc, char **argv )
 		if( !silent )
 		{
 			std::cout << "\nConstraints satisfied: " << std::boolalpha << solved << "\n"
-			          << "Objective function cost: " << cost << "\n";
+			          << "Objective function cost: " << cost << "\n"
+			          << encoding->name() << "\n";
 		}
 		
 		bool check = false;
@@ -390,7 +408,16 @@ int main( int argc, char **argv )
 		                      result_file_path,
 		                      matrix_file_path,
 		                      parameter,
+		                      encoding,
 		                      check );
+
+		if( !silent )
+		{
+			std::cout << "Solution\n";
+			for( int value : solution )
+				std::cout << value << " ";
+			std::cout << "\n";
+		}		
 #else
 		size_t matrix_side = number_variables * domain_size;
 		if( complementary_variable )
@@ -419,6 +446,7 @@ int main( int argc, char **argv )
 		                silent,
 		                matrix_file_path,
 		                parameter,
+		                encoding,
 		                check );
 #endif
 	}
