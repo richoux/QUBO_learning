@@ -2,7 +2,7 @@
 
 std::string Unary::name() {	return "Unary encoding"; }
 int Unary::number_triangle_patterns() { return 2; }
-int Unary::number_square_patterns() { return 13; }
+int Unary::number_square_patterns() { return 14; }
 
 Eigen::VectorXi Unary::fill_vector( const std::vector<int>& candidate,
                                      size_t domain_size,
@@ -104,12 +104,16 @@ Eigen::MatrixXi Unary::fill_matrix( const std::vector<int>& variables,
 				
 				if( variables[0] == 1 ) // linear combinatorics pattern
 				{
-					if( col == 0 ) // if this is the first element on the diagonal
-						Q( row, col ) += 1 - param_triangle; // this is equivalent to place param_triangle/n at every first element of triangle pattern positions x_i.x_i,
-					// but this way, it avoids eventual rounding errors due to the division.
-					else
-						Q( row, col ) += 1; // if future implementations would consider coefficients in the Linear Equation constraint,
-					// this 1 should be replaced bu the corresponding coefficient, as well as the 1 in column 0.
+					// first try
+					// if( col == 0 ) // if this is the first element on the diagonal
+					// 	Q( row, col ) += -param_triangle; // this is equivalent to place param_triangle/n at every first element of triangle pattern positions x_i.x_i,
+					// // but this way, it avoids eventual rounding errors due to the division.
+					// else
+					// 	Q( row, col ) += 1; // if future implementations would consider coefficients in the Linear Equation constraint,
+					// // this 1 should be replaced bu the corresponding coefficient, as well as the 1 in column 0.
+
+					// Q( row, col ) += ( row_domain + starting_value ) * ( row_domain + starting_value - 2*param_triangle );
+					Q( row, col ) += 1 - 2*param_triangle;
 				}
 			}
 			else // non-diagonal
@@ -117,7 +121,7 @@ Eigen::MatrixXi Unary::fill_matrix( const std::vector<int>& variables,
 				// Philippe's encoding
 				if( col == row  + 1 && col_domain > 0 )
 					Q( row, col ) += -1; // unary encoding constraint, non-diagonal part
-
+				
 				triangle_element = ( col < row + domain_size - row_domain ? true : false );
 				if( triangle_element )
 				{
@@ -126,9 +130,14 @@ Eigen::MatrixXi Unary::fill_matrix( const std::vector<int>& variables,
 					
 					// Flo's encoding
 					// Q( row, col ) += 2; // unary encoding constraint, triangle part
+
+					if( variables[0] == 1 ) // linear combinatorics pattern
+						Q( row, col ) += 2;
 				}
 				else
 				{
+					Q( row, col ) += 2 * variables[14]; // full-2 pattern
+
 					if( row_domain == col_domain ) // diagonal in each square patterns
 					{
 						Q( row, col ) += variables[4]; // less-than pattern
