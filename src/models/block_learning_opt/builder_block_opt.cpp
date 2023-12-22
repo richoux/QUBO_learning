@@ -14,7 +14,8 @@ BuilderQUBO::BuilderQUBO( const std::vector<int>& training_data,
                           int starting_value,
                           const std::vector<double>& error_vector,
                           bool complementary_variable,
-                          int parameter )
+                          int parameter,
+                          Encoding *encoding )
 	: ModelBuilder(),
 	  _training_data( training_data ),
 	  _size_training_set( number_samples ),
@@ -23,7 +24,8 @@ BuilderQUBO::BuilderQUBO( const std::vector<int>& training_data,
 	  _matrix_side( _candidate_length * _domain_size ),
 	  _starting_value( starting_value ),
 	  _error_vector( error_vector ),
-	  _parameter( parameter )
+	  _parameter( parameter ),
+	  _encoding( encoding )
 {
 	// for( int i = 0 ; i < number_samples ; ++i )
 	// {
@@ -35,23 +37,33 @@ BuilderQUBO::BuilderQUBO( const std::vector<int>& training_data,
 
 void BuilderQUBO::declare_variables()
 {
-	// The first variable encodes the half-block pattern
-	// The 14 following variables are Boolean and encode selected full-block patterns
+	// The first variable encodes triangle patterns
+	// For one-hot encoding: the 14 following variables are Boolean and encode selected square patterns
 	// Among these 14 variables, some are mutually exclusive (see LinearEquationEq constraints)
 
-	// half-block variable
-	/*
-	 * half-block domain
-	 * 
-	 * 1: 0 diagonal 
-	 * 2: -1 diagonal
-	 * 3: linear combinatorics -(2a-b_xi)b_xi
-	 *
-	 */	
-	variables.emplace_back( std::initializer_list<int>( {1, 2, 3} ) );
+	// For unary encoding: the 13 following variables are Boolean and encode selected square patterns
+	// Among these 13 variables, some are mutually exclusive (see LinearEquationEq constraints)
+
+	if( _encoding->number_triangle_patterns() == 3 )
+	{	
+		/*
+		 * triangle domain
+		 * 
+		 * 1: 0 diagonal 
+		 * 2: -1 diagonal
+		 * 3: linear combinatorics -(2a-b_xi)b_xi
+		 *
+		 */
+
+		variables.emplace_back( std::initializer_list<int>( {1, 2, 3} ) );
+	}
+	else // we consider there is only 2 triangle patterns, for unary encoding
+	{
+		variables.emplace_back( std::initializer_list<int>( {0, 1} ) );		
+	}
 
 	/*
-	 * full-block variables (indices)
+	 * square variables (indices)
 	 * 
 	 * ## comparison
 	 *  1: neq
@@ -69,10 +81,12 @@ void BuilderQUBO::declare_variables()
 	 * ## complex
 	 * 12: repel
 	 * 13: attract
+	 *
+	 * For one-hot encoding only:
 	 * 14: linear combinatorics (2.b_xi.b_xj
 	 *
 	 */	
-	for( size_t i = 0 ; i < 14 ; ++i )
+	for( int i = 0 ; i < _encoding->number_square_patterns() ; ++i )
 		variables.emplace_back( std::initializer_list<int>( {0, 1} ) );
 }
 
@@ -82,7 +96,7 @@ void BuilderQUBO::declare_constraints()
 	constraints.emplace_back( make_shared< ghost::global_constraints::LinearEquationLeq >( std::vector<int>{7,8}, 1 ) );
 	constraints.emplace_back( make_shared< ghost::global_constraints::LinearEquationLeq >( std::vector<int>{9,10}, 1 ) );
 	constraints.emplace_back( make_shared< ghost::global_constraints::LinearEquationLeq >( std::vector<int>{12,13}, 1 ) );
-	constraints.emplace_back( make_shared<TrainingSet>( variables, _training_data, _size_training_set, _candidate_length, _domain_size, _starting_value, _error_vector, _parameter ) );
+	constraints.emplace_back( make_shared<TrainingSet>( variables, _training_data, _size_training_set, _candidate_length, _domain_size, _starting_value, _error_vector, _parameter, _encoding ) );
 }
 
 void BuilderQUBO::declare_objective()

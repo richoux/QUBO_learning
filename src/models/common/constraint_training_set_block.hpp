@@ -5,6 +5,8 @@
 #include <ghost/variable.hpp>
 #include <ghost/constraint.hpp>
 
+#include "encoding.hpp"
+
 using namespace std;
 using namespace ghost;
 
@@ -12,7 +14,6 @@ class TrainingSet : public Constraint
 {
 	std::vector<int> _training_data;
 	mutable std::vector<int> _variable_values;
-	// mutable std::vector<int> _variable_values_for_delta;
 	size_t _size_training_set;
 	size_t _domain_size;
 	size_t _candidate_length;
@@ -21,6 +22,7 @@ class TrainingSet : public Constraint
 	                     // from starting_value to starting_value + domain_size.
 	std::vector<double> _error_vector;
 	int _parameter;
+	Encoding *_encoding;
 	
 	double compute_error( const std::vector<int>& variable_values ) const;
 	double required_error( const vector<Variable*>& variables ) const override;
@@ -34,5 +36,6 @@ public:
 	             size_t domain_size,
 	             int starting_value,
 	             const std::vector<double>& error_vector,
-	             int parameter );
+	             int parameter,
+	             Encoding *encoding );
 };

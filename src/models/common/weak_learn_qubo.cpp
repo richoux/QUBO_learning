@@ -15,7 +15,10 @@
 #include <randutils.hpp>
 #include <Eigen/Dense>
 
-#include "matrix.hpp"
+#include "encoding.hpp"
+#include "onehot.hpp"
+#include "unary.hpp"
+
 #include "checks.hpp"
 #include "print_qubo.hpp"
 
@@ -24,8 +27,6 @@
 #else
 #include "builder_block_opt.hpp"
 #endif
-
-#define BLOCK_MODEL_SIZE 15 // directly linked to the number of patterns
 
 using namespace std::literals::chrono_literals;
 
@@ -42,6 +43,7 @@ void usage( char **argv )
 	     << "-m, --matrix RESULT_FILE, to write the learned Q matrix in RESULT_FILE\n"
 	     << "-t, --timeout TIME_BUDGET, in seconds (1 by default)\n"
 	     << "-b, --benchmark, to limit prints.\n"
+	     << "-e, --encoding ENCODING_CODE, 0 for one-hot, 1 for unary (one-hot by default)\n"
 	     << "-n, --number NUMBER_SAMPLES, to sample NUMBER_SAMPLES random candidates from the training set. Samples here are such that we got NUMBER_SAMPLES/2 positive and NUMBER_SAMPLES/2 negative candidates.\n"
 	     << "-s, --samestart, to force weak learners to start from the same point in the search space\n"
 	     << "-w, --weak_learners NUMBER_LEARNERS, to learn NUMBER_LEARNERS Q matrices and merge them into an average matrix (disabled by default).\n"
@@ -81,6 +83,9 @@ int main( int argc, char **argv )
 	bool force_positive;
 	bool silent;
 
+	int encoding_type;
+	Encoding *encoding;
+	
 	std::vector<int> solution;
 
 	randutils::mt19937_rng rng;
@@ -110,6 +115,7 @@ int main( int argc, char **argv )
 	cmdl( {"m", "matrix"}, "" ) >> matrix_file_path;
 	cmdl( {"t", "timeout"}, 1 ) >> time_budget;
 	cmdl( {"n", "number"} ) >> number_samples;
+	cmdl( {"e", "encoding"}, 0 ) >> encoding_type;
 	cmdl( {"w", "weak_learners"}, 1 ) >> weak_learners;
 	time_budget *= 1000000; // GHOST needs microseconds
 	cmdl[ {"-s", "--samestart"} ] ? custom_starting_point = true : custom_starting_point = false;
@@ -123,7 +129,16 @@ int main( int argc, char **argv )
 		std::cout << "You must assign at least 2 weak learners.\n";
 		return EXIT_FAILURE;
 	}
-	
+
+	switch( encoding_type )
+	{
+	case 1:
+		encoding = new Unary();
+		break;
+	default:
+		encoding = new Onehot();
+	}
+
 	training_data_file.open( training_data_file_path );
 	int value;
 	double error;
@@ -173,12 +188,14 @@ int main( int argc, char **argv )
 			getline( check_file, line );
 			getline( check_file, line );
 			std::stringstream line_stream( line );
+
+			int number_patterns = encoding->number_square_patterns() + encoding->number_triangle_patterns();
 			
-			std::vector<double> solution_real( BLOCK_MODEL_SIZE + 2, 0. );
-			for( int i = 0 ; i < BLOCK_MODEL_SIZE + 2; ++i )
+			std::vector<double> solution_real( number_patterns, 0. );
+			for( int i = 0 ; i < number_patterns; ++i )
 				line_stream >> solution_real[i];
 			
-			Q = fill_matrix_reals( solution_real, number_variables, domain_size, starting_value, parameter );
+			Q = encoding->fill_matrix_reals( solution_real, number_variables, domain_size, starting_value, parameter );
 			
 			check_solution_reals( Q,
 			                      candidates,
@@ -191,6 +208,7 @@ int main( int argc, char **argv )
 			                      silent,
 			                      "",
 			                      parameter,
+			                      encoding,
 			                      false );
 		}
 		else
@@ -231,12 +249,14 @@ int main( int argc, char **argv )
 			{
 				getline( check_file, line );
 				std::stringstream line_stream( line );
-				
-				solution.reserve( BLOCK_MODEL_SIZE );
-				for( int i = 0 ; i < BLOCK_MODEL_SIZE; ++i )
+
+				int number_patterns = encoding->number_square_patterns() + 1; // since triangle patterns are encoded on a unique variable
+
+				solution.reserve( number_patterns );
+				for( int i = 0 ; i < number_patterns; ++i )
 					line_stream >> solution[i];
 				
-				Q = fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
+				Q = encoding->fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
 			}
 
 			check_solution( Q,
@@ -250,6 +270,7 @@ int main( int argc, char **argv )
 			                silent,
 			                "",
 			                parameter,
+			                encoding,
 			                false );		
 		}
 		
@@ -283,7 +304,7 @@ int main( int argc, char **argv )
 
 		// So far with GHOST v2.8, there is no default Solver constructor.
 		// The unique constructor requires a Builder as parameter, so the two next lines are necessary.
-		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable, parameter );
+		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable, parameter, encoding );
 		ghost::Solver solver( builder );
 
 		double cost;
@@ -332,7 +353,7 @@ int main( int argc, char **argv )
 					++i;
 				}
 				
-				BuilderQUBO builder( sub_samples, number_samples, number_variables, domain_size, starting_value, sub_sampled_labels, complementary_variable, parameter );
+				BuilderQUBO builder( sub_samples, number_samples, number_variables, domain_size, starting_value, sub_sampled_labels, complementary_variable, parameter, encoding );
 				solver = Solver( builder );
 			}
 
@@ -350,50 +371,65 @@ int main( int argc, char **argv )
 		}
 
 		// mean solution
-		std::vector<double> mean_solution( BLOCK_MODEL_SIZE + 2, 0 );
+		int number_patterns = encoding->number_square_patterns() + encoding->number_triangle_patterns();
+		std::vector<double> mean_solution( number_patterns, 0 );
 		// for( auto& sol : solutions )
 		// 	std::transform( sol.cbegin(), sol.cend(), mean_solution.cbegin(), mean_solution.begin(), std::plus<>{} );
 		for( int i = 0 ; i < weak_learners ; ++i )
 		{
-		
-			switch( solutions[i][0] )
-			{
-			case 1:
-				mean_solution[0] += 1;
-				break;
-			case 2:
-				mean_solution[1] += 1;
-				break;
-			default:
-				mean_solution[2] += 1;
-			}
+			if( encoding->number_triangle_patterns() == 3 )
+				switch( solutions[i][0] )
+				{
+				case 1:
+					mean_solution[0] += 1;
+					break;
+				case 2:
+					mean_solution[1] += 1;
+					break;
+				default:
+					mean_solution[2] += 1;
+				}
+			else // we assume there is just 2 patterns, like for unary encoding
+				switch( solutions[i][0] )
+				{
+				case 0:
+					mean_solution[0] += 1;
+					break;
+				case 1:
+					mean_solution[1] += 1;
+				}
 			
-			std::transform( solutions[i].cbegin()+1, solutions[i].cend(), mean_solution.cbegin()+3, mean_solution.begin()+3, std::plus<>{} );
+			std::transform( solutions[i].cbegin()+1, solutions[i].cend(), mean_solution.cbegin()+encoding->number_triangle_patterns(), mean_solution.begin()+encoding->number_triangle_patterns(), std::plus<>{} );
 		}
 
 		std::transform( mean_solution.cbegin(), mean_solution.cend(), mean_solution.begin(), [&](auto s){ return s / weak_learners; } );
 
 		// majority solution
-		std::vector<int> majority_solution( BLOCK_MODEL_SIZE, 0 );
+		number_patterns = encoding->number_square_patterns() + 1; // since triangle patterns are encoded on a unique variable
+		std::vector<int> majority_solution( number_patterns, 0 );
 		int triangle_1 = 0;
 		int triangle_2 = 0;
 		int triangle_3 = 0;
 		int sum_element;
-			
-		for( int i = 0 ; i < BLOCK_MODEL_SIZE ; ++i )
+
+		bool has_3_triangle_patterns = encoding->number_triangle_patterns() == 3;
+		
+		for( int i = 0 ; i < number_patterns ; ++i )
 		{
 			sum_element = 0;
 			for( int s = 0 ; s < weak_learners ; ++s )
 			{
-				if( i == 0 )
+				if( i == 0 && has_3_triangle_patterns )
 				{
 					if( solutions[s][0] == 1 )
 						++triangle_1;
 					else
+					{
 						if( solutions[s][0] == 2 )
 							++triangle_2;
 						else
 							++triangle_3;
+					}				
 				}
 				else
 				{
@@ -402,7 +438,7 @@ int main( int argc, char **argv )
 				}
 			}
 
-			if( i == 0 )
+			if( i == 0 && has_3_triangle_patterns )
 			{
 				if( static_cast<double>( triangle_1 ) == ( static_cast<double>( weak_learners ) / 3 ) && static_cast<double>( triangle_2 ) == ( static_cast<double>( weak_learners ) / 3 ) ) // if we have a draw among triangle patterns, select one randomly
 				{
@@ -463,13 +499,13 @@ int main( int argc, char **argv )
 		}
 
 		// min solution
-		std::vector<int> min_solution( BLOCK_MODEL_SIZE, 0 );
+		std::vector<int> min_solution( number_patterns, 0 );
 		std::copy( solutions[0].begin(), solutions[0].end(), min_solution.begin() );
 		for( auto& sol : solutions )
 			std::transform( sol.cbegin(), sol.cend(), min_solution.cbegin(), min_solution.begin(), [](auto a, auto b){ return std::min(a,b); } );
 
 		// max solution
-		std::vector<int> max_solution( BLOCK_MODEL_SIZE, 0 );
+		std::vector<int> max_solution( number_patterns, 0 );
 		for( auto& sol : solutions )
 			std::transform( sol.cbegin(), sol.cend(), max_solution.cbegin(), max_solution.begin(), [](auto a, auto b){ return std::max(a,b); } );
 		
@@ -526,6 +562,7 @@ int main( int argc, char **argv )
 		                            result_file_path,
 		                            matrix_file_path,
 		                            parameter,
+		                            encoding,
 		                            check,
 		                            "_mean" );
 
@@ -544,6 +581,7 @@ int main( int argc, char **argv )
 		                      result_file_path,
 		                      matrix_file_path,
 		                      parameter,
+		                      encoding,
 		                      check,
 		                      "_majority" );
 // #else

@@ -1,18 +1,50 @@
-#include "matrix.hpp"
+#include "onehot.hpp"
 
-Eigen::VectorXi fill_vector( const std::vector<int>& candidate, size_t domain_size, int starting_value )
+std::string Onehot::name() { return "One-hot encoding"; }
+int Onehot::number_triangle_patterns() { return 3; }
+int Onehot::number_square_patterns() { return 14; }
+
+Eigen::VectorXi Onehot::fill_vector( const std::vector<int>& candidate,
+                                     size_t domain_size,
+                                     int starting_value,
+                                     int additional_variable )
 {
-	size_t candidate_length = candidate.size();
+	size_t candidate_length = candidate.size() ;
 
-	Eigen::VectorXi X = Eigen::VectorXi::Zero( candidate_length * domain_size );
+	Eigen::VectorXi X = Eigen::VectorXi::Zero( ( candidate_length + additional_variable ) * domain_size );
 
 	for( size_t index = 0 ; index < candidate_length ; ++index )
 		X( index * domain_size + ( candidate[ index ] - starting_value ) ) = 1;
 
+	if( additional_variable > 0 )
+		X( candidate_length ) = 1;
+
 	return X;
 }
 
-Eigen::MatrixXi fill_matrix( const std::vector<int>& variables, size_t candidate_length, size_t domain_size, int starting_value, int parameter )
+Eigen::VectorXd Onehot::fill_vector_reals( const std::vector<int>& candidate,
+                                           size_t domain_size,
+                                           int starting_value,
+                                           int additional_variable )
+{
+	size_t candidate_length = candidate.size() ;
+
+	Eigen::VectorXd X = Eigen::VectorXd::Zero( ( candidate_length + additional_variable ) * domain_size );
+
+	for( size_t index = 0 ; index < candidate_length ; ++index )
+		X( index * domain_size + ( candidate[ index ] - starting_value ) ) = 1;
+
+	if( additional_variable > 0 )
+		X( candidate_length ) = 1;
+
+	return X;
+}
+
+Eigen::MatrixXi Onehot::fill_matrix( const std::vector<int>& variables,
+                                     size_t candidate_length,
+                                     size_t domain_size,
+                                     int starting_value,
+                                     int parameter )
 {
 	size_t matrix_side;
 	matrix_side	= candidate_length * domain_size;
@@ -64,38 +96,27 @@ Eigen::MatrixXi fill_matrix( const std::vector<int>& variables, size_t candidate
 				{
 					if( row_domain == col_domain )
 					{
-						if( variables[1] == 1 ) // different pattern
-							Q( row, col ) += 1;
-						if( variables[4] == 1 ) // less-than pattern
-							Q( row, col ) += 1;
-						if( variables[6] == 1 ) // greater-than pattern
-							Q( row, col ) += 1;
+						Q( row, col ) += variables[1]; // different pattern
+						Q( row, col ) += variables[4]; // less-than pattern
+						Q( row, col ) += variables[6]; // greater-than pattern
 					}
 					if( row_domain < col_domain )
 					{
-						if( variables[2] == 1 ) // equality pattern
-							Q( row, col ) += 1;
-						if( variables[5] == 1 ) // greater-than-or-equals-to pattern
-							Q( row, col ) += 1;
-						if( variables[6] == 1 ) // greater-than pattern
-							Q( row, col ) += 1;
+						Q( row, col ) += variables[2]; // equality pattern
+						Q( row, col ) += variables[5]; // greater-than-or-equals-to pattern
+						Q( row, col ) += variables[6]; // greater-than pattern
 					}
 					if( row_domain > col_domain )
 					{
-						if( variables[2] == 1 ) // equality pattern
-							Q( row, col ) += 1;
-						if( variables[3] == 1 ) // less-than-or-equals-to pattern
-							Q( row, col ) += 1;
-						if( variables[4] == 1 ) // less-than pattern
-							Q( row, col ) += 1;
+						Q( row, col ) += variables[2]; // equality pattern
+						Q( row, col ) += variables[3]; // less-than-or-equals-to pattern
+						Q( row, col ) += variables[4]; // less-than pattern
 					}
 
 					if( row_variable == row_domain || col_variable == col_domain )
 					{
-						if( variables[7] == 1 ) // favor assigning the current position
-							Q( row, col ) += -1;
-						if( variables[8] == 1 ) // avoid assigning the current position
-							Q( row, col ) += 1;
+						Q( row, col ) += -variables[7]; // favor assigning the current position
+						Q( row, col ) += variables[8]; // avoid assigning the current position
 					}
 					
 					if( row_variable != row_domain &&
@@ -103,20 +124,15 @@ Eigen::MatrixXi fill_matrix( const std::vector<int>& variables, size_t candidate
 					    col_variable != row_domain &&
 					    col_variable != col_domain )
 					{
-						if( variables[9] == 1 ) // favor assigning a different position
-							Q( row, col ) += -1;
-						if( variables[10] == 1 ) // avoid assigning a different position
-							Q( row, col ) += 1;
+						Q( row, col ) += -variables[9]; // favor assigning a different position
+						Q( row, col ) += variables[10]; // avoid assigning a different position
 					}
 					
-					if( variables[11] == 1 ) // swap values pattern
-					{
-						if( row_variable == col_domain && col_variable == row_domain )
-							Q( row, col ) += -1;
-						else
-							if( row_variable == col_domain || col_variable == row_domain )
-								Q( row, col ) += 1;
-					}
+					if( row_variable == col_domain && col_variable == row_domain )
+						Q( row, col ) += -variables[11]; // swap values pattern
+					else
+						if( row_variable == col_domain || col_variable == row_domain )
+							Q( row, col ) += variables[11]; // swap values pattern
 
 					if( variables[12] == 1 ) // repel pattern
 					{
@@ -148,7 +164,11 @@ Eigen::MatrixXi fill_matrix( const std::vector<int>& variables, size_t candidate
 	return Q;
 }
 
-Eigen::MatrixXd fill_matrix_reals( const std::vector<double>& variables, size_t candidate_length, size_t domain_size, int starting_value, int parameter )
+Eigen::MatrixXd Onehot::fill_matrix_reals( const std::vector<double>& variables,
+                                           size_t candidate_length,
+                                           size_t domain_size,
+                                           int starting_value,
+                                           int parameter )
 {
 	size_t matrix_side;
 	matrix_side	= candidate_length * domain_size;

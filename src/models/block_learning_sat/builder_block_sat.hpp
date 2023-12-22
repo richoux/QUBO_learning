@@ -3,6 +3,8 @@
 #include <memory>
 #include <ghost/model_builder.hpp>
 
+#include "encoding.hpp"
+
 using namespace ghost;
 using namespace std;
 
@@ -16,6 +18,7 @@ class BuilderQUBO : public ModelBuilder
 	int _starting_value;
 	std::vector<double> _error_vector;
 	int _parameter;
+	Encoding *_encoding;
 	
 public:
 	BuilderQUBO( const std::vector<int>& training_data,
@@ -25,7 +28,8 @@ public:
 	             int starting_value,
 	             const std::vector<double>& error_vector,
 	             bool complementary_variable,
-	             int parameter );
+	             int parameter,
+	             Encoding *encoding );
 	
 	void declare_variables() override;
 	void declare_constraints() override;
