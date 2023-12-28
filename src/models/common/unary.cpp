@@ -89,6 +89,12 @@ Eigen::MatrixXi Unary::fill_matrix( const std::vector<int>& variables,
 			
 			if( col == row ) //diagonal
 			{
+				// Modified Philippe's encoding
+				if( row_domain == 0 )
+					Q( row, col ) += -1; // unary encoding constraint, diagonal part
+				else
+					Q( row, col ) += 1; // unary encoding constraint, diagonal part
+				
 				// JF's encoding
 				// Q( row, col ) += row_domain; // unary encoding constraint, diagonal part
 
@@ -99,8 +105,8 @@ Eigen::MatrixXi Unary::fill_matrix( const std::vector<int>& variables,
 				// Q( row, col ) += -sum + row_domain; // unary encoding constraint, diagonal part
 
 				// Philippe's encoding
-				if( col > 0 ) // if this is not the first element on the diagonal
-					Q( row, col ) += 1; // unary encoding constraint, diagonal part
+				// if( col > 0 ) // if this is not the first element on the diagonal
+				// 	Q( row, col ) += 1; // unary encoding constraint, diagonal part
 				
 				if( variables[0] == 1 ) // linear combinatorics pattern
 				{
