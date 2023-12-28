@@ -1,7 +1,7 @@
 #include "onehot.hpp"
 
 std::string Onehot::name() { return "One-hot encoding"; }
-int Onehot::number_triangle_patterns() { return 3; }
+int Onehot::number_triangle_patterns() { return 2; }
 int Onehot::number_square_patterns() { return 14; }
 
 Eigen::VectorXi Onehot::fill_vector( const std::vector<int>& candidate,
@@ -71,25 +71,23 @@ Eigen::MatrixXi Onehot::fill_matrix( const std::vector<int>& variables,
 			
 			if( col == row ) //diagonal
 			{
-				if( variables[0] == 2 ) // -1-diagonal pattern
-					Q( row, col ) += -1;
-				else
-					if( variables[0] == 3 ) // linear combinatorics pattern
-					{
-						if( parameter == std::numeric_limits<int>::max() )
-							param = 1;
-						else
-							param = parameter;
-							
-						Q( row, col ) += -( 2 * param - ( row_domain + starting_value ) ) * ( row_domain + starting_value );
-					}
+				Q( row, col ) += -1; // one-hot constraint
+				if( variables[0] == 1 ) // linear combinatorics pattern
+				{
+					if( parameter == std::numeric_limits<int>::max() )
+						param = 1;
+					else
+						param = parameter;
+					
+					Q( row, col ) += -( 2 * param - ( row_domain + starting_value ) ) * ( row_domain + starting_value );
+				}
 			}
 			else // non-diagonal
 			{
 				if( triangle_element )
 				{
 					Q( row, col ) += 2; // one-hot constraint
-					if( variables[0] == 3 ) // linear combinatorics pattern
+					if( variables[0] == 1 ) // linear combinatorics pattern
 						Q( row, col ) += 2 * ( row_domain + starting_value ) * ( col_domain + starting_value );
 				}
 				else // full-block
@@ -199,15 +197,15 @@ Eigen::MatrixXd Onehot::fill_matrix_reals( const std::vector<double>& variables,
 					param = 1;
 				else
 					param = parameter;
-				Q( row, col ) += (-1 * variables[1]); // -1-diagonal pattern
-				Q( row, col ) += (-( 2 * param - ( row_domain + starting_value ) ) * ( row_domain + starting_value ) * variables[2] ); // linear combinatorics pattern
+				Q( row, col ) += -1; // one-hot constraint
+				Q( row, col ) += (-( 2 * param - ( row_domain + starting_value ) ) * ( row_domain + starting_value ) * variables[0] ); // linear combinatorics pattern
 			}
 			else // non-diagonal
 			{
 				if( triangle_element )
 				{
 					Q( row, col ) += 2; // one-hot constraint
-					Q( row, col ) += ( 2 * ( row_domain + starting_value ) * ( col_domain + starting_value ) * variables[2] ); // linear combinatorics pattern
+					Q( row, col ) += ( 2 * ( row_domain + starting_value ) * ( col_domain + starting_value ) * variables[0] ); // linear combinatorics pattern
 				}
 				else // full-block
 				{
@@ -218,27 +216,27 @@ Eigen::MatrixXd Onehot::fill_matrix_reals( const std::vector<double>& variables,
 
 					if( row_domain == col_domain )
 					{
-						Q( row, col ) += variables[3]; // different pattern
-						Q( row, col ) += variables[6]; // less-than pattern
-						Q( row, col ) += variables[8]; // greater-than pattern
+						Q( row, col ) += variables[1]; // different pattern
+						Q( row, col ) += variables[4]; // less-than pattern
+						Q( row, col ) += variables[6]; // greater-than pattern
 					}
 					if( row_domain < col_domain )
 					{
-						Q( row, col ) += variables[4]; // equality pattern
-						Q( row, col ) += variables[7]; // greater-than-or-equals-to pattern
-						Q( row, col ) += variables[8]; // greater-than pattern
+						Q( row, col ) += variables[2]; // equality pattern
+						Q( row, col ) += variables[5]; // greater-than-or-equals-to pattern
+						Q( row, col ) += variables[6]; // greater-than pattern
 					}
 					if( row_domain > col_domain )
 					{
-						Q( row, col ) += variables[4]; // equality pattern
-						Q( row, col ) += variables[5]; // less-than-or-equals-to pattern
-						Q( row, col ) += variables[6]; // less-than pattern
+						Q( row, col ) += variables[2]; // equality pattern
+						Q( row, col ) += variables[3]; // less-than-or-equals-to pattern
+						Q( row, col ) += variables[4]; // less-than pattern
 					}
 
 					if( row_variable == row_domain || col_variable == col_domain )
 					{
-						Q( row, col ) -= variables[9]; // favor assigning the current position
-						Q( row, col ) += variables[10]; // avoid assigning the current position
+						Q( row, col ) -= variables[7]; // favor assigning the current position
+						Q( row, col ) += variables[8]; // avoid assigning the current position
 					}
 					
 					if( row_variable != row_domain &&
@@ -246,19 +244,19 @@ Eigen::MatrixXd Onehot::fill_matrix_reals( const std::vector<double>& variables,
 					    col_variable != row_domain &&
 					    col_variable != col_domain )
 					{
-						Q( row, col ) -= variables[11]; // favor assigning a different position
-						Q( row, col ) += variables[12]; // avoid assigning a different position
+						Q( row, col ) -= variables[9]; // favor assigning a different position
+						Q( row, col ) += variables[10]; // avoid assigning a different position
 					}
 					
 					if( row_variable == col_domain && col_variable == row_domain )
-						Q( row, col ) -= variables[13]; // swap values pattern
+						Q( row, col ) -= variables[11]; // swap values pattern
 					else
 						if( row_variable == col_domain || col_variable == row_domain )
-							Q( row, col ) += variables[13]; // swap values pattern
+							Q( row, col ) += variables[11]; // swap values pattern
 					
-					Q( row, col ) += ( std::max( 0, param - ( std::abs( col_domain - row_domain ) ) ) * variables[14] ); // repel pattern
-					Q( row, col ) += ( std::max( 0, std::abs( col_domain - row_domain ) - ( static_cast<int>( domain_size ) - 1 - param ) ) * variables[15] ); // attract pattern
-					Q( row, col ) += ( 2 * ( row_domain + starting_value ) * ( col_domain + starting_value ) * variables[16] ); // linear combinatorics pattern
+					Q( row, col ) += ( std::max( 0, param - ( std::abs( col_domain - row_domain ) ) ) * variables[12] ); // repel pattern
+					Q( row, col ) += ( std::max( 0, std::abs( col_domain - row_domain ) - ( static_cast<int>( domain_size ) - 1 - param ) ) * variables[13] ); // attract pattern
+					Q( row, col ) += ( 2 * ( row_domain + starting_value ) * ( col_domain + starting_value ) * variables[14] ); // linear combinatorics pattern
 				}
 			}
 		}
