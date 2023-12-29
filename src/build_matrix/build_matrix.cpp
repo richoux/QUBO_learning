@@ -7,12 +7,8 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
-#include <chrono>
-#include <limits>
 
-#include <ghost/solver.hpp>
 #include <argh.h>
-#include <randutils.hpp>
 #include <Eigen/Dense>
 
 #include "encoding.hpp"
@@ -20,8 +16,6 @@
 #include "unary.hpp"
 
 #include "checks.hpp"
-
-using namespace std::literals::chrono_literals;
 
 void usage( char **argv )
 {
