@@ -90,10 +90,10 @@ Eigen::MatrixXi Unary::fill_matrix( const std::vector<int>& variables,
 			if( col == row ) //diagonal
 			{
 				// Modified Philippe's encoding
-				if( row_domain == 0 )
-					Q( row, col ) += -1; // unary encoding constraint, diagonal part
-				else
-					Q( row, col ) += 1; // unary encoding constraint, diagonal part
+				// if( row_domain == 0 )
+				// 	Q( row, col ) += -domain_size; // unary encoding constraint, diagonal part
+				// else
+				// 	Q( row, col ) += domain_size; // unary encoding constraint, diagonal part
 				
 				// JF's encoding
 				// Q( row, col ) += row_domain; // unary encoding constraint, diagonal part
@@ -125,8 +125,8 @@ Eigen::MatrixXi Unary::fill_matrix( const std::vector<int>& variables,
 			else // non-diagonal
 			{
 				// Philippe's encoding
-				if( col == row  + 1 && col_domain > 0 )
-					Q( row, col ) += -1; // unary encoding constraint, non-diagonal part
+				// if( col == row  + 1 && col_domain > 0 )
+				// 	Q( row, col ) += -domain_size; // unary encoding constraint, non-diagonal part
 				
 				triangle_element = ( col < row + domain_size - row_domain ? true : false );
 				if( triangle_element )
@@ -314,6 +314,38 @@ Eigen::MatrixXi Unary::fill_matrix( const std::vector<int>& variables,
 					}
 				}
 			}
+		}
+	}
+
+	// unary patter with strong coefficients, regarding patterns composing the matrix.
+	int min = 0;
+	for( size_t col = 0 ; col < matrix_side ; ++col )
+	{
+		int sum = 0;
+		for( size_t row = 0 ; row <= col ; ++row )
+			if( Q( row, col ) < 0 )
+				sum += Q( row, col );
+		if( min > sum )
+			min = sum;
+	}
+	
+	for( size_t row = 0 ; row < matrix_side ; ++row )
+	{
+		row_domain = row % domain_size;
+		for( size_t col = row ; col < matrix_side ; ++col )
+		{
+			col_domain = col % domain_size;
+			
+			if( col == row ) //diagonal
+			{
+				if( row_domain == 0 )
+					Q( row, col ) += min - 1;
+				else
+					Q( row, col ) += -min + 1;
+			}
+			else // non-diagonal
+				if( col == row  + 1 && col_domain > 0 )
+					Q( row, col ) += min - 1;
 		}
 	}
 	
