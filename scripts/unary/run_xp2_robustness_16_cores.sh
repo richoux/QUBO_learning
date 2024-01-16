@@ -1,6 +1,7 @@
 #!/bin/bash
 
 EXE="../../bin/learn_q_opt"
+RESULTS="../../results/unary"
 
 CORE=$(grep -c '^processor' /proc/cpuinfo)
 if ! [[ ${CORE%.*} -eq 16 ]]; then
@@ -18,194 +19,172 @@ do
 		echo "*** $(($c*2)) candidates ***"
 		echo ""
 		echo "AllDiff"
-		>&2 echo ""
-		>&2 echo ""
-		>&2 echo "*** $(($c*2)) candidates ***"
-		>&2 echo ""
-		>&2 echo "AllDiff"
+
 		for i in {1..6}
 		do
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp01 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp01 --benchmark >> out_error_01 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp02 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp02 --benchmark >> out_error_02 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp03 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp03 --benchmark >> out_error_03 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp04 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp04 --benchmark >> out_error_04 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp05 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp05 --benchmark >> out_error_05 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp06 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp06 --benchmark >> out_error_06 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp07 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp07 --benchmark >> out_error_07 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp08 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp08 --benchmark >> out_error_08 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp09 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp09 --benchmark >> out_error_09 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp10 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp10 --benchmark >> out_error_10 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp11 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp11 --benchmark >> out_error_11 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp12 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp12 --benchmark >> out_error_12 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp13 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp13 --benchmark >> out_error_13 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp14 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp14 --benchmark >> out_error_14 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp15 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp15 --benchmark >> out_error_15 &
-				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp16 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp16 --benchmark >> out_error_16 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp01 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp02 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp03 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp04 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp05 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp06 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp07 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp08 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp09 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp10 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp11 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp12 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp13 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp14 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp15 &
+				$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp16 &
 				wait
 				>&2 echo "$((16*i))% done"
+				cat tmp?? >> "$RESULTS/alldiff-12_12_${c}_patterns"
 		done
-
-		$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp01 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp01 --benchmark >> out_error_01 &
-		$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp02 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp02 --benchmark >> out_error_02 &
-		$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp03 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp03 --benchmark >> out_error_03 &
-		$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" -r tmp04 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/alldiff-30_30.txt -c tmp04 --benchmark >> out_error_04 &
-		wait
 		
-		cat out_error_?? > out_error ; rm -f out_error_?? tmp??
-		BAD_LEARN=`awk -v count=0 '$4>0 {++count} END {print count}' out_error`
-		echo "Imperfect representations (bad learning): $BAD_LEARN"
-
-		rm -f out_error
-
+		$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp01 &
+		$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp02 &
+		$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp03 &
+		$EXE -e 1 -f "../../spaces/incomplete/alldiff-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp04 &
+		wait
+		cat tmp01 tmp02 tmp03 tmp04 >> "$RESULTS/alldiff-12_12_${c}_patterns"
+		sed -i 's/ //g' "$RESULTS/alldiff-12_12_${c}_patterns"
+		rm -f tmp??
+		
 		echo ""
 		echo "Ordered"
-		>&2 echo ""
-		>&2 echo "Ordered"
 		for i in {1..6}
 		do
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp01 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp01 --benchmark >> out_error_01 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp02 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp02 --benchmark >> out_error_02 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp03 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp03 --benchmark >> out_error_03 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp04 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp04 --benchmark >> out_error_04 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp05 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp05 --benchmark >> out_error_05 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp06 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp06 --benchmark >> out_error_06 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp07 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp07 --benchmark >> out_error_07 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp08 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp08 --benchmark >> out_error_08 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp09 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp09 --benchmark >> out_error_09 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp10 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp10 --benchmark >> out_error_10 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp11 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp11 --benchmark >> out_error_11 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp12 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp12 --benchmark >> out_error_12 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp13 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp13 --benchmark >> out_error_13 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp14 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp14 --benchmark >> out_error_14 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp15 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp15 --benchmark >> out_error_15 &
-				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp16 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp16 --benchmark >> out_error_16 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp01 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp02 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp03 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp04 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp05 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp06 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp07 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp08 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp09 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp10 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp11 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp12 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp13 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp14 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp15 &
+				$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp16 &
 				wait
 				>&2 echo "$((16*i))% done"
+				cat tmp?? >> "$RESULTS/ordered-12_12_${c}_patterns"
 		done
-
-		$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp01 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp01 --benchmark >> out_error_01 &
-		$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp02 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp02 --benchmark >> out_error_02 &
-		$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp03 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp03 --benchmark >> out_error_03 &
-		$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" -r tmp04 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/ordered-30_30.txt -c tmp04 --benchmark >> out_error_04 &
+		
+		$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp01 &
+		$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp02 &
+		$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp03 &
+		$EXE -e 1 -f "../../spaces/incomplete/ordered-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp04 &
 		wait
-
-		cat out_error_?? > out_error ; rm -f out_error_?? tmp??
-		BAD_LEARN=`awk -v count=0 '$4>0 {++count} END {print count}' out_error`
-		echo "Imperfect representations (bad learning): $BAD_LEARN"
-
-		rm -f out_error
+		cat tmp01 tmp02 tmp03 tmp04 >> "$RESULTS/ordered-12_12_${c}_patterns"
+		sed -i 's/ //g' "$RESULTS/ordered-12_12_${c}_patterns"
+		rm -f tmp??
 
 		echo ""
 		echo "LinearSum"
-		>&2 echo ""
-		>&2 echo "LinearSum"
 		for i in {1..6}
 		do
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp01 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp01 --benchmark >> out_error_01 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp02 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp02 --benchmark >> out_error_02 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp03 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp03 --benchmark >> out_error_03 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp04 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp04 --benchmark >> out_error_04 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp05 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp05 --benchmark >> out_error_05 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp06 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp06 --benchmark >> out_error_06 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp07 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp07 --benchmark >> out_error_07 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp08 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp08 --benchmark >> out_error_08 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp09 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp09 --benchmark >> out_error_09 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp10 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp10 --benchmark >> out_error_10 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp11 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp11 --benchmark >> out_error_11 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp12 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp12 --benchmark >> out_error_12 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp13 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp13 --benchmark >> out_error_13 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp14 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp14 --benchmark >> out_error_14 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp15 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp15 --benchmark >> out_error_15 &
-				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp16 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp16 --benchmark >> out_error_16 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp01 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp02 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp03 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp04 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp05 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp06 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp07 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp08 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp09 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp10 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp11 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp12 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp13 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp14 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp15 &
+				$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp16 &
 				wait
 				>&2 echo "$((16*i))% done"
+				cat tmp?? >> "$RESULTS/linear_equation-12_12_72_${c}_patterns"
 		done
 
-		$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp01 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp01 --benchmark >> out_error_01 &
-		$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp02 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp02 --benchmark >> out_error_02 &
-		$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp03 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp03 --benchmark >> out_error_03 &
-		$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" -r tmp04 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/linear_equation-30_30_600.txt -c tmp04 --benchmark >> out_error_04 &
+		$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp01 &
+		$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp02 &
+		$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp03 &
+		$EXE -e 1 -f "../../spaces/incomplete/linear_equation-12_12_72_$c.txt" 2> /dev/null | tail -n 1 1> tmp04 &
 		wait
-
-		cat out_error_?? > out_error ; rm -f out_error_?? tmp??
-		BAD_LEARN=`awk -v count=0 '$4>0 {++count} END {print count}' out_error`
-		echo "Imperfect representations (bad learning): $BAD_LEARN"
-
-		rm -f out_error
+		cat tmp01 tmp02 tmp03 tmp04 >> "$RESULTS/linear_equation-12_12_72_${c}_patterns"
+		sed -i 's/ //g' "$RESULTS/linear_equation-12_12_72_${c}_patterns"
+		rm -f tmp??
 
 		echo ""
 		echo "NoOverlap"
-		>&2 echo ""
-		>&2 echo "NoOverlap"
 		for i in {1..6}
 		do
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp01 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp01 --benchmark >> out_error_01 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp02 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp02 --benchmark >> out_error_02 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp03 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp03 --benchmark >> out_error_03 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp04 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp04 --benchmark >> out_error_04 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp05 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp05 --benchmark >> out_error_05 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp06 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp06 --benchmark >> out_error_06 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp07 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp07 --benchmark >> out_error_07 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp08 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp08 --benchmark >> out_error_08 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp09 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp09 --benchmark >> out_error_09 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp10 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp10 --benchmark >> out_error_10 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp11 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp11 --benchmark >> out_error_11 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp12 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp12 --benchmark >> out_error_12 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp13 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp13 --benchmark >> out_error_13 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp14 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp14 --benchmark >> out_error_14 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp15 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp15 --benchmark >> out_error_15 &
-				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp16 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp16 --benchmark >> out_error_16 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp01 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp02 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp03 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp04 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp05 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp06 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp07 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp08 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp09 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp10 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp11 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp12 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp13 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp14 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp15 &
+				$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp16 &
 				wait
 				>&2 echo "$((16*i))% done"
+				cat tmp?? >> "$RESULTS/no_overlap_1D-8_35_3_${c}_patterns"
 		done
 
-		$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp01 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp01 --benchmark >> out_error_01 &
-		$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp02 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp02 --benchmark >> out_error_02 &
-		$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp03 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp03 --benchmark >> out_error_03 &
-		$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" -r tmp04 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/no_overlap_1D-20_160_6.txt -c tmp04 --benchmark >> out_error_04 &
+		$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp01 &
+		$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp02 &
+		$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp03 &
+		$EXE -e 1 -f "../../spaces/incomplete/no_overlap_1D-8_35_3_$c.txt" 2> /dev/null | tail -n 1 1> tmp04 &
 		wait
-
-		cat out_error_?? > out_error ; rm -f out_error_?? tmp??
-		BAD_LEARN=`awk -v count=0 '$4>0 {++count} END {print count}' out_error`
-		echo "Imperfect representations (bad learning): $BAD_LEARN"
-
-		rm -f out_error
+		cat tmp01 tmp02 tmp03 tmp04 >> "$RESULTS/no_overlap_1D-8_35_3_${c}_patterns"
+		sed -i 's/ //g' "$RESULTS/no_overlap_1D-8_35_3_${c}_patterns"
+		rm -f tmp??
 
 		echo ""
 		echo "Channel"
-		>&2 echo ""
-		>&2 echo "Channel"
 		for i in {1..6}
 		do
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp01 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp01 --benchmark >> out_error_01 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp02 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp02 --benchmark >> out_error_02 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp03 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp03 --benchmark >> out_error_03 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp04 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp04 --benchmark >> out_error_04 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp05 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp05 --benchmark >> out_error_05 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp06 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp06 --benchmark >> out_error_06 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp07 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp07 --benchmark >> out_error_07 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp08 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp08 --benchmark >> out_error_08 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp09 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp09 --benchmark >> out_error_09 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp10 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp10 --benchmark >> out_error_10 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp11 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp11 --benchmark >> out_error_11 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp12 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp12 --benchmark >> out_error_12 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp13 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp13 --benchmark >> out_error_13 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp14 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp14 --benchmark >> out_error_14 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp15 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp15 --benchmark >> out_error_15 &
-				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp16 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp16 --benchmark >> out_error_16 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp01 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp02 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp03 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp04 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp05 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp06 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp07 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp08 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp09 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp10 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp11 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp12 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp13 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp14 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp15 &
+				$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp16 &
 				wait
 				>&2 echo "$((16*i))% done"
+				cat tmp?? >> "$RESULTS/channel-12_12_${c}_patterns"
 		done
 
-		$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp01 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp01 --benchmark >> out_error_01 &
-		$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp02 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp02 --benchmark >> out_error_02 &
-		$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp03 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp03 --benchmark >> out_error_03 &
-		$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" -r tmp04 --benchmark 2> /dev/null 1> /dev/null ; $EXE -e 1 -f ../../spaces/test/channel-30_30.txt -c tmp04 --benchmark >> out_error_04 &
+		$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp01 &
+		$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp02 &
+		$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp03 &
+		$EXE -e 1 -f "../../spaces/incomplete/channel-12_12_$c.txt" 2> /dev/null | tail -n 1 1> tmp04 &
 		wait
-
-		cat out_error_?? > out_error ; rm -f out_error_?? tmp??
-		BAD_LEARN=`awk -v count=0 '$4>0 {++count} END {print count}' out_error`
-		echo "Imperfect representations (bad learning): $BAD_LEARN"
-
-		rm -f out_error
+		cat tmp01 tmp02 tmp03 tmp04 >> "$RESULTS/channel-12_12_${c}_patterns"
+		sed -i 's/ //g' "$RESULTS/channel-12_12_${c}_patterns"
+		rm -f tmp??
 done
