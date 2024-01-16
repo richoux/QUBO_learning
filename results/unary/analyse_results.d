@@ -131,7 +131,7 @@ int main( string[] args )
 		total_vectors += number_vectors[k];
 		total_errors += v;
 	}
-	writeln( "Total errors: " ~ to!string( total_errors ) ~ "/" ~ to!string( total_vectors ) );
+	writeln( "Success rate: " ~ to!string( total_vectors - total_errors ) ~ "/" ~ to!string( total_vectors ) );
 	
 	return 0;
 }
