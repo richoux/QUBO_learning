@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/485604706.svg)](https://zenodo.org/badge/latestdoi/485604706)
+[![DOI](https://zenodo.org/badge/485604706.svg)](https://zenodo.org/badge/latestdoi/485604706) for one-hot encoding only (ICCS 2023 paper).
 
 # Learning QUBO matrix from data
 
@@ -53,6 +53,8 @@ Learn a q matrix for AllDifferent-4-4 and write the pattern composition vector i
 ```
 $> ./bin/learn_q_opt -f spaces/complete/alldiff-4_4.txt -r result_file.txt
 ```
+
+The one-hot encoding is applied by default. To choose the unary encoding, use the option `-e 1`
 
 <br>
 
@@ -113,12 +115,6 @@ $> ./bin/make_test_spaces -c ch -n 20 -d 20 -s 50 -o channel.txt
 
 <br>
 
-### Running the paper's experiments
-Run all experiments at once (requires a 16-core CPU):
-```
-$> ./scripts/run_all.sh
-```
-
 #### Warning
-This will generate new result files in the `results` folder.
+Running experiments with scripts in the `scripts` folder will generate new result files in the `results` folder.
 
