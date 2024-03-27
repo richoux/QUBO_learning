@@ -4,7 +4,6 @@
 
 #include <Eigen/Dense>
 
-#include "matrix.hpp"
 #include "constraint_training_set_block.hpp"
 
 TrainingSet::TrainingSet( const vector<Variable>& variables,
@@ -14,23 +13,24 @@ TrainingSet::TrainingSet( const vector<Variable>& variables,
                           size_t domain_size,
                           int starting_value,
                           const std::vector<double>& error_vector,
-                          int parameter )
+                          int parameter,
+                          Encoding *encoding )
 	: Constraint( variables ),
 	  _training_data( training_data ),
 	  _variable_values( std::vector<int>( variables.size() ) ),
-	  // _variable_values_for_delta( std::vector<int>( variables.size() ) ),
 	  _size_training_set( number_samples ),
 	  _domain_size( domain_size ),
 	  _candidate_length( number_variables ),
 	  _starting_value( starting_value ),
 	  _error_vector( error_vector ),
-	  _parameter( parameter )
+	  _parameter( parameter ),
+	  _encoding( encoding )
 { }
 
 double TrainingSet::compute_error( const std::vector<int>& variable_values ) const
 {
 	double error = 0.;
-	Eigen::MatrixXi Q = fill_matrix( variable_values, _candidate_length, _domain_size, _starting_value, _parameter ) ;
+	Eigen::MatrixXi Q = _encoding->fill_matrix( variable_values, _candidate_length, _domain_size, _starting_value, _parameter ) ;
 	Eigen::VectorXi X;	
 
 	int min_scalar = std::numeric_limits<int>::max();
@@ -43,7 +43,7 @@ double TrainingSet::compute_error( const std::vector<int>& variable_values ) con
 		for( size_t i = 0 ; i < _candidate_length; ++i )
 			candidate[i] = _training_data[ ( sample_id * _candidate_length ) + i ];
 
-		X = fill_vector( candidate, _domain_size, _starting_value );
+		X = _encoding->fill_vector( candidate, _domain_size, _starting_value );
 		scalars[ sample_id ] = ( X.transpose() * Q ) * X;
 		
 		if( min_scalar > scalars[ sample_id ]	)

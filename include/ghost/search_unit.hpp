@@ -2,15 +2,15 @@
  * GHOST (General meta-Heuristic Optimization Solving Tool) is a C++ framework
  * designed to help developers to model and implement optimization problem
  * solving. It contains a meta-heuristic solver aiming to solve any kind of
- * combinatorial and optimization real-time problems represented by a CSP/COP/EFSP/EFOP. 
+ * combinatorial and optimization real-time problems represented by a CSP/COP/EF-CSP/EF-COP. 
  *
- * First developped to solve game-related optimization problems, GHOST can be used for
+ * First developed to solve game-related optimization problems, GHOST can be used for
  * any kind of applications where solving combinatorial and optimization problems. In
  * particular, it had been designed to be able to solve not-too-complex problem instances
  * within some milliseconds, making it very suitable for highly reactive or embedded systems.
  * Please visit https://github.com/richoux/GHOST for further information.
  *
- * Copyright (C) 2014-2022 Florian Richoux
+ * Copyright (C) 2014-2023 Florian Richoux
  *
  * This file is part of GHOST.
  * GHOST is free software: you can redistribute it and/or
@@ -751,8 +751,11 @@ namespace ghost
 					for( const auto candidate_value : domain_to_explore )
 					{
 						if( !data.matrix_var_ctr.at( variable_to_change ).empty() ) [[likely]]
+						{
+							delta_errors[ candidate_value ].reserve( data.matrix_var_ctr.at( variable_to_change ).size() );
 							for( const int constraint_id : data.matrix_var_ctr.at( variable_to_change ) )
 								delta_errors[ candidate_value ].push_back( model.constraints[ constraint_id ]->simulate_delta( std::vector<int>{variable_to_change}, std::vector<int>{candidate_value} ) );
+						}
 						else
 							delta_errors[ candidate_value ].push_back( 0.0 );
 					}
@@ -772,6 +775,7 @@ namespace ghost
 							int current_value = model.variables[ variable_to_change ].get_value();
 							int candidate_value = model.variables[ variable_id ].get_value();
 
+							delta_errors[ variable_id ].reserve( data.matrix_var_ctr.at( variable_to_change ).size() + data.matrix_var_ctr.at( variable_id ).size() );
 							for( const int constraint_id : data.matrix_var_ctr.at( variable_to_change ) )
 							{
 								constraint_checked[ constraint_id ] = true;

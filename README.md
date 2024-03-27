@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/485604706.svg)](https://zenodo.org/badge/latestdoi/485604706)
+[![DOI](https://zenodo.org/badge/485604706.svg)](https://zenodo.org/badge/latestdoi/485604706) for one-hot encoding only (ICCS 2023 paper).
 
 # Learning QUBO matrix from data
 
@@ -13,7 +13,7 @@ This program aims to learn pattern composition representing a Q matrix from data
 * results: contains the results of experiments run for our paper.
 * scripts: scripts to run different experiments in the paper.
 * spaces: training and test sets. `spaces/complete` and `spaces/incomplete` contain training sets of Experiment 1 and 2, respectively.
-* src: source code of the project. `src/make_spaces` contains the source code to generate training and test sets. `src/models` contains the code of our different models. The model presented in the paper is `src/models/block_learning_opt` (and `src/models/block_learning_sat` for the model without the objective function).
+* src: source code of the project. `src/make_spaces` contains the source code to generate training and test sets. `src/models` contains the code of our different models. The model presented in the paper is `src/models/block_learning_opt` (and `src/models/block_learning_sat` for the model without the objective function). `src/explored` contains different models and learning schemes that have been tested before `src/models/block_learning_opt` and `src/models/block_learning_sat`.
 
 <br>
 
@@ -35,23 +35,48 @@ $> make MYFLAGS=-DGHOST_BENCH
 
 ### Run the main program to learn a Q matrix
 ```
-$> ./bin/q_learning_opt (and many options, type -h first to have them)`
+$> ./bin/learn_q_opt (and many options, type -h first to have them)`
 ```
 
 #### For instance
 Learn a q matrix for AllDifferent-4-4:
 ```
-$> ./bin/q_learning_opt -f spaces/complete/alldiff-4_4.txt
+$> ./bin/learn_q_opt -f spaces/complete/alldiff-4_4.txt
 ```
 
 Learn a q matrix for AllDifferent-4-4 and write q in an output file:
 ```
-$> ./bin/q_learning_opt -f spaces/complete/alldiff-4_4.txt -m matrix_file.txt
+$> ./bin/learn_q_opt -f spaces/complete/alldiff-4_4.txt -m matrix_file.txt
 ```
 
 Learn a q matrix for AllDifferent-4-4 and write the pattern composition vector in an output file:
 ```
-$> ./bin/q_learning_opt -f spaces/complete/alldiff-4_4.txt -r result_file.txt
+$> ./bin/learn_q_opt -f spaces/complete/alldiff-4_4.txt -r result_file.txt
+```
+
+The one-hot encoding is applied by default. To choose the unary encoding, use the option `-e 1`
+
+<br>
+
+### Run the main program to learn a Q matrix with weak learners
+```
+$> ./bin/weak_learn_q_opt (and many options, type -h first to have them)`
+```
+
+#### For instance
+Learn a q matrix for AllDifferent-4-4 with 5 weak learners:
+```
+$> ./bin/weak_learn_q_opt -f spaces/complete/alldiff-4_4.txt -w 5
+```
+
+Learn a q matrix for AllDifferent-12-12 with 7 weak learners over the same samples for each weak learners (here, a pre-sampled set of 4 solutions and 4 non-solutions):
+```
+$> ./bin/weak_learn_q_opt -f spaces/incomplete/alldiff-12_12_4.txt -w 7
+```
+
+Learn a q matrix for AllDifferent-12-12 with 9 weak learners over 10 random samples (different samples for each weak learners):
+```
+$> ./bin/weak_learn_q_opt -f spaces/incomplete/alldiff-12_12_10000.txt -w 9 -n 10
 ```
 
 <br>
@@ -90,12 +115,6 @@ $> ./bin/make_test_spaces -c ch -n 20 -d 20 -s 50 -o channel.txt
 
 <br>
 
-### Running the paper's experiments
-Run all experiments at once (requires a 16-core CPU):
-```
-$> ./scripts/run_all.sh
-```
-
 #### Warning
-This will generate new result files in the `results` folder.
+Running experiments with scripts in the `scripts` folder will generate new result files in the `results` folder.
 

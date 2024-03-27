@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <string>
 #include <cmath>
+#include <algorithm>
 
 #include "print_qubo.hpp"
 
@@ -9,9 +10,9 @@ PrintQUBO::PrintQUBO( int matrix_side )
 	: _matrix_side( matrix_side )
 {}
 
-stringstream PrintQUBO::print_candidate( const std::vector<Variable>& variables ) const
+std::stringstream PrintQUBO::print_candidate( const std::vector<ghost::Variable>& variables ) const
 {
-	stringstream stream;
+	std::stringstream stream;
 		
 	stream << "Q matrix:\n";
 	

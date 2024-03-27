@@ -2,15 +2,15 @@
  * GHOST (General meta-Heuristic Optimization Solving Tool) is a C++ framework
  * designed to help developers to model and implement optimization problem
  * solving. It contains a meta-heuristic solver aiming to solve any kind of
- * combinatorial and optimization real-time problems represented by a CSP/COP/EFSP/EFOP. 
+ * combinatorial and optimization real-time problems represented by a CSP/COP/EF-CSP/EF-COP. 
  *
- * First developped to solve game-related optimization problems, GHOST can be used for
+ * First developed to solve game-related optimization problems, GHOST can be used for
  * any kind of applications where solving combinatorial and optimization problems. In
  * particular, it had been designed to be able to solve not-too-complex problem instances
  * within some milliseconds, making it very suitable for highly reactive or embedded systems.
  * Please visit https://github.com/richoux/GHOST for further information.
  *
- * Copyright (C) 2014-2022 Florian Richoux
+ * Copyright (C) 2014-2023 Florian Richoux
  *
  * This file is part of GHOST.
  * GHOST is free software: you can redistribute it and/or
@@ -180,7 +180,7 @@ namespace ghost
 		 * satisfy the user-defined constraint, and something strictly higher than 0 otherwise,
 		 * like 1 for instance.
 		 *
-		 * While modeling EFSP/EFOP problems, required_error needs to express an error function.
+		 * While modeling EF-CSP/EF-COP problems, required_error needs to express an error function.
 		 * It still must outputs 0 for satisfying values of variables, but must
 		 * outputs a value strictly higher than 0 otherwise, such that the higher this value,
 		 * the further current values of variables are from satisfying the user-defined constraint.
@@ -214,7 +214,7 @@ namespace ghost
 		 * same, the ouputs equals to 0. Finally, if the candidate error is strictly higher
 		 * (then worst) than the current error, the ouput is positive.
 		 *
-		 * For EFSP/EFOP models, this method can be VERY important to have faster computation. 
+		 * For EF-CSP/EF-COP models, this method can be VERY important to have faster computation. 
 		 * Although optional (the solver still works without it), we strongly advise users to define
 		 * it properly, unless the overridden required_error method is trivial to compute.
 		 * Having this method may make a big difference for the solver to quickly find better
@@ -309,4 +309,27 @@ namespace ghost
 			          << "\n########";
 		}
 	};
+
+	/**********************/
+	/** PureOptimization **/
+	/**********************/
+	// PureOptimization is used when no constraints have been given to the solver (ie, for pure optimization runs). 
+	class PureOptimization : public Constraint
+	{
+		double required_error( const std::vector<Variable*>& variables ) const
+		{
+			return 0.;
+		}
+
+		double optional_delta_error( const std::vector<Variable*>& variables, const std::vector<int>& indexes, const std::vector<int>& candidate_values ) const
+		{
+			return 0.;
+		}
+
+	public:
+		PureOptimization( const std::vector<Variable>& variables )
+			: Constraint( variables )
+		{ }
+	};
+
 }
