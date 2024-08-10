@@ -1,7 +1,3 @@
-[![DOI](https://zenodo.org/badge/485604706.svg)](https://zenodo.org/badge/latestdoi/485604706) for one-hot encoding only (ICCS 2023 paper).
-<br>
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10884651.svg)](https://doi.org/10.5281/zenodo.10884651) for unary and one-hot encodings.
-
 # Learning QUBO matrix from data
 
 This program aims to learn pattern composition representing a Q matrix from data. 
