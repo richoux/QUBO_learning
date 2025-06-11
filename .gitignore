@@ -1,2 +1,6 @@
 # Compiled Object files
 *.o
+
+# untrack large files
+results/one-hot_complete_search/all_solutions/*_1
+results/unary_complete_search/all_solutions/*_1
