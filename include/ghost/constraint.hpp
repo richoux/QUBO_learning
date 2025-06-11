@@ -10,7 +10,7 @@
  * within some milliseconds, making it very suitable for highly reactive or embedded systems.
  * Please visit https://github.com/richoux/GHOST for further information.
  *
- * Copyright (C) 2014-2023 Florian Richoux
+ * Copyright (C) 2014-2025 Florian Richoux
  *
  * This file is part of GHOST.
  * GHOST is free software: you can redistribute it and/or
@@ -62,6 +62,7 @@ namespace ghost
 	class Constraint
 	{
 		friend class SearchUnit;
+		template<typename ModelBuilderType> friend class Solver;
 		friend class ModelBuilder;
 		friend class algorithms::AdaptiveSearchErrorProjection;
 		friend class algorithms::CulpritSearchErrorProjection;

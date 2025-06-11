@@ -359,7 +359,7 @@ int main( int argc, char **argv )
 
 			std::chrono::duration<double,std::micro> elapsed_time_solver( 0 );
 			std::chrono::time_point<std::chrono::steady_clock> start_solver( std::chrono::steady_clock::now() );
-			weak_solved[i] = solver.solve( cost, solutions[i], time_budget, options );
+			weak_solved[i] = solver.fast_search( cost, solutions[i], time_budget, options );
 			solved = solved && weak_solved[i];
 			elapsed_time_solver = std::chrono::steady_clock::now() - start_solver;
 			std::cout << "Solution of weak learner " << i << ": ";

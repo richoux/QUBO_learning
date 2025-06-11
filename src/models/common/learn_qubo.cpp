@@ -85,8 +85,8 @@ int main( int argc, char **argv )
 
 	int encoding_type;
 	Encoding *encoding;
-	
-	std::vector<int> solution;
+		
+	std::vector< std::vector<int> > solutions;
 
 	randutils::mt19937_rng rng;
 	argh::parser cmdl( { "-f", "--file", "-t", "--timeout", "-n", "--number", "-ps", "--percent", "-c", "--check", "-r", "--result", "-m", "--matrix", "-e", "--encoding" } );
@@ -219,6 +219,7 @@ int main( int argc, char **argv )
 			std::stringstream line_stream( line );
 
 			int number_patterns = encoding->number_square_patterns() + 1; // since triangle patterns are encoded on a unique variable
+			std::vector<int> solution;
 			solution.reserve( number_patterns );
 			for( int i = 0 ; i < number_patterns; ++i )
 				line_stream >> solution[i];
@@ -373,7 +374,7 @@ int main( int argc, char **argv )
 		BuilderQUBO builder( samples, number_samples, number_variables, domain_size, starting_value, sampled_labels, complementary_variable, parameter, encoding );
 		ghost::Solver solver( builder );
 
-		double cost;
+		vector<double> costs;
 		bool solved = true;
 		ghost::Options options;
 #if not defined BLOCK and not defined BLOCK_SAT and not defined BLOCK_OPT
@@ -382,12 +383,13 @@ int main( int argc, char **argv )
 
 		options.custom_starting_point = custom_starting_point; 
 
-		solved = solver.solve( cost, solution, time_budget, options );		
+		// solved = solver.fast_search( cost, solution, time_budget, options );		
+		solved = solver.complete_search( costs, solutions, options );		
 
 		if( !silent )
 		{
 			std::cout << "\nConstraints satisfied: " << std::boolalpha << solved << "\n"
-			          << "Objective function cost: " << cost << "\n"
+				// << "Objective function cost: " << cost << "\n"
 			          << encoding->name() << "\n";
 		}
 		
@@ -396,28 +398,73 @@ int main( int argc, char **argv )
 			check = true;
 
 #if defined BLOCK or defined BLOCK_SAT or defined BLOCK_OPT
-		check_solution_block( solution,
-		                      candidates,
-		                      labels,
-		                      number_variables,
-		                      domain_size,
-		                      total_training_set_size,
-		                      starting_value,
-		                      complementary_variable,
-		                      silent,
-		                      result_file_path,
-		                      matrix_file_path,
-		                      parameter,
-		                      encoding,
-		                      check );
+		// std::vector<int> best_solutions;
+		// double min_cost = std::numeric_limits<double>::max();
+		// for( size_t i = 0 ; i < solutions.size() ; ++i )
+		// {
+		// 	if( min_cost > costs[i] )
+		// 	{
+		// 		best_solutions.clear();
+		// 		best_solutions.push_back(i);
+		// 		min_cost = costs[i];
+		// 	}
+		// 	else
+		// 		if( min_cost == costs[i] )
+		// 			best_solutions.push_back(i);
+		// }
+		
+		// std::cout << "Best objective function cost: " << costs[best_solutions[0]] << "\n";
 
-		if( !silent )
+		// for( size_t i = 0 ; i < best_solutions.size() ; ++i )
+		// {
+		// 	check_solution_block( solutions[ best_solutions[i] ],
+		// 												candidates,
+		// 												labels,
+		// 												number_variables,
+		// 												domain_size,
+		// 												total_training_set_size,
+		// 												starting_value,
+		// 												complementary_variable,
+		// 												silent,
+		// 												result_file_path,
+		// 												matrix_file_path,
+		// 												parameter,
+		// 												encoding,
+		// 												check );
+
+		// 	if( !silent )
+		// 	{
+		// 		std::cout << "Solution " << i+1 << "\n";
+		// 		for( int value : solutions[best_solutions[i]] )
+		// 			std::cout << value << " ";
+		// 	}
+		// }
+
+		for( size_t i = 0 ; i < solutions.size() ; ++i )
 		{
-			std::cout << "Solution\n";
-			for( int value : solution )
-				std::cout << value << " ";
-			std::cout << "\n";
-		}		
+			check_solution_block( solutions[ i ],
+														candidates,
+														labels,
+														number_variables,
+														domain_size,
+														total_training_set_size,
+														starting_value,
+														complementary_variable,
+														silent,
+														result_file_path,
+														matrix_file_path,
+														parameter,
+														encoding,
+														check );
+
+			if( !silent )
+			{
+				std::cout << "Solution " << i+1 << "\n";
+				for( int value : solutions[i] )
+					std::cout << value << " ";
+				std::cout << "Objective function cost: " << costs[i] << "\n";
+			}
+		}
 #else
 		size_t matrix_side = number_variables * domain_size;
 		if( complementary_variable )
@@ -432,7 +479,7 @@ int main( int argc, char **argv )
 			int shift = row_number * ( row_number - 1 ) / 2;
 			
 			for( int i = 0 ; i < length ; ++i )
-				Q( row_number, row_number + i ) = solution[ ( row_number * matrix_side ) - shift + i ];
+				Q( row_number, row_number + i ) = solutions[0][ ( row_number * matrix_side ) - shift + i ];
 		}
 		
 		check_solution( Q,

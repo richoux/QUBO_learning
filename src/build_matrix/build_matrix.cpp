@@ -25,6 +25,7 @@ void usage( char **argv )
 	          << "-n, --variables N, the number of variables.\n"
 	          << "-d, --domain D, the domain size.\n"
 	          << "-c, --check RESULT_FILE, to build Q given the solution produced by GHOST in RESULT_FILE.\n"
+	          << "-v, --vector VECTOR, to build Q given the vector solution produced by GHOST.\n"
 	          << "-s, --start S, the first value in the domain (1 by default).\n"
 	          << "-p, --parameter P, a parameter value (MAX_INT by default).\n"
 	          << "-e, --encoding ENCODING_CODE, 0 for one-hot, 1 for unary (one-hot by default)\n";
@@ -40,13 +41,14 @@ int main( int argc, char **argv )
 	std::string check_file_path;
 	std::string line;
 	std::ifstream check_file;
-
+	bool has_file = false;
+	
 	int encoding_type;
 	Encoding *encoding;
 	
 	std::vector<int> solution;
 
-	argh::parser cmdl( { "-n", "--variables", "-d", "--domain", "-c", "--check", "-e", "--encoding" } );
+	argh::parser cmdl( { "-n", "--variables", "-d", "--domain", "-c", "--check", "-e", "--encoding", "-v", "--vector" } );
 	cmdl.parse( argc, argv );
 	
 	if( cmdl[ {"-h", "--help"} ] )
@@ -55,15 +57,19 @@ int main( int argc, char **argv )
 		return EXIT_SUCCESS;
 	}
 
-	if( !( cmdl( {"n", "variables"} ) && cmdl( {"d", "domain"} ) && cmdl( {"c", "check"} ) ) )
+	if( !( cmdl( {"n", "variables"} ) && cmdl( {"d", "domain"} ) && ( cmdl( {"c", "check"} ) || cmdl( {"v", "vector"} ) ) ) )
 	{
 		usage( argv );
 		return EXIT_FAILURE;
 	}
 
+	if( cmdl( {"c", "check"} ) )
+		has_file = true;
+
 	cmdl( {"n", "variables"} ) >> number_variables;
 	cmdl( {"d", "domain"} ) >> domain_size;
 	cmdl( {"c", "check"} ) >> check_file_path;
+	cmdl( {"v", "vector"} ) >> line;
 	cmdl( {"e", "encoding"}, 0 ) >> encoding_type;
 	cmdl( {"s", "start"}, 1 ) >> starting_value;
 	cmdl( {"p", "parameter"} ) >> parameter;
@@ -76,21 +82,34 @@ int main( int argc, char **argv )
 	default:
 		encoding = new Onehot();
 	}
-	
-	check_file.open( check_file_path );
+
+	int number_patterns = encoding->number_square_patterns() + 1; // since triangle patterns are encoded on a unique variable
+	solution.reserve( number_patterns );
+
+	if( has_file )
+	{
+		check_file.open( check_file_path );
+		getline( check_file, line );
+		getline( check_file, line );
+
+		std::stringstream line_stream( line );
+		for( int i = 0 ; i < number_patterns; ++i )
+			line_stream >> solution[i];
+	}
+	else
+	{
+		for( int i = 0 ; i < number_patterns; ++i )
+		{
+			if( line.at(i) == '0' )
+				solution[i] = 0;
+			else
+				solution[i] = 1;
+ 		}
+	}
 	
 	size_t matrix_side = number_variables * domain_size;
 	Eigen::MatrixXi Q = Eigen::MatrixXi::Zero( matrix_side, matrix_side );
 	std::vector<int> q_matrix;
-
-	getline( check_file, line );
-	getline( check_file, line );
-	std::stringstream line_stream( line );
-	
-	int number_patterns = encoding->number_square_patterns() + 1; // since triangle patterns are encoded on a unique variable
-	solution.reserve( number_patterns );
-	for( int i = 0 ; i < number_patterns; ++i )
-		line_stream >> solution[i];
 	
 	Q = encoding->fill_matrix( solution, number_variables, domain_size, starting_value, parameter );
 	check_file.close();
