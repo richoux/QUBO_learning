@@ -462,7 +462,7 @@ int main( int argc, char **argv )
 				std::cout << "Solution " << i+1 << "\n";
 				for( int value : solutions[i] )
 					std::cout << value << " ";
-				std::cout << "Objective function cost: " << costs[i] << "\n";
+				std::cout << "\nObjective function cost: " << costs[i] << "\n";
 			}
 		}
 #else
