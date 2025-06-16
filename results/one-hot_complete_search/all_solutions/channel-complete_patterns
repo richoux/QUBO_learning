@@ -23,7 +23,8 @@ Q matrix:
 Min scalar = -10
 0
 Solution 1
-0 0 0 0 0 0 0 1 0 1 0 1 0 0 0 Objective function cost: 3
+0 0 0 0 0 0 0 1 0 1 0 1 0 0 0
+Objective function cost: 3
 
 Q matrix:
 -1  2  2  2  0 -1 -1 -1  0 -1 -1 -1  0 -1 -1 -1
@@ -46,7 +47,8 @@ Q matrix:
 Min scalar = -10
 0
 Solution 2
-0 0 0 0 0 0 0 1 0 1 0 1 0 1 0 Objective function cost: 4
+0 0 0 0 0 0 0 1 0 1 0 1 0 1 0
+Objective function cost: 4
 
 Q matrix:
 -1  2  2  2  0 -1 -1 -1  0 -1 -1 -1  0 -1 -1 -1
@@ -69,7 +71,8 @@ Q matrix:
 Min scalar = -10
 0
 Solution 3
-0 0 0 0 0 0 0 1 0 1 0 1 1 0 0 Objective function cost: 4
+0 0 0 0 0 0 0 1 0 1 0 1 1 0 0
+Objective function cost: 4
 
 Q matrix:
 -1  2  2  2  1 -1 -1 -1  1 -1 -1 -1  1 -1 -1 -1
@@ -92,7 +95,8 @@ Q matrix:
 Min scalar = -10
 0
 Solution 4
-0 1 0 0 0 0 0 1 0 1 0 1 0 0 0 Objective function cost: 4
+0 1 0 0 0 0 0 1 0 1 0 1 0 0 0
+Objective function cost: 4
 
 Q matrix:
 -1  2  2  2  1 -1 -1 -1  1 -1 -1 -1  1 -1 -1 -1
@@ -115,7 +119,8 @@ Q matrix:
 Min scalar = -10
 0
 Solution 5
-0 1 0 0 0 0 0 1 0 1 0 1 0 1 0 Objective function cost: 5
+0 1 0 0 0 0 0 1 0 1 0 1 0 1 0
+Objective function cost: 5
 
 Q matrix:
 -1  2  2  2  1 -1 -1 -1  1 -1 -1 -1  1 -1 -1 -1
@@ -138,4 +143,5 @@ Q matrix:
 Min scalar = -10
 0
 Solution 6
-0 1 0 0 0 0 0 1 0 1 0 1 1 0 0 Objective function cost: 5
+0 1 0 0 0 0 0 1 0 1 0 1 1 0 0
+Objective function cost: 5
